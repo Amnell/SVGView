@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.3
 
 import PackageDescription
 
@@ -36,7 +36,7 @@ let package = Package(
         ),
     	.target(
     		name: "SVGView",
-            path: "Source"
+            path: "Source",
         ),
         .testTarget(
             name: "CoreGraphicsPolyfillTests",
@@ -50,5 +50,5 @@ let package = Package(
             ]
         ),
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v5]
 )
