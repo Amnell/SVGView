@@ -5,40 +5,30 @@
 //  Created by Yuriy Strot on 07.02.2021.
 //
 
-import XCTest
+import Foundation
+import Testing
 @testable import SVGView
 
-class BaseTestCase : XCTestCase {
+protocol SVGTestHelper {
+    var dir: String { get }
+}
 
-    var dir: String {
-        return "1.2T"
-    }
+extension SVGTestHelper {
 
-    func compareToReference(_ fileName: String) {
+    var dir: String { "1.2T" }
+
+    func compareToReference(_ fileName: String) throws {
         let bundle = Bundle.module
-        let svgURL = bundle.url(forResource: fileName, withExtension: "svg", subdirectory: "w3c/\(dir)/svg/")!
-        let refURL = bundle.url(forResource: fileName, withExtension: "ref", subdirectory: "w3c/\(dir)/refs/")!
+        let svgURL = try #require(bundle.url(forResource: fileName, withExtension: "svg", subdirectory: "w3c/\(dir)/svg/"))
+        let refURL = try #require(bundle.url(forResource: fileName, withExtension: "ref", subdirectory: "w3c/\(dir)/refs/"))
 
-        let node = SVGParser.parse(contentsOf: svgURL)!
-        let content = Serializer.serialize(node)
-        let reference = try! String(contentsOf: refURL)
+        let node = try #require(SVGParser.parse(contentsOf: svgURL))
+        let content = try #require(Serializer.serialize(node))
+        let reference = try String(contentsOf: refURL)
 
-        compareResultStrings(nodeContent: content, referenceContent: reference)
-    }
-
-    func compareResultStrings(nodeContent: String?, referenceContent: String?) {
-        guard let nodeContent = nodeContent else {
-            XCTFail("nodeContent is empty")
-            return
-        }
-        guard let referenceContent = referenceContent else {
-            XCTFail("referenceContent is empty")
-            return
-        }
-
-        if nodeContent != referenceContent {
-            XCTFail("nodeContent is not equal to referenceContent. " + prettyFirstDifferenceBetweenStrings(s1: nodeContent, s2: referenceContent))
-        }
+        let nodeContent = content
+        let referenceContent = reference
+        #expect(nodeContent == referenceContent, "nodeContent is not equal to referenceContent. \(prettyFirstDifferenceBetweenStrings(s1: nodeContent, s2: referenceContent))")
     }
 
     func prettyFirstDifferenceBetweenStrings(s1: String, s2: String) -> String {

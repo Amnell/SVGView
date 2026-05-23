@@ -16,127 +16,127 @@
 //  since the polyfill types are aliases to the native CoreGraphics types.
 //
 
-import XCTest
+import Testing
 
 @testable import SVGView
 
-final class PolyfillTests: XCTestCase {
+struct PolyfillTests {
     
     #if os(WASI) || os(Linux)
     
     // MARK: - CGAffineTransform Tests
     
-    func testAffineTransformIdentity() {
+    @Test func affineTransformIdentity() {
         let identity = CGAffineTransform.identity
-        XCTAssertEqual(identity.a, 1)
-        XCTAssertEqual(identity.b, 0)
-        XCTAssertEqual(identity.c, 0)
-        XCTAssertEqual(identity.d, 1)
-        XCTAssertEqual(identity.tx, 0)
-        XCTAssertEqual(identity.ty, 0)
-        XCTAssertTrue(identity.isIdentity)
+        #expect(identity.a == 1)
+        #expect(identity.b == 0)
+        #expect(identity.c == 0)
+        #expect(identity.d == 1)
+        #expect(identity.tx == 0)
+        #expect(identity.ty == 0)
+        #expect(identity.isIdentity)
     }
     
-    func testAffineTransformTranslation() {
+    @Test func affineTransformTranslation() {
         let transform = CGAffineTransform(translationX: 10, y: 20)
-        XCTAssertEqual(transform.a, 1)
-        XCTAssertEqual(transform.b, 0)
-        XCTAssertEqual(transform.c, 0)
-        XCTAssertEqual(transform.d, 1)
-        XCTAssertEqual(transform.tx, 10)
-        XCTAssertEqual(transform.ty, 20)
-        XCTAssertFalse(transform.isIdentity)
+        #expect(transform.a == 1)
+        #expect(transform.b == 0)
+        #expect(transform.c == 0)
+        #expect(transform.d == 1)
+        #expect(transform.tx == 10)
+        #expect(transform.ty == 20)
+        #expect(!transform.isIdentity)
     }
     
-    func testAffineTransformScale() {
+    @Test func affineTransformScale() {
         let transform = CGAffineTransform(scaleX: 2, y: 3)
-        XCTAssertEqual(transform.a, 2)
-        XCTAssertEqual(transform.b, 0)
-        XCTAssertEqual(transform.c, 0)
-        XCTAssertEqual(transform.d, 3)
-        XCTAssertEqual(transform.tx, 0)
-        XCTAssertEqual(transform.ty, 0)
+        #expect(transform.a == 2)
+        #expect(transform.b == 0)
+        #expect(transform.c == 0)
+        #expect(transform.d == 3)
+        #expect(transform.tx == 0)
+        #expect(transform.ty == 0)
     }
     
-    func testAffineTransformRotation() {
+    @Test func affineTransformRotation() {
         let transform = CGAffineTransform(rotationAngle: .pi / 2)
-        XCTAssertEqual(transform.a, cos(.pi / 2), accuracy: 1e-10)
-        XCTAssertEqual(transform.b, sin(.pi / 2), accuracy: 1e-10)
-        XCTAssertEqual(transform.c, -sin(.pi / 2), accuracy: 1e-10)
-        XCTAssertEqual(transform.d, cos(.pi / 2), accuracy: 1e-10)
-        XCTAssertEqual(transform.tx, 0)
-        XCTAssertEqual(transform.ty, 0)
+        #expect(abs(transform.a - cos(.pi / 2)) <= 1e-10)
+        #expect(abs(transform.b - sin(.pi / 2)) <= 1e-10)
+        #expect(abs(transform.c - (-sin(.pi / 2))) <= 1e-10)
+        #expect(abs(transform.d - cos(.pi / 2)) <= 1e-10)
+        #expect(transform.tx == 0)
+        #expect(transform.ty == 0)
     }
     
-    func testPointTransformation() {
+    @Test func pointTransformation() {
         let point = CGPoint(x: 1, y: 2)
         let transform = CGAffineTransform(translationX: 10, y: 20)
         let transformedPoint = point.applying(transform)
         
-        XCTAssertEqual(transformedPoint.x, 11)
-        XCTAssertEqual(transformedPoint.y, 22)
+        #expect(transformedPoint.x == 11)
+        #expect(transformedPoint.y == 22)
     }
     
-    func testTransformConcatenation() {
+    @Test func transformConcatenation() {
         let transform1 = CGAffineTransform(translationX: 5, y: 10)
         let transform2 = CGAffineTransform(scaleX: 2, y: 3)
         let combined = transform1.concatenating(transform2)
         
-        XCTAssertEqual(combined.a, 2)
-        XCTAssertEqual(combined.d, 3)
-        XCTAssertEqual(combined.tx, 10)
-        XCTAssertEqual(combined.ty, 30)
+        #expect(combined.a == 2)
+        #expect(combined.d == 3)
+        #expect(combined.tx == 10)
+        #expect(combined.ty == 30)
     }
     
-    func testTransformFluent() {
+    @Test func transformFluent() {
         let transform = CGAffineTransform.identity
             .translatedBy(x: 10, y: 20)
             .scaledBy(x: 2, y: 3)
             .rotated(by: .pi / 4)
         
-        XCTAssertFalse(transform.isIdentity)
-        XCTAssertNotEqual(transform.tx, 0)
-        XCTAssertNotEqual(transform.ty, 0)
+        #expect(!transform.isIdentity)
+        #expect(transform.tx != 0)
+        #expect(transform.ty != 0)
     }
     
-    func testComplexTransform() {
+    @Test func complexTransform() {
         let point = CGPoint(x: 5, y: 5)
         let transform = CGAffineTransform(rotationAngle: .pi / 4)
             .translatedBy(x: 10, y: 10)
             .scaledBy(x: 2, y: 2)
         
         let transformedPoint = point.applying(transform)
-        XCTAssertNotEqual(transformedPoint.x, point.x)
-        XCTAssertNotEqual(transformedPoint.y, point.y)
+        #expect(transformedPoint.x != point.x)
+        #expect(transformedPoint.y != point.y)
     }
     
     // MARK: - CGLineJoin and CGLineCap Tests
     
-    func testLineJoinEnum() {
+    @Test func lineJoinEnum() {
         let miterJoin = CGLineJoin.miter
         let roundJoin = CGLineJoin.round
         let bevelJoin = CGLineJoin.bevel
         let defaultJoin = CGLineJoin()
         
-        XCTAssertEqual(defaultJoin, .miter)
-        XCTAssertNotEqual(miterJoin, roundJoin)
-        XCTAssertNotEqual(roundJoin, bevelJoin)
+        #expect(defaultJoin == .miter)
+        #expect(miterJoin != roundJoin)
+        #expect(roundJoin != bevelJoin)
     }
     
-    func testLineCapEnum() {
+    @Test func lineCapEnum() {
         let buttCap = CGLineCap.butt
         let roundCap = CGLineCap.round
         let squareCap = CGLineCap.square
         let defaultCap = CGLineCap()
         
-        XCTAssertEqual(defaultCap, .butt)
-        XCTAssertNotEqual(buttCap, roundCap)
-        XCTAssertNotEqual(roundCap, squareCap)
+        #expect(defaultCap == .butt)
+        #expect(buttCap != roundCap)
+        #expect(roundCap != squareCap)
     }
     
     // MARK: - CGPath Tests
     
-    func testPathElementCreation() {
+    @Test func pathElementCreation() {
         let moveElement = PathElement.moveToPoint(CGPoint(x: 0, y: 0))
         let lineElement = PathElement.addLineToPoint(CGPoint(x: 10, y: 10))
         let _ = PathElement.addQuadCurveToPoint(CGPoint(x: 5, y: 5), CGPoint(x: 10, y: 0))
@@ -144,136 +144,136 @@ final class PolyfillTests: XCTestCase {
         let closeElement = PathElement.closeSubpath
         
         if case .moveToPoint(let point) = moveElement {
-            XCTAssertEqual(point.x, 0)
-            XCTAssertEqual(point.y, 0)
+            #expect(point.x == 0)
+            #expect(point.y == 0)
         } else {
-            XCTFail("Expected moveToPoint")
+            Issue.record("Expected moveToPoint")
         }
         
         if case .addLineToPoint(let point) = lineElement {
-            XCTAssertEqual(point.x, 10)
-            XCTAssertEqual(point.y, 10)
+            #expect(point.x == 10)
+            #expect(point.y == 10)
         } else {
-            XCTFail("Expected addLineToPoint")
+            Issue.record("Expected addLineToPoint")
         }
         
         if case .closeSubpath = closeElement {
             // Test passes
         } else {
-            XCTFail("Expected closeSubpath")
+            Issue.record("Expected closeSubpath")
         }
     }
     
-    func testPathBasicOperations() {
+    @Test func pathBasicOperations() {
         let path = CGPath()
-        XCTAssertTrue(path.elements.isEmpty)
+        #expect(path.elements.isEmpty)
         
         path.move(to: CGPoint(x: 0, y: 0))
-        XCTAssertEqual(path.elements.count, 1)
+        #expect(path.elements.count == 1)
         
         path.addLine(to: CGPoint(x: 10, y: 10))
-        XCTAssertEqual(path.elements.count, 2)
+        #expect(path.elements.count == 2)
         
         path.closeSubpath()
-        XCTAssertEqual(path.elements.count, 3)
+        #expect(path.elements.count == 3)
     }
     
-    func testPathBoundingBox() {
+    @Test func pathBoundingBox() {
         let path = CGPath()
         path.move(to: CGPoint(x: 5, y: 5))
         path.addLine(to: CGPoint(x: 15, y: 10))
         path.addLine(to: CGPoint(x: 10, y: 20))
         
         let bounds = path.boundingBoxOfPath
-        XCTAssertEqual(bounds.minX, 5)
-        XCTAssertEqual(bounds.minY, 5)
-        XCTAssertEqual(bounds.maxX, 15)
-        XCTAssertEqual(bounds.maxY, 20)
-        XCTAssertEqual(bounds.width, 10)
-        XCTAssertEqual(bounds.height, 15)
+        #expect(bounds.minX == 5)
+        #expect(bounds.minY == 5)
+        #expect(bounds.maxX == 15)
+        #expect(bounds.maxY == 20)
+        #expect(bounds.width == 10)
+        #expect(bounds.height == 15)
     }
     
-    func testPathBoundingBoxWithCurves() {
+    @Test func pathBoundingBoxWithCurves() {
         let path = CGPath()
         path.move(to: CGPoint(x: 0, y: 0))
         path.addCurve(to: CGPoint(x: 10, y: 10), control1: CGPoint(x: 5, y: 5), control2: CGPoint(x: 15, y: 8))
         
         let bounds = path.boundingBoxOfPath
-        XCTAssertEqual(bounds.minX, 0)
-        XCTAssertEqual(bounds.minY, 0)
-        XCTAssertEqual(bounds.maxX, 15)
-        XCTAssertEqual(bounds.maxY, 10)
+        #expect(bounds.minX == 0)
+        #expect(bounds.minY == 0)
+        #expect(bounds.maxX == 15)
+        #expect(bounds.maxY == 10)
     }
     
-    func testPathAddRect() {
+    @Test func pathAddRect() {
         let path = CGPath()
         let rect = CGRect(x: 10, y: 20, width: 30, height: 40)
         path.addRect(rect)
         
-        XCTAssertEqual(path.elements.count, 5) // move + 3 lines + close
+        #expect(path.elements.count == 5) // move + 3 lines + close
         
         let bounds = path.boundingBoxOfPath
-        XCTAssertEqual(bounds, rect)
+        #expect(bounds == rect)
     }
     
-    func testPathAddEllipse() {
+    @Test func pathAddEllipse() {
         let path = CGPath()
         let rect = CGRect(x: 0, y: 0, width: 100, height: 50)
         path.addEllipse(in: rect)
         
-        XCTAssertFalse(path.elements.isEmpty)
+        #expect(!path.elements.isEmpty)
         
         let bounds = path.boundingBoxOfPath
         // Ellipse should fit within the rectangle (approximately)
-        XCTAssertGreaterThanOrEqual(bounds.minX, rect.minX - 1)
-        XCTAssertGreaterThanOrEqual(bounds.minY, rect.minY - 1)
-        XCTAssertLessThanOrEqual(bounds.maxX, rect.maxX + 1)
-        XCTAssertLessThanOrEqual(bounds.maxY, rect.maxY + 1)
+        #expect(bounds.minX >= rect.minX - 1)
+        #expect(bounds.minY >= rect.minY - 1)
+        #expect(bounds.maxX <= rect.maxX + 1)
+        #expect(bounds.maxY <= rect.maxY + 1)
     }
     
-    func testPathQuadCurve() {
+    @Test func pathQuadCurve() {
         let path = CGPath()
         path.move(to: CGPoint(x: 0, y: 0))
         path.addQuadCurve(to: CGPoint(x: 10, y: 10), control: CGPoint(x: 5, y: 0))
         
-        XCTAssertEqual(path.elements.count, 2)
+        #expect(path.elements.count == 2)
         
         if case .addQuadCurveToPoint(let control, let end) = path.elements[1] {
-            XCTAssertEqual(control.x, 5)
-            XCTAssertEqual(control.y, 0)
-            XCTAssertEqual(end.x, 10)
-            XCTAssertEqual(end.y, 10)
+            #expect(control.x == 5)
+            #expect(control.y == 0)
+            #expect(end.x == 10)
+            #expect(end.y == 10)
         } else {
-            XCTFail("Expected quad curve element")
+            Issue.record("Expected quad curve element")
         }
     }
     
     // MARK: - MBezierPath Tests
     
-    func testBezierPathInit() {
+    @Test func bezierPathInit() {
         let path = MBezierPath()
-        XCTAssertTrue(path.isEmpty)
-        XCTAssertTrue(path.cgPath.elements.isEmpty)
+        #expect(path.isEmpty)
+        #expect(path.cgPath.elements.isEmpty)
     }
     
-    func testBezierPathRectInit() {
+    @Test func bezierPathRectInit() {
         let rect = CGRect(x: 10, y: 20, width: 30, height: 40)
         let path = MBezierPath(rect: rect)
         
-        XCTAssertNotNil(path)
-        XCTAssertFalse(path!.isEmpty)
-        XCTAssertEqual(path!.bounds, rect)
+        #expect(path != nil)
+        #expect(!path!.isEmpty)
+        #expect(path!.bounds == rect)
     }
     
-    func testBezierPathOvalInit() {
+    @Test func bezierPathOvalInit() {
         let rect = CGRect(x: 0, y: 0, width: 100, height: 100)
         let path = MBezierPath(ovalIn: rect)
         
-        XCTAssertNotNil(path)
-        XCTAssertFalse(path!.isEmpty)
+        #expect(path != nil)
+        #expect(!path!.isEmpty)
     }
     
-    func testBezierPathArcInit() {
+    @Test func bezierPathArcInit() {
         let center = CGPoint(x: 50, y: 50)
         let radius: CGFloat = 25
         let path = MBezierPath(
@@ -284,14 +284,14 @@ final class PolyfillTests: XCTestCase {
             clockwise: true
         )
         
-        XCTAssertFalse(path.isEmpty)
+        #expect(!path.isEmpty)
     }
     
-    func testBezierPathOperations() {
+    @Test func bezierPathOperations() {
         let path = MBezierPath()
         
         path.move(to: CGPoint(x: 0, y: 0))
-        XCTAssertFalse(path.isEmpty)
+        #expect(!path.isEmpty)
         
         path.addLine(to: CGPoint(x: 10, y: 10))
         path.addQuadCurve(to: CGPoint(x: 20, y: 0), controlPoint: CGPoint(x: 15, y: -5))
@@ -302,10 +302,10 @@ final class PolyfillTests: XCTestCase {
         )
         path.close()
         
-        XCTAssertEqual(path.cgPath.elements.count, 5)
+        #expect(path.cgPath.elements.count == 5)
     }
     
-    func testBezierPathTransform() {
+    @Test func bezierPathTransform() {
         let path = MBezierPath()
         path.move(to: CGPoint(x: 0, y: 0))
         path.addLine(to: CGPoint(x: 10, y: 10))
@@ -315,11 +315,11 @@ final class PolyfillTests: XCTestCase {
         path.apply(transform)
         
         let newBounds = path.bounds
-        XCTAssertEqual(newBounds.width, originalBounds.width * 2, accuracy: 1e-10)
-        XCTAssertEqual(newBounds.height, originalBounds.height * 2, accuracy: 1e-10)
+        #expect(abs(newBounds.width - originalBounds.width * 2) <= 1e-10)
+        #expect(abs(newBounds.height - originalBounds.height * 2) <= 1e-10)
     }
     
-    func testBezierPathAppend() {
+    @Test func bezierPathAppend() {
         let path1 = MBezierPath()
         path1.move(to: CGPoint(x: 0, y: 0))
         path1.addLine(to: CGPoint(x: 10, y: 10))
@@ -331,10 +331,10 @@ final class PolyfillTests: XCTestCase {
         let originalCount = path1.cgPath.elements.count
         path1.append(path2)
         
-        XCTAssertEqual(path1.cgPath.elements.count, originalCount + path2.cgPath.elements.count)
+        #expect(path1.cgPath.elements.count == originalCount + path2.cgPath.elements.count)
     }
     
-    func testBezierPathArc() {
+    @Test func bezierPathArc() {
         let path = MBezierPath()
         let center = CGPoint(x: 50, y: 50)
         let radius: CGFloat = 25
@@ -347,11 +347,11 @@ final class PolyfillTests: XCTestCase {
             clockwise: true
         )
         
-        XCTAssertFalse(path.isEmpty)
-        XCTAssertGreaterThan(path.cgPath.elements.count, 1)
+        #expect(!path.isEmpty)
+        #expect(path.cgPath.elements.count > 1)
     }
     
-    func testBezierPathArcCounterClockwise() {
+    @Test func bezierPathArcCounterClockwise() {
         let path = MBezierPath()
         let center = CGPoint(x: 0, y: 0)
         let radius: CGFloat = 10
@@ -364,10 +364,10 @@ final class PolyfillTests: XCTestCase {
             clockwise: false
         )
         
-        XCTAssertFalse(path.isEmpty)
+        #expect(!path.isEmpty)
     }
     
-    func testBezierPathFullCircleArc() {
+    @Test func bezierPathFullCircleArc() {
         let path = MBezierPath()
         let center = CGPoint(x: 50, y: 50)
         let radius: CGFloat = 25
@@ -380,53 +380,53 @@ final class PolyfillTests: XCTestCase {
             clockwise: true
         )
         
-        XCTAssertFalse(path.isEmpty)
-        XCTAssertGreaterThan(path.cgPath.elements.count, 4) // Should have multiple segments
+        #expect(!path.isEmpty)
+        #expect(path.cgPath.elements.count > 4) // Should have multiple segments
     }
     
     // MARK: - PathElement Extension Tests
     
-    func testPathElementLastPoint() {
+    @Test func pathElementLastPoint() {
         let moveElement = PathElement.moveToPoint(CGPoint(x: 5, y: 10))
         let lineElement = PathElement.addLineToPoint(CGPoint(x: 15, y: 20))
         let closeElement = PathElement.closeSubpath
         
-        XCTAssertEqual(moveElement.lastPoint, CGPoint(x: 5, y: 10))
-        XCTAssertEqual(lineElement.lastPoint, CGPoint(x: 15, y: 20))
-        XCTAssertNil(closeElement.lastPoint)
+        #expect(moveElement.lastPoint == CGPoint(x: 5, y: 10))
+        #expect(lineElement.lastPoint == CGPoint(x: 15, y: 20))
+        #expect(closeElement.lastPoint == nil)
     }
     
-    func testPathElementIsCloseSubpath() {
+    @Test func pathElementIsCloseSubpath() {
         let moveElement = PathElement.moveToPoint(CGPoint(x: 0, y: 0))
         let closeElement = PathElement.closeSubpath
         
-        XCTAssertFalse(moveElement.isCloseSubpath)
-        XCTAssertTrue(closeElement.isCloseSubpath)
+        #expect(!moveElement.isCloseSubpath)
+        #expect(closeElement.isCloseSubpath)
     }
     
-    func testPathElementLastPointWithCurves() {
+    @Test func pathElementLastPointWithCurves() {
         let quadElement = PathElement.addQuadCurveToPoint(CGPoint(x: 5, y: 5), CGPoint(x: 10, y: 10))
         let curveElement = PathElement.addCurveToPoint(CGPoint(x: 1, y: 1), CGPoint(x: 2, y: 2), CGPoint(x: 3, y: 3))
         
-        XCTAssertEqual(quadElement.lastPoint, CGPoint(x: 10, y: 10))
-        XCTAssertEqual(curveElement.lastPoint, CGPoint(x: 3, y: 3))
+        #expect(quadElement.lastPoint == CGPoint(x: 10, y: 10))
+        #expect(curveElement.lastPoint == CGPoint(x: 3, y: 3))
     }
     
     // MARK: - CGPathElement Tests
     
-    func testCGPathElementCreation() {
+    @Test func cgPathElementCreation() {
         let element = CGPathElement(
             type: .moveToPoint,
             points: (CGPoint(x: 1, y: 2), CGPoint.zero, CGPoint.zero)
         )
         
-        XCTAssertEqual(element.type, .moveToPoint)
-        XCTAssertEqual(element.points[0], CGPoint(x: 1, y: 2))
+        #expect(element.type == .moveToPoint)
+        #expect(element.points[0] == CGPoint(x: 1, y: 2))
     }
     
     // MARK: - CGPathElementType Tests
     
-    func testCGPathElementTypeEnum() {
+    @Test func cgPathElementTypeEnum() {
         let moveType = CGPathElementType.moveToPoint
         let lineType = CGPathElementType.addLineToPoint
         let quadType = CGPathElementType.addQuadCurveToPoint
@@ -434,37 +434,37 @@ final class PolyfillTests: XCTestCase {
         let closeType = CGPathElementType.closeSubpath
         
         // Ensure all enum cases are distinct
-        XCTAssertNotEqual(moveType, lineType)
-        XCTAssertNotEqual(lineType, quadType)
-        XCTAssertNotEqual(quadType, curveType)
-        XCTAssertNotEqual(curveType, closeType)
-        XCTAssertNotEqual(closeType, moveType)
+        #expect(moveType != lineType)
+        #expect(lineType != quadType)
+        #expect(quadType != curveType)
+        #expect(curveType != closeType)
+        #expect(closeType != moveType)
     }
     
     // MARK: - CGPathFillRule Tests
     
-    func testCGPathFillRuleEnum() {
+    @Test func cgPathFillRuleEnum() {
         let evenOdd = CGPathFillRule.evenOdd
         let winding = CGPathFillRule.winding
         
-        XCTAssertNotEqual(evenOdd, winding)
-        XCTAssertNotEqual(evenOdd.rawValue, winding.rawValue)
+        #expect(evenOdd != winding)
+        #expect(evenOdd.rawValue != winding.rawValue)
     }
     
-    func testCGPathFillRuleRawValues() {
+    @Test func cgPathFillRuleRawValues() {
         // Test that raw values are distinct and valid
         let evenOdd = CGPathFillRule.evenOdd
         let winding = CGPathFillRule.winding
         
-        XCTAssertNotNil(CGPathFillRule(rawValue: evenOdd.rawValue))
-        XCTAssertNotNil(CGPathFillRule(rawValue: winding.rawValue))
-        XCTAssertEqual(CGPathFillRule(rawValue: evenOdd.rawValue), evenOdd)
-        XCTAssertEqual(CGPathFillRule(rawValue: winding.rawValue), winding)
+        #expect(CGPathFillRule(rawValue: evenOdd.rawValue) != nil)
+        #expect(CGPathFillRule(rawValue: winding.rawValue) != nil)
+        #expect(CGPathFillRule(rawValue: evenOdd.rawValue) == evenOdd)
+        #expect(CGPathFillRule(rawValue: winding.rawValue) == winding)
     }
     
     // MARK: - MBezierPath Static Method Tests
     
-    func testMBezierPathAddArcToStatic() {
+    @Test func mBezierPathAddArcToStatic() {
         let path = CGPath()
         let center = CGPoint(x: 10, y: 10)
         let radius: CGFloat = 5
@@ -479,19 +479,19 @@ final class PolyfillTests: XCTestCase {
             clockwise: true
         )
         
-        XCTAssertFalse(path.elements.isEmpty)
-        XCTAssertGreaterThan(path.elements.count, 1)
+        #expect(!path.elements.isEmpty)
+        #expect(path.elements.count > 1)
         
         // First element should be move to starting point
         if case .moveToPoint(let point) = path.elements.first {
-            XCTAssertEqual(point.x, center.x + radius, accuracy: 1e-10)
-            XCTAssertEqual(point.y, center.y, accuracy: 1e-10)
+            #expect(abs(point.x - (center.x + radius)) <= 1e-10)
+            #expect(abs(point.y - center.y) <= 1e-10)
         } else {
-            XCTFail("Expected first element to be moveToPoint")
+            Issue.record("Expected first element to be moveToPoint")
         }
     }
     
-    func testMBezierPathAddArcToStaticWithExistingPath() {
+    @Test func mBezierPathAddArcToStaticWithExistingPath() {
         let path = CGPath()
         path.move(to: CGPoint(x: 20, y: 20))
         path.addLine(to: CGPoint(x: 25, y: 25))
@@ -509,31 +509,31 @@ final class PolyfillTests: XCTestCase {
         )
         
         // Should have added more elements
-        XCTAssertGreaterThan(path.elements.count, originalCount)
+        #expect(path.elements.count > originalCount)
     }
     
     // MARK: - Edge Cases
     
-    func testEmptyPathBounds() {
+    @Test func emptyPathBounds() {
         let path = CGPath()
         let bounds = path.boundingBoxOfPath
         
-        XCTAssertTrue(bounds.width.isInfinite || bounds.width.isNaN)
-        XCTAssertTrue(bounds.height.isInfinite || bounds.height.isNaN)
+        #expect(bounds.width.isInfinite || bounds.width.isNaN)
+        #expect(bounds.height.isInfinite || bounds.height.isNaN)
     }
     
-    func testSinglePointPathBounds() {
+    @Test func singlePointPathBounds() {
         let path = CGPath()
         path.move(to: CGPoint(x: 10, y: 20))
         
         let bounds = path.boundingBoxOfPath
-        XCTAssertEqual(bounds.origin.x, 10)
-        XCTAssertEqual(bounds.origin.y, 20)
-        XCTAssertEqual(bounds.width, 0)
-        XCTAssertEqual(bounds.height, 0)
+        #expect(bounds.origin.x == 10)
+        #expect(bounds.origin.y == 20)
+        #expect(bounds.width == 0)
+        #expect(bounds.height == 0)
     }
     
-    func testZeroRadiusArc() {
+    @Test func zeroRadiusArc() {
         let path = MBezierPath()
         path.addArc(
             withCenter: CGPoint(x: 0, y: 0),
@@ -544,33 +544,33 @@ final class PolyfillTests: XCTestCase {
         )
         
         // With zero radius, it creates move + curve elements all at center point
-        XCTAssertFalse(path.isEmpty)
-        XCTAssertEqual(path.cgPath.elements.count, 3) // move + 2 curves for π angle
+        #expect(!path.isEmpty)
+        #expect(path.cgPath.elements.count == 3) // move + 2 curves for pi angle
         
         // First element should be moveToPoint at center
         if case .moveToPoint(let point) = path.cgPath.elements[0] {
-            XCTAssertEqual(point.x, 0)
-            XCTAssertEqual(point.y, 0)
+            #expect(point.x == 0)
+            #expect(point.y == 0)
         } else {
-            XCTFail("Expected first element to be moveToPoint")
+            Issue.record("Expected first element to be moveToPoint")
         }
         
         // All curve elements should have all points at center
         for element in path.cgPath.elements.dropFirst() {
             if case .addCurveToPoint(let cp1, let cp2, let end) = element {
-                XCTAssertEqual(cp1.x, 0)
-                XCTAssertEqual(cp1.y, 0)
-                XCTAssertEqual(cp2.x, 0)
-                XCTAssertEqual(cp2.y, 0)
-                XCTAssertEqual(end.x, 0)
-                XCTAssertEqual(end.y, 0)
+                #expect(cp1.x == 0)
+                #expect(cp1.y == 0)
+                #expect(cp2.x == 0)
+                #expect(cp2.y == 0)
+                #expect(end.x == 0)
+                #expect(end.y == 0)
             } else {
-                XCTFail("Expected curve element")
+                Issue.record("Expected curve element")
             }
         }
     }
     
-    func testVerySmallAngleArc() {
+    @Test func verySmallAngleArc() {
         let path = MBezierPath()
         path.addArc(
             withCenter: CGPoint(x: 0, y: 0),
@@ -581,10 +581,10 @@ final class PolyfillTests: XCTestCase {
         )
         
         // Should handle very small angles (essentially no arc)
-        XCTAssertTrue(path.isEmpty || path.cgPath.elements.count <= 2)
+        #expect(path.isEmpty || path.cgPath.elements.count <= 2)
     }
     
-    func testIdenticalStartEndAngles() {
+    @Test func identicalStartEndAngles() {
         let path = MBezierPath()
         path.addArc(
             withCenter: CGPoint(x: 0, y: 0),
@@ -595,23 +595,22 @@ final class PolyfillTests: XCTestCase {
         )
         
         // Should handle identical start and end angles
-        XCTAssertTrue(path.isEmpty || path.cgPath.elements.count <= 1)
+        #expect(path.isEmpty || path.cgPath.elements.count <= 1)
     }
     
-    func testNegativeRectDimensions() {
+    @Test func negativeRectDimensions() {
         let path = CGPath()
         let rect = CGRect(x: 10, y: 10, width: -5, height: -5)
         path.addRect(rect)
         
         // Should handle negative dimensions
-        XCTAssertFalse(path.elements.isEmpty)
+        #expect(!path.elements.isEmpty)
     }
     
     #else
     
-    func testPolyfillNotNeeded() {
+    @Test func polyfillNotNeeded() {
         // On platforms with CoreGraphics, polyfill types should be aliases
-        XCTAssertTrue(true, "CoreGraphics polyfill not needed on this platform")
     }
     
     #endif
