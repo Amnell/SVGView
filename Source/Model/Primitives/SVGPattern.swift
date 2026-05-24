@@ -35,19 +35,61 @@ public class SVGPattern: SVGPaint {
     @ViewBuilder
     func apply<S: View>(view: S, model: SVGShape? = nil) -> some View {
         if width > 0, height > 0, !contents.isEmpty, let cgImage = renderTile() {
-            let image = Image(decorative: cgImage, scale: 1.0)
             let bounds = model?.bounds() ?? .zero
+            let image = Image(decorative: cgImage, scale: 1.0)
             view
                 .foregroundColor(.clear)
                 .overlay(
-                    Rectangle()
-                        .fill(ImagePaint(image: image, scale: 1.0))
-                        .frame(width: bounds.width, height: bounds.height)
-                        .offset(x: bounds.minX, y: bounds.minY)
+                    tileView(image: image, bounds: bounds)
                         .mask(view)
                 )
         } else {
             view.foregroundColor(.clear)
+        }
+    }
+
+    @ViewBuilder
+    private func tileView(image: Image, bounds: CGRect) -> some View {
+        if patternTransform.isIdentity {
+            Rectangle()
+                .fill(ImagePaint(image: image, scale: 1.0))
+                .frame(width: bounds.width, height: bounds.height)
+                .offset(x: bounds.minX, y: bounds.minY)
+        } else {
+            // Canvas-based tiling: apply patternTransform to the drawing context so
+            // the tile grid is rendered in the transformed coordinate space.
+            Canvas { ctx, size in
+                ctx.concatenate(self.patternTransform)
+                // Compute how many tiles are needed to cover the shape bounds after
+                // the inverse transform is applied. Over-estimating is safe.
+                let inv = self.patternTransform.inverted()
+                let corners = [
+                    CGPoint(x: 0, y: 0),
+                    CGPoint(x: size.width, y: 0),
+                    CGPoint(x: 0, y: size.height),
+                    CGPoint(x: size.width, y: size.height),
+                ]
+                let transformed = corners.map { $0.applying(inv) }
+                let minX = transformed.map(\.x).min() ?? 0
+                let maxX = transformed.map(\.x).max() ?? size.width
+                let minY = transformed.map(\.y).min() ?? 0
+                let maxY = transformed.map(\.y).max() ?? size.height
+                let startCol = Int(floor(minX / self.width)) - 1
+                let endCol   = Int(ceil(maxX  / self.width)) + 1
+                let startRow = Int(floor(minY / self.height)) - 1
+                let endRow   = Int(ceil(maxY  / self.height)) + 1
+                let resolved = ctx.resolve(image)
+                for row in startRow...endRow {
+                    for col in startCol...endCol {
+                        ctx.draw(resolved, at: CGPoint(
+                            x: CGFloat(col) * self.width,
+                            y: CGFloat(row) * self.height
+                        ), anchor: .topLeading)
+                    }
+                }
+            }
+            .frame(width: bounds.width, height: bounds.height)
+            .offset(x: bounds.minX, y: bounds.minY)
         }
     }
 

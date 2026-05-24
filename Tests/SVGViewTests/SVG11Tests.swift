@@ -106,6 +106,7 @@ struct SVG11Tests {
         @Test func pserversGrad02B() async throws { try await compareToReference("pservers-grad-02-b") }
         @Test func pserversGrad03B() async throws { try await compareToReference("pservers-grad-03-b") }
         @Test func pserversGrad04B() async throws { try await compareToReference("pservers-grad-04-b") }
+        @Test func pserversGrad06B() async throws { try await compareToReference("pservers-grad-06-b") }
         @Test func pserversGrad05B() async throws { try await compareToReference("pservers-grad-05-b") }
         @Test func pserversGrad07B() async throws { try await compareToReference("pservers-grad-07-b") }
         @Test func pserversGrad09B() async throws { try await compareToReference("pservers-grad-09-b") }
