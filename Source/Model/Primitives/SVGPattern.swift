@@ -36,11 +36,12 @@ public class SVGPattern: SVGPaint {
     func apply<S: View>(view: S, model: SVGShape? = nil) -> some View {
         if width > 0, height > 0, !contents.isEmpty, let cgImage = renderTile() {
             let bounds = model?.bounds() ?? .zero
+            let frame  = model?.frame()  ?? .zero
             let image = Image(decorative: cgImage, scale: 1.0)
             view
                 .foregroundColor(.clear)
                 .overlay(
-                    tileView(image: image, bounds: bounds)
+                    tileView(image: image, bounds: bounds, shapeOrigin: frame.origin)
                         .mask(view)
                 )
         } else {
@@ -49,20 +50,27 @@ public class SVGPattern: SVGPaint {
     }
 
     @ViewBuilder
-    private func tileView(image: Image, bounds: CGRect) -> some View {
+    private func tileView(image: Image, bounds: CGRect, shapeOrigin: CGPoint = .zero) -> some View {
         if patternTransform.isIdentity {
             Rectangle()
                 .fill(ImagePaint(image: image, scale: 1.0))
                 .frame(width: bounds.width, height: bounds.height)
                 .offset(x: bounds.minX, y: bounds.minY)
         } else {
-            // Canvas-based tiling: apply patternTransform to the drawing context so
-            // the tile grid is rendered in the transformed coordinate space.
+            // patternTransform uses SVG user-space coordinates, but the Canvas
+            // coordinate system has its origin at the shape's top-left corner.
+            // Subtract the shape origin so tile positions are in Canvas-local space.
+            let localTransform = CGAffineTransform(
+                a: patternTransform.a, b: patternTransform.b,
+                c: patternTransform.c, d: patternTransform.d,
+                tx: patternTransform.tx - shapeOrigin.x,
+                ty: patternTransform.ty - shapeOrigin.y
+            )
             Canvas { ctx, size in
-                ctx.concatenate(self.patternTransform)
-                // Compute how many tiles are needed to cover the shape bounds after
-                // the inverse transform is applied. Over-estimating is safe.
-                let inv = self.patternTransform.inverted()
+                ctx.concatenate(localTransform)
+                // Compute tile coverage by inverse-transforming the canvas corners
+                // back into tile space. Over-estimating is safe.
+                let inv = localTransform.inverted()
                 let corners = [
                     CGPoint(x: 0, y: 0),
                     CGPoint(x: size.width, y: 0),
