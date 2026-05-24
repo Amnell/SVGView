@@ -23,16 +23,57 @@ extension SVGTestHelper {
         let refURL = try #require(bundle.url(forResource: fileName, withExtension: "ref", subdirectory: "w3c/\(dir)/refs/"))
 
         let node = try #require(SVGParser.parse(contentsOf: svgURL))
-        let content = try #require(Serializer.serialize(node))
+        let content = Serializer.serialize(node)
         let reference = try String(contentsOf: refURL)
 
-        let nodeContent = content
-        let referenceContent = reference
-        #expect(nodeContent == referenceContent, "nodeContent is not equal to referenceContent. \(prettyFirstDifferenceBetweenStrings(s1: nodeContent, s2: referenceContent))")
+        Attachment.record(Attachment(content, named: "\(fileName)-actual.txt"))
+        Attachment.record(Attachment(reference, named: "\(fileName)-expected.txt"))
+        Attachment.record(Attachment(unifiedDiff(actual: content, expected: reference), named: "\(fileName)-diff.txt"))
+
+        #expect(content == reference, "nodeContent is not equal to referenceContent. \(prettyFirstDifferenceBetweenStrings(s1: content, s2: reference))")
     }
 
     func prettyFirstDifferenceBetweenStrings(s1: String, s2: String) -> String {
         return prettyFirstDifferenceBetweenNSStrings(s1: s1 as NSString, s2: s2 as NSString) as String
+    }
+
+    func unifiedDiff(actual: String, expected: String) -> String {
+        let actualLines = actual.components(separatedBy: "\n")
+        let expectedLines = expected.components(separatedBy: "\n")
+        var result = "--- expected\n+++ actual\n"
+        let lcs = longestCommonSubsequence(actualLines, expectedLines)
+        var i = 0, j = 0, k = 0
+        while i < actualLines.count || j < expectedLines.count {
+            if i < actualLines.count && j < expectedLines.count && k < lcs.count && actualLines[i] == lcs[k] && expectedLines[j] == lcs[k] {
+                result += " \(actualLines[i])\n"
+                i += 1; j += 1; k += 1
+            } else if j < expectedLines.count && (k >= lcs.count || expectedLines[j] != lcs[k]) {
+                result += "-\(expectedLines[j])\n"
+                j += 1
+            } else {
+                result += "+\(actualLines[i])\n"
+                i += 1
+            }
+        }
+        return result
+    }
+
+    private func longestCommonSubsequence(_ a: [String], _ b: [String]) -> [String] {
+        let m = a.count, n = b.count
+        var dp = Array(repeating: Array(repeating: 0, count: n + 1), count: m + 1)
+        for i in 1...m {
+            for j in 1...n {
+                dp[i][j] = a[i-1] == b[j-1] ? dp[i-1][j-1] + 1 : max(dp[i-1][j], dp[i][j-1])
+            }
+        }
+        var result: [String] = []
+        var i = m, j = n
+        while i > 0 && j > 0 {
+            if a[i-1] == b[j-1] { result.append(a[i-1]); i -= 1; j -= 1 }
+            else if dp[i-1][j] > dp[i][j-1] { i -= 1 }
+            else { j -= 1 }
+        }
+        return result.reversed()
     }
 }
 
