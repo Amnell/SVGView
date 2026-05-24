@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASE_DIR="SVGViewTests"
+BASE_DIR="Tests/SVGViewTests"
 cd $BASE_DIR
 
 HEADER="# W3C SVG Test Suite Coverage\n\n"
@@ -63,4 +63,4 @@ function addSubTitle() {
 addTitle "1.1F2" "SVG 1.1 (Second Edition)" "svg-11-second-edition" "https://www.w3.org/TR/SVG11/" "1"
 addTitle "1.2T" "SVG Tiny 1.2" "svg-tiny-12" "https://www.w3.org/TR/SVGTiny12/" "2"
 
-echo "$HEADER$FOOTER" > ../w3c-coverage.md
+echo "$HEADER$FOOTER" > ../../w3c-coverage.md
