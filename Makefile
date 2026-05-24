@@ -45,4 +45,7 @@ generate-test-cases: # Generate test cases from w3c reference files
 update-references-snapshots: # Update .ref from .svg files
 	swift run GenerateReferencesCLI Tests/SVGViewTests/w3c/
 
-.PHONY: help test generate-test-cases update-references-snapshots
+w3c-coverage: # Regenerate w3c-coverage.md
+	./w3c-coverage.sh
+
+.PHONY: help test generate-test-cases update-references-snapshots w3c-coverage
