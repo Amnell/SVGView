@@ -143,3 +143,74 @@ class SVGMarkerParser: SVGBaseElementParser {
         }
     }
 }
+
+/// Implements the SVG `<switch>` element (SVG 1.1 §5.8).
+///
+/// The switch evaluates conditional-processing attributes on each child element
+/// in document order and renders the first child for which all conditions are
+/// met.  Subsequent children are ignored.
+class SVGSwitchParser: SVGBaseElementParser {
+
+    /// SVG 1.1 feature strings that SVGView supports.
+    private static let supportedFeatures: Set<String> = [
+        "http://www.w3.org/TR/SVG11/feature#SVG-static",
+        "http://www.w3.org/TR/SVG11/feature#CoreAttribute",
+        "http://www.w3.org/TR/SVG11/feature#Structure",
+        "http://www.w3.org/TR/SVG11/feature#BasicStructure",
+        "http://www.w3.org/TR/SVG11/feature#ConditionalProcessing",
+        "http://www.w3.org/TR/SVG11/feature#Shape",
+        "http://www.w3.org/TR/SVG11/feature#BasicText",
+        "http://www.w3.org/TR/SVG11/feature#PaintAttribute",
+        "http://www.w3.org/TR/SVG11/feature#BasicPaintAttribute",
+        "http://www.w3.org/TR/SVG11/feature#OpacityAttribute",
+        "http://www.w3.org/TR/SVG11/feature#GraphicsAttribute",
+        "http://www.w3.org/TR/SVG11/feature#BasicGraphicsAttribute",
+        "http://www.w3.org/TR/SVG11/feature#Gradient",
+        "http://www.w3.org/TR/SVG11/feature#Marker",
+        "http://www.w3.org/TR/SVG11/feature#Image",
+    ]
+
+    override func doParse(context: SVGNodeContext, delegate: (XMLElement) -> SVGNode?) -> SVGNode? {
+        let children = context.element.contents.compactMap { $0 as? XMLElement }
+        for child in children {
+            if conditionsMet(for: child) {
+                let contents = delegate(child).map { [$0] } ?? []
+                return SVGGroup(contents: contents)
+            }
+        }
+        return SVGGroup(contents: [])
+    }
+
+    private func conditionsMet(for element: XMLElement) -> Bool {
+        let attrs = element.attributes
+
+        // requiredExtensions: SVGView supports no extensions — any non-empty value skips the child
+        if let extensions = attrs["requiredExtensions"], !extensions.trimmingCharacters(in: .whitespaces).isEmpty {
+            return false
+        }
+
+        // requiredFeatures: every space-separated feature URI must be in our supported set
+        if let features = attrs["requiredFeatures"] {
+            let required = features.split(separator: " ").map(String.init)
+            if !required.allSatisfy({ Self.supportedFeatures.contains($0) }) {
+                return false
+            }
+        }
+
+        // systemLanguage: at least one comma-separated BCP-47 tag must prefix-match the current locale
+        if let languages = attrs["systemLanguage"] {
+            let currentLang: String
+            if #available(macOS 13, iOS 16, watchOS 9, *) {
+                currentLang = Locale.current.language.languageCode?.identifier ?? ""
+            } else {
+                currentLang = (Locale.current as NSLocale).languageCode
+            }
+            let codes = languages.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+            if !codes.contains(where: { $0.hasPrefix(currentLang) || currentLang.hasPrefix($0) }) {
+                return false
+            }
+        }
+
+        return true
+    }
+}
