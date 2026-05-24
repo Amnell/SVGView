@@ -32,12 +32,18 @@ public struct SVGParser {
     static public func parse(xml: XMLElement?, settings: SVGSettings = .default) -> SVGNode? {
         guard let xml = xml else { return nil }
 
-        return parse(element: xml, parentContext: SVGRootContext(
+        let node = parse(element: xml, parentContext: SVGRootContext(
             logger: settings.logger,
             linker: settings.linker,
             screen: SVGScreen.main(ppi: settings.ppi),
             index: SVGIndex(element: xml),
             defaultFontSize: settings.fontSize))
+
+        if let node {
+            SVGScriptRunner.executeIfNeeded(xmlRoot: xml, nodeRoot: node, logger: settings.logger)
+        }
+
+        return node
     }
 
     @available(*, deprecated, message: "Use parse(contentsOf:) function instead")
