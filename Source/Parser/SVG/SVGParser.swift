@@ -50,6 +50,18 @@ public struct SVGParser {
         return parse(context: context)
     }
 
+    /// Parses a list of XML elements using the given index. Used for pattern tile content.
+    static func parseElements(_ elements: [XMLElement], index: SVGIndex) -> [SVGNode] {
+        let context = SVGRootContext(
+            logger: SVGLogger.console,
+            linker: SVGLinker.none,
+            screen: SVGScreen.main(ppi: 96),
+            index: index,
+            defaultFontSize: 16
+        )
+        return elements.compactMap { parse(element: $0, parentContext: context) }
+    }
+
     private static let parsers: [String:SVGElementParser] = [
         "svg": SVGViewportParser(),
         "g": SVGGroupParser(),

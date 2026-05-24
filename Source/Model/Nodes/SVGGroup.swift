@@ -44,6 +44,17 @@ public class SVGGroup: SVGNode {
         serializer.add("contents", contents)
     }
 
+    #if !os(WASI) && !os(Linux)
+    override func draw(in context: CGContext) {
+        context.saveGState()
+        context.concatenate(transform)
+        for node in contents {
+            node.draw(in: context)
+        }
+        context.restoreGState()
+    }
+    #endif
+
     #if canImport(SwiftUI)
     public func contentView() -> some View {
         SVGGroupView(model: self)

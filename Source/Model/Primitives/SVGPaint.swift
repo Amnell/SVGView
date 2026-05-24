@@ -34,6 +34,8 @@ extension View {
                 linearGradient.apply(view: self, model: model)
             case let radialGradient as SVGRadialGradient:
                 radialGradient.apply(view: self, model: model)
+            case let pattern as SVGPattern:
+                pattern.apply(view: self, model: model)
             case let color as SVGColor:
                 color.apply(view: self, model: model)
             default:

@@ -47,7 +47,22 @@ public class SVGRect: SVGShape {
         serializer.add("rx", rx, 0).add("ry", ry, 0)
         super.serialize(serializer)
     }
-    
+
+    #if !os(WASI) && !os(Linux)
+    override func draw(in context: CGContext) {
+        guard let color = fill as? SVGColor else { return }
+        context.saveGState()
+        context.setFillColor(CGColor(
+            red: CGFloat(color.r) / 255,
+            green: CGFloat(color.g) / 255,
+            blue: CGFloat(color.b) / 255,
+            alpha: CGFloat(color.opacity)
+        ))
+        context.fill(CGRect(x: x, y: y, width: width, height: height))
+        context.restoreGState()
+    }
+    #endif
+
     #if canImport(SwiftUI)
     public func contentView() -> some View {
         SVGRectView(model: self)
