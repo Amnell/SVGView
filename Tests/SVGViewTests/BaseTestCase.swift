@@ -9,6 +9,10 @@ import Foundation
 import Testing
 @testable import SVGView
 
+#if canImport(SwiftUI)
+import SwiftUI
+#endif
+
 protocol SVGTestHelper {
     var dir: String { get }
 }
@@ -17,18 +21,21 @@ extension SVGTestHelper {
 
     var dir: String { "1.2T" }
 
-    func compareToReference(_ fileName: String) throws {
+    func compareToReference(_ fileName: String) async throws {
         let bundle = Bundle.module
         let svgURL = try #require(bundle.url(forResource: fileName, withExtension: "svg", subdirectory: "w3c/\(dir)/svg/"))
         let refURL = try #require(bundle.url(forResource: fileName, withExtension: "ref", subdirectory: "w3c/\(dir)/refs/"))
 
+        let svgSource = try String(contentsOf: svgURL)
         let node = try #require(SVGParser.parse(contentsOf: svgURL))
         let content = Serializer.serialize(node)
         let reference = try String(contentsOf: refURL)
 
+        Attachment.record(Attachment(svgSource, named: "\(fileName).svg"))
         Attachment.record(Attachment(content, named: "\(fileName)-actual.txt"))
         Attachment.record(Attachment(reference, named: "\(fileName)-expected.txt"))
         Attachment.record(Attachment(unifiedDiff(actual: content, expected: reference), named: "\(fileName)-diff.txt"))
+        await renderedPNGAttachment(node: node, named: "\(fileName)-rendered.png")
 
         #expect(content == reference, "nodeContent is not equal to referenceContent. \(prettyFirstDifferenceBetweenStrings(s1: content, s2: reference))")
     }
@@ -74,6 +81,46 @@ extension SVGTestHelper {
             else { j -= 1 }
         }
         return result.reversed()
+    }
+
+    /// Renders `node` to a PNG using `ImageRenderer` and records it as a test attachment.
+    /// Only runs on platforms that support `ImageRenderer` (macOS 13+, iOS 16+, watchOS 9+).
+    /// Failures are silently ignored — the render is a diagnostic aid, not part of correctness.
+    func renderedPNGAttachment(node: SVGNode, named name: String) async {
+#if canImport(SwiftUI)
+        if #available(macOS 13, iOS 16, watchOS 9, *) {
+            let size = renderSize(for: node)
+            let png = await MainActor.run { () -> Data? in
+                let renderer = ImageRenderer(content: SVGView(svg: node).frame(width: size.width, height: size.height))
+                renderer.scale = 1.0
+#if os(macOS)
+                guard let nsImage = renderer.nsImage,
+                      let tiff = nsImage.tiffRepresentation,
+                      let rep = NSBitmapImageRep(data: tiff) else { return nil }
+                return rep.representation(using: .png, properties: [:])
+#elseif os(iOS)
+                return renderer.uiImage?.pngData()
+#else
+                return nil
+#endif
+            }
+            if let png {
+                Attachment.record(Attachment(png, named: name))
+            }
+        }
+#endif
+    }
+
+    private func renderSize(for node: SVGNode) -> CGSize {
+        if let viewport = node as? SVGViewport {
+            if let box = viewport.viewBox, box.width > 0, box.height > 0 {
+                return CGSize(width: box.width, height: box.height)
+            }
+            if let w = viewport.width.ideal, let h = viewport.height.ideal, w > 0, h > 0 {
+                return CGSize(width: w, height: h)
+            }
+        }
+        return CGSize(width: 480, height: 360)
     }
 }
 
