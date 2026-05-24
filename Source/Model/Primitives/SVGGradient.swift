@@ -101,19 +101,22 @@ public class SVGRadialGradient: SVGGradient {
     public let fx: CGFloat
     public let fy: CGFloat
     public let r: CGFloat
+    public let gradientTransform: CGAffineTransform
 
-    public init(cx: CGFloat = 0.5, cy: CGFloat = 0.5, fx: CGFloat = 0.5, fy: CGFloat = 0.5, r: CGFloat = 0.5, userSpace: Bool = false, stops: [SVGStop] = []) {
+    public init(cx: CGFloat = 0.5, cy: CGFloat = 0.5, fx: CGFloat = 0.5, fy: CGFloat = 0.5, r: CGFloat = 0.5,
+                userSpace: Bool = false, gradientTransform: CGAffineTransform = .identity, stops: [SVGStop] = []) {
         self.cx = cx
         self.cy = cy
         self.fx = fx
         self.fy = fy
         self.r = r
+        self.gradientTransform = gradientTransform
         super.init(
             userSpace: userSpace,
             stops: stops
         )
     }
-    
+
     #if canImport(SwiftUI)
     public func toSwiftUI(rect: CGRect) -> RadialGradient {
         let suiStops = stops.map { stop in Gradient.Stop(color: stop.color.toSwiftUI(), location: stop.offset) }
@@ -123,21 +126,69 @@ public class SVGRadialGradient: SVGGradient {
         return RadialGradient(gradient: Gradient(stops: suiStops), center: UnitPoint(x: ncx, y: ncy), startRadius: 0, endRadius: userSpace ? r : r * s)
     }
 
-    func apply<S>(view: S, model: SVGShape? = nil) -> some View where S : View {
-        let frame = model?.frame() ?? CGRect()
+    @ViewBuilder
+    func apply<S>(view: S, model: SVGShape? = nil) -> some View where S: View {
         let bounds = model?.bounds() ?? CGRect()
-        let width = bounds.width
-        let height = bounds.height
-        let minimum = min(width, height)
-        return view
-            .foregroundColor(.clear)
-            .overlay(
-                toSwiftUI(rect: frame)
-                    .scaleEffect(CGSize(width: userSpace ? 1 : width/minimum,
-                                        height: userSpace ? 1 : height/minimum))
-                    .offset(x: bounds.minX, y: bounds.minY)
-                    .mask(view)
-            )
+        let frame = model?.frame() ?? CGRect()
+        if !gradientTransform.isIdentity, let cgImage = renderGradientImage(shapeFrame: frame) {
+            let image = Image(decorative: cgImage, scale: 1.0)
+            view
+                .foregroundColor(.clear)
+                .overlay(
+                    image
+                        .resizable()
+                        .frame(width: bounds.width, height: bounds.height)
+                        .offset(x: bounds.minX, y: bounds.minY)
+                        .mask(view)
+                )
+        } else {
+            let minimum = min(bounds.width, bounds.height)
+            view
+                .foregroundColor(.clear)
+                .overlay(
+                    toSwiftUI(rect: frame)
+                        .scaleEffect(CGSize(width: userSpace ? 1 : bounds.width / minimum,
+                                            height: userSpace ? 1 : bounds.height / minimum))
+                        .offset(x: bounds.minX, y: bounds.minY)
+                        .mask(view)
+                )
+        }
+    }
+
+    private func renderGradientImage(shapeFrame: CGRect) -> CGImage? {
+        let w = Int(ceil(shapeFrame.width))
+        let h = Int(ceil(shapeFrame.height))
+        guard w > 0, h > 0 else { return nil }
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let context = CGContext(
+            data: nil, width: w, height: h,
+            bitsPerComponent: 8, bytesPerRow: 0,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else { return nil }
+        // Flip y-axis so that y increases downward (matches SVG coordinate space)
+        context.translateBy(x: 0, y: CGFloat(h))
+        context.scaleBy(x: 1, y: -1)
+        // Translate so that the shape's SVG origin maps to the bitmap origin
+        context.translateBy(x: -shapeFrame.minX, y: -shapeFrame.minY)
+        // Apply gradientTransform: maps gradient space → SVG user space
+        context.concatenate(gradientTransform)
+        // Build CGGradient from stops
+        let cgColors = stops.map { stop in
+            CGColor(red: CGFloat(stop.color.r) / 255.0,
+                    green: CGFloat(stop.color.g) / 255.0,
+                    blue: CGFloat(stop.color.b) / 255.0,
+                    alpha: CGFloat(stop.color.a) / 255.0)
+        } as CFArray
+        let locations: [CGFloat] = stops.map(\.offset)
+        guard let cg = CGGradient(colorsSpace: colorSpace, colors: cgColors, locations: locations) else { return nil }
+        context.drawRadialGradient(
+            cg,
+            startCenter: CGPoint(x: fx, y: fy), startRadius: 0,
+            endCenter: CGPoint(x: cx, y: cy), endRadius: r,
+            options: [.drawsAfterEndLocation, .drawsBeforeStartLocation]
+        )
+        return context.makeImage()
     }
     #endif
 
