@@ -2,11 +2,11 @@
 
 This page is automatically generated and shows actual coverage of the [W3C SVG Test Suite](https://github.com/web-platform-tests/wpt/tree/master/svg) by this `SVGView` implementation. Currently there are two standards supported: [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/) and [SVG Tiny 1.2](https://www.w3.org/TR/SVGTiny12/).
 
-  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `20.3%`
+  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `20.4%`
     * [Animate](#animate-1): `0.0%`
     * [Color](#color-1): `83.3%`
     * [Conform](#conform-1): `0.0%`
-    * [Coords](#coords-1): `71.8%`
+    * [Coords](#coords-1): `75.0%`
     * [Extend](#extend-1): `0.0%`
     * [Filters](#filters-1): `0.0%`
     * [Fonts](#fonts-1): `0.0%`
@@ -51,7 +51,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 
 ## [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/)
 
-`20.3%` of tests covered (106/522). They can be splitted into following categories:
+`20.4%` of tests covered (107/522). They can be splitted into following categories:
 
 ### <a name='animate-1'></a> [Animate](https://www.w3.org/TR/SVG11/animate.html): `0.0%`
 
@@ -167,16 +167,16 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[conform-viewers-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/conform-viewers-03-f.svg)|
 </details>
 
-### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `71.8%`
+### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `75.0%`
 
 <details>
-  <summary>(23/32) tests covered...</summary>
+  <summary>(24/32) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
 |✅|[coords-coord-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/coords-coord-01-t.svg)|
 |✅|[coords-coord-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/coords-coord-02-t.svg)|
-|❌|[coords-dom-01-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-01-f.svg)|
+|✅|[coords-dom-01-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-01-f.svg)|
 |❌|[coords-dom-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-02-f.svg)|
 |❌|[coords-dom-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-03-f.svg)|
 |❌|[coords-dom-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-04-f.svg)|
