@@ -2,7 +2,7 @@
 
 This page is automatically generated and shows actual coverage of the [W3C SVG Test Suite](https://github.com/web-platform-tests/wpt/tree/master/svg) by this `SVGView` implementation. Currently there are two standards supported: [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/) and [SVG Tiny 1.2](https://www.w3.org/TR/SVGTiny12/).
 
-  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `19.9%`
+  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `20.3%`
     * [Animate](#animate-1): `0.0%`
     * [Color](#color-1): `83.3%`
     * [Conform](#conform-1): `0.0%`
@@ -17,7 +17,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
     * [Metadata](#metadata-1): `0.0%`
     * [Painting](#painting-1): `51.6%`
     * [Paths](#paths-1): `90.4%`
-    * [Pservers](#pservers-1): `18.1%`
+    * [Pservers](#pservers-1): `24.2%`
     * [Render](#render-1): `37.5%`
     * [Script](#script-1): `0.0%`
     * [Shapes](#shapes-1): `81.8%`
@@ -51,7 +51,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 
 ## [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/)
 
-`19.9%` of tests covered (104/522). They can be splitted into following categories:
+`20.3%` of tests covered (106/522). They can be splitted into following categories:
 
 ### <a name='animate-1'></a> [Animate](https://www.w3.org/TR/SVG11/animate.html): `0.0%`
 
@@ -468,19 +468,19 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[paths-dom-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/paths-dom-02-f.svg)|
 </details>
 
-### <a name='pservers-1'></a> [Pservers](https://www.w3.org/TR/SVG11/pservers.html): `18.1%`
+### <a name='pservers-1'></a> [Pservers](https://www.w3.org/TR/SVG11/pservers.html): `24.2%`
 
 <details>
-  <summary>(6/33) tests covered...</summary>
+  <summary>(8/33) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
 |✅|[pservers-grad-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-01-b.svg)|
 |✅|[pservers-grad-02-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-02-b.svg)|
-|❌|[pservers-grad-03-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-03-b.svg)|
+|✅|[pservers-grad-03-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-03-b.svg)|
 |✅|[pservers-grad-04-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-04-b.svg)|
 |✅|[pservers-grad-05-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-05-b.svg)|
-|❌|[pservers-grad-06-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-06-b.svg)|
+|✅|[pservers-grad-06-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-06-b.svg)|
 |✅|[pservers-grad-07-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-07-b.svg)|
 |❌|[pservers-grad-08-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-08-b.svg)|
 |✅|[pservers-grad-09-b](Tests/SVGViewTests/w3c/1.1F2/svg/pservers-grad-09-b.svg)|
