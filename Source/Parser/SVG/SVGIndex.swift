@@ -37,7 +37,7 @@ class SVGIndex {
         if let id = SVGHelper.parseId(element.attributes) {
             elements[id] = element
             switch element.name {
-            case "linearGradient", "radialGradient", "fill":
+            case "linearGradient", "radialGradient", "fill", "pattern":
                 paints[id] = parseFill(element)
             default:
                 elements[id] = element
@@ -60,9 +60,47 @@ class SVGIndex {
             return parseLinearGradient(element)
         case "radialGradient":
             return parseRadialGradient(element)
+        case "pattern":
+            return parsePattern(element)
         default:
             return .none
         }
+    }
+
+    private func getParentPattern(_ element: XMLElement) -> SVGPattern? {
+        if let link = element.attributes["xlink:href"]?.replacingOccurrences(of: " ", with: ""), link.hasPrefix("#") {
+            let id = link.replacingOccurrences(of: "#", with: "")
+            return paints[id] as? SVGPattern
+        }
+        return nil
+    }
+
+    private func parsePattern(_ element: XMLElement) -> SVGPattern? {
+        let parent = getParentPattern(element)
+        let childElements = element.contents.compactMap { $0 as? XMLElement }
+        let contents: [SVGNode]
+        if childElements.isEmpty {
+            contents = parent?.contents ?? []
+        } else {
+            contents = SVGParser.parseElements(childElements, index: self)
+        }
+        guard !contents.isEmpty else { return nil }
+        let x = SVGHelper.parseCGFloat(element.attributes, "x", defaultValue: parent?.x ?? 0)
+        let y = SVGHelper.parseCGFloat(element.attributes, "y", defaultValue: parent?.y ?? 0)
+        let width = SVGHelper.parseCGFloat(element.attributes, "width", defaultValue: parent?.width ?? 0)
+        let height = SVGHelper.parseCGFloat(element.attributes, "height", defaultValue: parent?.height ?? 0)
+        guard width > 0, height > 0 else { return nil }
+        var userSpace = parent?.userSpace ?? false
+        if let patternUnits = element.attributes["patternUnits"] {
+            userSpace = patternUnits == "userSpaceOnUse"
+        }
+        var patternTransform = parent?.patternTransform ?? .identity
+        if let transformStr = element.attributes["patternTransform"] {
+            patternTransform = SVGHelper.parseTransform(transformStr)
+        }
+        return SVGPattern(x: x, y: y, width: width, height: height,
+                          userSpace: userSpace, patternTransform: patternTransform,
+                          contents: contents)
     }
 
     private func getParentGradient(_ element: XMLElement) -> SVGGradient? {
