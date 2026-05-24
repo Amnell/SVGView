@@ -13,6 +13,21 @@ swift run GenerateReferencesCLI Tests/SVGViewTests/w3c   # regenerate .ref snaps
 
 Tests are snapshot-based: the parsed node tree is serialized to text and compared against a `.ref` file. The visual render is recorded as an attachment only — it does not assert.
 
+### Exporting rendered PNGs for debugging
+
+Pass `--attachments-path <dir>` to write all test attachments (rendered PNG, actual/expected text, diff) to a directory on disk:
+
+```bash
+mkdir -p /tmp/svgout
+swift test --filter <TestName> --attachments-path /tmp/svgout
+# Files written: <TestName>-rendered.png, <TestName>-actual.txt, <TestName>-expected.txt, <TestName>-diff.txt
+```
+
+To compare a rendered PNG against the W3C reference image, open the reference URL in a browser:
+```
+https://www.w3.org/Graphics/SVG/Test/20110816/png/<test-name>.png
+```
+
 ## Key Directories
 
 | Path | Purpose |
