@@ -65,6 +65,7 @@ public struct SVGParser {
         "path": SVGPathParser(),
         "marker": SVGMarkerParser(),
         "defs": SVGVDefParser(),
+        "switch": SVGSwitchParser(),
     ]
 
     private static func parse(context: SVGNodeContext) -> SVGNode? {

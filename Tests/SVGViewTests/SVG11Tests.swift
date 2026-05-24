@@ -147,6 +147,8 @@ struct SVG11Tests {
     struct Struct: SVGTestHelper {
         var dir: String { "1.1F2" }
 
+        @Test func structCond01T() throws { try compareToReference("struct-cond-01-t") }
+        @Test func structCond03T() throws { try compareToReference("struct-cond-03-t") }
         @Test func structDefs01T() throws { try compareToReference("struct-defs-01-t") }
         @Test func structFrag01T() throws { try compareToReference("struct-frag-01-t") }
         @Test func structFrag06T() throws { try compareToReference("struct-frag-06-t") }
