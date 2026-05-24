@@ -9,6 +9,8 @@ This is a fork of [exyte/SVGView](https://github.com/exyte/SVGView) that tailore
 
 This uses `make` heavily for relevant scripts. Run `make` without arguments to see the available commands.
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for a step-by-step guide on identifying missing SVG spec features and implementing them, including how to write tests and generate reference snapshots.
+
 ## To add a new SVG test:
 - Update `cli.swift` to include the svg file path
 - `make generate-test-cases` to generate the unit test files
