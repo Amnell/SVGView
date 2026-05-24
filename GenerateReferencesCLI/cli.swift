@@ -76,6 +76,7 @@ struct cli: ParsableCommand {
         "paths-data-20-f",
         "pservers-grad-01-b",
         "pservers-grad-02-b",
+        "pservers-grad-03-b",
         "pservers-grad-04-b",
         "pservers-grad-05-b",
         "pservers-grad-07-b",

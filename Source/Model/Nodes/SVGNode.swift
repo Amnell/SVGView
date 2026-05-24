@@ -86,6 +86,12 @@ public class SVGNode: SerializableElement {
         return String(describing: type(of: self))
     }
 
+    #if !os(WASI) && !os(Linux)
+    func draw(in context: CGContext) {
+        // default: no-op
+    }
+    #endif
+
 }
 
 #if canImport(SwiftUI)
