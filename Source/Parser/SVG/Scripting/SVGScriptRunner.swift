@@ -92,6 +92,10 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
             setFillOpacity(normalizedValue)
         case "stroke-opacity":
             setStrokeOpacity(normalizedValue)
+        case "stroke-dasharray":
+            setStrokeDashArray(normalizedValue)
+        case "stroke-dashoffset":
+            setStrokeDashOffset(normalizedValue)
         default:
             break
         }
@@ -160,6 +164,51 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
             miterLimit: current.miterLimit,
             dashes: current.dashes,
             offset: current.offset
+        )
+    }
+
+    private func setStrokeDashArray(_ value: String) {
+        guard let shape = node as? SVGShape,
+              let current = shape.stroke
+        else { return }
+
+        let dashes: [CGFloat]
+        if value.lowercased() == "none" {
+            dashes = []
+        } else {
+            let parts = value.components(separatedBy: CharacterSet(charactersIn: " ,"))
+                .filter { !$0.isEmpty }
+            dashes = parts.compactMap { token in
+                guard let parsed = SVGHelper.doubleFromString(token) else { return nil }
+                return CGFloat(parsed)
+            }
+        }
+
+        shape.stroke = SVGStroke(
+            fill: current.fill,
+            width: current.width,
+            cap: current.cap,
+            join: current.join,
+            miterLimit: current.miterLimit,
+            dashes: dashes,
+            offset: current.offset
+        )
+    }
+
+    private func setStrokeDashOffset(_ value: String) {
+        guard let shape = node as? SVGShape,
+              let current = shape.stroke,
+              let offset = SVGHelper.doubleFromString(value)
+        else { return }
+
+        shape.stroke = SVGStroke(
+            fill: current.fill,
+            width: current.width,
+            cap: current.cap,
+            join: current.join,
+            miterLimit: current.miterLimit,
+            dashes: current.dashes,
+            offset: CGFloat(offset)
         )
     }
 }
