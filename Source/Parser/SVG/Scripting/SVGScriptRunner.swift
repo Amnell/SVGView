@@ -102,6 +102,8 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
             setStrokeLineJoin(normalizedValue)
         case "stroke-miterlimit":
             setStrokeMiterLimit(normalizedValue)
+        case "fill-rule":
+            setFillRule(normalizedValue)
         default:
             break
         }
@@ -285,6 +287,11 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
             dashes: current.dashes,
             offset: current.offset
         )
+    }
+
+    private func setFillRule(_ value: String) {
+        guard let path = node as? SVGPath else { return }
+        path.fillRule = value.lowercased() == "evenodd" ? .evenOdd : .winding
     }
 }
 

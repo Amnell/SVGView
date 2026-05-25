@@ -74,4 +74,14 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-stroke-06")
     }
 
+    @Test func scriptFillRule01() async throws {
+        // Unsupported script MIME type must not mutate path fill-rule.
+        try await compareToReference("script-fillrule-01")
+    }
+
+    @Test func scriptFillRule02() async throws {
+        // Supported script MIME type should mutate path fill-rule.
+        try await compareToReference("script-fillrule-02")
+    }
+
 }

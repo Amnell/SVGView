@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="120" height="120">
+  <path id="target" d="M10 10 H110 V110 H10 Z M40 40 H80 V80 H40 Z" fill="blue" fill-rule="nonzero"/>
+  <script type="text/ecmascript"><![CDATA[
+    document.getElementById('target').setAttribute('fill-rule', 'evenodd');
+  ]]></script>
+</svg>
