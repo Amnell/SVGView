@@ -167,10 +167,10 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[conform-viewers-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/conform-viewers-03-f.svg)|
 </details>
 
-### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `78.1%`
+### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `81.3%`
 
 <details>
-  <summary>(25/32) tests covered...</summary>
+  <summary>(26/32) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
@@ -178,7 +178,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |✅|[coords-coord-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/coords-coord-02-t.svg)|
 |✅|[coords-dom-01-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-01-f.svg)|
 |✅|[coords-dom-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-02-f.svg)|
-|❌|[coords-dom-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-03-f.svg)|
+|✅|[coords-dom-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-03-f.svg)|
 |❌|[coords-dom-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-dom-04-f.svg)|
 |✅|[coords-trans-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-trans-01-b.svg)|
 |✅|[coords-trans-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/coords-trans-02-t.svg)|

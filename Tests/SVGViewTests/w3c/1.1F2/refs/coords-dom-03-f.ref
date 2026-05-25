@@ -1,0 +1,64 @@
+SVGViewport {
+	id: "svg-root",
+	viewBox: { width: 480, height: 360 },
+	scaling: "none",
+	contents: [
+		SVGDefs {  },
+		SVGGroup {
+			id: "test-body-content",
+			contents: [
+				SVGText {
+					text: "Test that some methods taking an SVGMatrix take a copy of it",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 10, 30]
+				},
+				SVGRect { id: "r1", x: 10, y: 50, width: 50, height: 50, fill: "lime" },
+				SVGRect { id: "r2", x: 10, y: 110, width: 50, height: 50, fill: "lime" },
+				SVGRect { id: "r3", x: 10, y: 170, width: 50, height: 50, fill: "lime" },
+				SVGGroup {
+					contents: [
+						SVGText {
+							text: "SVGTransformList.createSVGTransformFromMatrix()",
+							font: { name: "SVGFreeSansASCII,sans-serif", size: 10 },
+							fill: "black",
+							transform: [1, 0, 0, 1, 70, 80]
+						},
+						SVGText {
+							text: "SVGSVGElement.createSVGTransformFromMatrix()",
+							font: { name: "SVGFreeSansASCII,sans-serif", size: 10 },
+							fill: "black",
+							transform: [1, 0, 0, 1, 70, 140]
+						},
+						SVGText {
+							text: "SVGTransform.setMatrix()",
+							font: { name: "SVGFreeSansASCII,sans-serif", size: 10 },
+							fill: "black",
+							transform: [1, 0, 0, 1, 70, 200]
+						}
+					]
+				},
+				SVGGroup { id: "g", transform: [3, 0, 0, 1, 0, 0] }
+			]
+		},
+		SVGGroup {
+			contents: [
+				SVGText {
+					id: "revision",
+					text: "$Revision: 1.7 $",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 32 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 10, 340]
+				}
+			]
+		},
+		SVGRect {
+			id: "test-frame",
+			x: 1,
+			y: 1,
+			width: 478,
+			height: 358,
+			stroke: { fill: "black" }
+		}
+	]
+}

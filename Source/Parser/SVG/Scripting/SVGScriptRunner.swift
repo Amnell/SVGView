@@ -4,11 +4,14 @@ import Foundation
 import JavaScriptCore
 
 @objc protocol SVGJSDocumentExports: JSExport {
+    var documentElement: SVGJSElement? { get }
     func getElementById(_ id: String) -> SVGJSElement?
 }
 
 @objc protocol SVGJSElementExports: JSExport {
     var transform: SVGJSTransformListContainer? { get }
+    func createSVGMatrix() -> SVGJSMatrix
+    func createSVGTransformFromMatrix(_ matrix: SVGJSMatrix) -> SVGJSTransform
     func setAttribute(_ name: String, _ value: String)
 }
 
@@ -18,6 +21,7 @@ import JavaScriptCore
 
 @objc protocol SVGJSTransformListExports: JSExport {
     func getItem(_ index: Int) -> SVGJSTransform?
+    func createSVGTransformFromMatrix(_ matrix: SVGJSMatrix) -> SVGJSTransform
 }
 
 @objc protocol SVGJSTransformExports: JSExport {
@@ -26,6 +30,7 @@ import JavaScriptCore
     func setTranslate(_ tx: Double, _ ty: Double)
     func setScale(_ sx: Double, _ sy: Double)
     func setRotate(_ angle: Double, _ cx: Double, _ cy: Double)
+    func setMatrix(_ matrix: SVGJSMatrix)
 }
 
 @objc protocol SVGJSMatrixExports: JSExport {
@@ -43,6 +48,10 @@ final class SVGJSDocument: NSObject, SVGJSDocumentExports {
 
     init(root: SVGNode) {
         self.root = root
+    }
+
+    var documentElement: SVGJSElement? {
+        SVGJSElement(node: root)
     }
 
     func getElementById(_ id: String) -> SVGJSElement? {
@@ -63,6 +72,14 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
 
     var transform: SVGJSTransformListContainer? {
         SVGJSTransformListContainer(node: node)
+    }
+
+    func createSVGMatrix() -> SVGJSMatrix {
+        SVGJSMatrix()
+    }
+
+    func createSVGTransformFromMatrix(_ matrix: SVGJSMatrix) -> SVGJSTransform {
+        SVGJSTransform(components: matrix.componentsSnapshot())
     }
 
     func setAttribute(_ name: String, _ value: String) {
@@ -459,6 +476,10 @@ final class SVGJSTransformList: NSObject, SVGJSTransformListExports {
     func getItem(_ index: Int) -> SVGJSTransform? {
         index == 0 ? transform : nil
     }
+
+    func createSVGTransformFromMatrix(_ matrix: SVGJSMatrix) -> SVGJSTransform {
+        SVGJSTransform(components: matrix.componentsSnapshot())
+    }
 }
 
 @objcMembers
@@ -480,9 +501,9 @@ final class SVGJSTransform: NSObject, SVGJSTransformExports {
         matrixModel
     }
 
-    init(node: SVGNode) {
+    init(node: SVGNode?) {
         self.node = node
-        let t = node.transform
+        let t = node?.transform ?? .identity
         self.components = (
             a: Double(t.a),
             b: Double(t.b),
@@ -491,6 +512,13 @@ final class SVGJSTransform: NSObject, SVGJSTransformExports {
             e: Double(t.tx),
             f: Double(t.ty)
         )
+        super.init()
+        self.matrixModel = SVGJSMatrix(owner: self)
+    }
+
+    init(components: (a: Double, b: Double, c: Double, d: Double, e: Double, f: Double)) {
+        self.node = nil
+        self.components = components
         super.init()
         self.matrixModel = SVGJSMatrix(owner: self)
     }
@@ -524,6 +552,12 @@ final class SVGJSTransform: NSObject, SVGJSTransformExports {
         applyToNode()
     }
 
+    func setMatrix(_ matrix: SVGJSMatrix) {
+        type = Self.svgTransformMatrix
+        components = matrix.componentsSnapshot()
+        applyToNode()
+    }
+
     func setComponent(_ keyPath: WritableKeyPath<(a: Double, b: Double, c: Double, d: Double, e: Double, f: Double), Double>, _ value: Double) {
         type = Self.svgTransformMatrix
         components[keyPath: keyPath] = value
@@ -549,39 +583,75 @@ final class SVGJSTransform: NSObject, SVGJSTransformExports {
 @objcMembers
 final class SVGJSMatrix: NSObject, SVGJSMatrixExports {
     private weak var owner: SVGJSTransform?
+    private var detachedComponents: (a: Double, b: Double, c: Double, d: Double, e: Double, f: Double)
+
+    override init() {
+        self.detachedComponents = (a: 1, b: 0, c: 0, d: 1, e: 0, f: 0)
+        super.init()
+    }
 
     init(owner: SVGJSTransform) {
         self.owner = owner
+        self.detachedComponents = (a: 1, b: 0, c: 0, d: 1, e: 0, f: 0)
+    }
+
+    func componentsSnapshot() -> (a: Double, b: Double, c: Double, d: Double, e: Double, f: Double) {
+        if let owner {
+            return (
+                a: owner.component(\.a),
+                b: owner.component(\.b),
+                c: owner.component(\.c),
+                d: owner.component(\.d),
+                e: owner.component(\.e),
+                f: owner.component(\.f)
+            )
+        }
+        return detachedComponents
+    }
+
+    private func setComponent(_ keyPath: WritableKeyPath<(a: Double, b: Double, c: Double, d: Double, e: Double, f: Double), Double>, _ value: Double) {
+        if let owner {
+            owner.setComponent(keyPath, value)
+            return
+        }
+        detachedComponents[keyPath: keyPath] = value
+    }
+
+    private func component(_ keyPath: KeyPath<(a: Double, b: Double, c: Double, d: Double, e: Double, f: Double), Double>) -> Double {
+        if let owner {
+            return owner.component(keyPath)
+        }
+        return detachedComponents[keyPath: keyPath]
     }
 
     var a: Double {
-        get { owner?.component(\.a) ?? 1 }
-        set { owner?.setComponent(\.a, newValue) }
+        get { component(\.a) }
+        set { setComponent(\.a, newValue) }
     }
 
     var b: Double {
-        get { owner?.component(\.b) ?? 0 }
-        set { owner?.setComponent(\.b, newValue) }
+        get { component(\.b) }
+        set { setComponent(\.b, newValue) }
     }
 
     var c: Double {
-        get { owner?.component(\.c) ?? 0 }
-        set { owner?.setComponent(\.c, newValue) }
+        get { component(\.c) }
+        set { setComponent(\.c, newValue) }
     }
 
     var d: Double {
-        get { owner?.component(\.d) ?? 1 }
-        set { owner?.setComponent(\.d, newValue) }
+        get { component(\.d) }
+        set { setComponent(\.d, newValue) }
     }
 
     var e: Double {
-        get { owner?.component(\.e) ?? 0 }
-        set { owner?.setComponent(\.e, newValue) }
+        get { component(\.e) }
+        set { setComponent(\.e, newValue) }
     }
 
     var f: Double {
-        get { owner?.component(\.f) ?? 0 }
-        set { owner?.setComponent(\.f, newValue) }
+        get { component(\.f) }
+        set { setComponent(\.f, newValue) }
     }
 }
 #endif
