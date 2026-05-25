@@ -203,7 +203,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |✅|[coords-units-02-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-02-b.svg)|
 |✅|[coords-units-03-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-03-b.svg)|
 |✅|[coords-viewattr-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-01-b.svg)|
-|❌|[coords-viewattr-02-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-02-b.svg)|
+|✅|[coords-viewattr-02-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-02-b.svg)|
 |❌|[coords-viewattr-03-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-03-b.svg)|
 |❌|[coords-viewattr-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-04-f.svg)|
 </details>

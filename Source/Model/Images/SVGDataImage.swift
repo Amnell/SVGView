@@ -19,9 +19,16 @@ public class SVGDataImage: SVGImage {
     @Published public var data: Data
     #endif
 
-    public init(x: CGFloat = 0, y: CGFloat = 0, width: CGFloat = 0, height: CGFloat = 0, data: Data) {
+    public init(
+        x: CGFloat = 0,
+        y: CGFloat = 0,
+        width: CGFloat = 0,
+        height: CGFloat = 0,
+        preserveAspectRatio: SVGPreserveAspectRatio = SVGPreserveAspectRatio(),
+        data: Data
+    ) {
         self.data = data
-        super.init(x: x, y: y, width: width, height: height)
+        super.init(x: x, y: y, width: width, height: height, preserveAspectRatio: preserveAspectRatio)
     }
 
     override func serialize(_ serializer: Serializer) {
@@ -39,28 +46,39 @@ public class SVGDataImage: SVGImage {
 #if canImport(SwiftUI)
 extension SVGDataImage: ObservableObject {}
 struct SVGDataImageView: View {
+    @ObservedObject var model: SVGDataImage
 
 #if os(OSX)
-    @ViewBuilder
-    private var image: Image? {
-        if let nsImage = NSImage(data: model.data) {
-            Image(nsImage: nsImage)
+    private var decoded: (image: Image, size: CGSize)? {
+        guard let nsImage = NSImage(data: model.data) else {
+            return nil
         }
+        return (Image(nsImage: nsImage), nsImage.size)
     }
 #else
-    @ViewBuilder
-    private var image: Image? {
-        if let uiImage = UIImage(data: model.data) {
-            Image(uiImage: uiImage)
+    private var decoded: (image: Image, size: CGSize)? {
+        guard let uiImage = UIImage(data: model.data) else {
+            return nil
         }
+        return (Image(uiImage: uiImage), uiImage.size)
     }
 #endif
 
-    @ObservedObject var model: SVGDataImage
+    private var viewportSize: CGSize {
+        CGSize(width: model.width, height: model.height)
+    }
 
     public var body: some View {
-        image
-            .frame(width: model.width, height: model.height)
+        ZStack(alignment: .topLeading) {
+            if let decoded {
+                decoded.image
+                    .resizable()
+                    .frame(width: decoded.size.width, height: decoded.size.height, alignment: .topLeading)
+                    .transformEffect(model.preserveAspectRatio.layout(size: decoded.size, into: viewportSize))
+            }
+        }
+            .frame(width: model.width, height: model.height, alignment: .topLeading)
+            .clipped()
             .position(x: model.x, y: model.y)
             .offset(x: model.width/2, y: model.height/2)
             .applyNodeAttributes(model: model)
