@@ -40,6 +40,7 @@ struct cli: ParsableCommand {
         "coords-transformattr-03-f",
         "coords-transformattr-04-f",
         "coords-transformattr-05-f",
+        "coords-units-01-b",
         "coords-units-02-b",
         "coords-units-03-b",
         "coords-viewattr-01-b",
