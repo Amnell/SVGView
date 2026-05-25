@@ -314,4 +314,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-46")
     }
 
+    @Test func scriptCurrentColor47() async throws {
+        // CSS-wide inherit keyword token should not block later fill-opacity and valid color updates.
+        try await compareToReference("script-currentcolor-47")
+    }
+
+    @Test func scriptCurrentColor48() async throws {
+        // CSS-wide initial keyword token should be ignored while later valid color applies.
+        try await compareToReference("script-currentcolor-48")
+    }
+
+    @Test func scriptCurrentColor49() async throws {
+        // CSS-wide unset keyword token should be ignored across stroke none -> currentColor relink.
+        try await compareToReference("script-currentcolor-49")
+    }
+
 }
