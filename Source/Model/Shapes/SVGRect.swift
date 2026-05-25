@@ -78,7 +78,18 @@ struct SVGRectView: View {
     @ObservedObject var model: SVGRect
 
     public var body: some View {
-        RoundedRectangle(cornerSize: CGSize(width: model.rx, height: model.ry))
+        let clampedRx = min(model.rx, model.width / 2)
+        let clampedRy = min(model.ry, model.height / 2)
+        let roundedPath: Path = {
+            let cgPath = CGMutablePath()
+            cgPath.addRoundedRect(
+                in: CGRect(x: 0, y: 0, width: model.width, height: model.height),
+                cornerWidth: clampedRx,
+                cornerHeight: clampedRy
+            )
+            return Path(cgPath)
+        }()
+        roundedPath
             .applySVGStroke(stroke: model.stroke)
             .applyShapeAttributes(model: model)
             .frame(width: model.width, height: model.height)
