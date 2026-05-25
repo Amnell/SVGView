@@ -84,4 +84,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-fillrule-02")
     }
 
+    @Test func scriptCurrentColor01() async throws {
+        // Unsupported script MIME type must not mutate fill via currentColor.
+        try await compareToReference("script-currentcolor-01")
+    }
+
+    @Test func scriptCurrentColor02() async throws {
+        // fill=currentColor then color=red should resolve to red.
+        try await compareToReference("script-currentcolor-02")
+    }
+
+    @Test func scriptCurrentColor03() async throws {
+        // color=lime then fill=currentColor should resolve to lime.
+        try await compareToReference("script-currentcolor-03")
+    }
+
 }
