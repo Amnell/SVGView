@@ -194,4 +194,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-22")
     }
 
+    @Test func scriptCurrentColor23() async throws {
+        // Shape fill-opacity should be preserved while fill follows currentColor updates.
+        try await compareToReference("script-currentcolor-23")
+    }
+
+    @Test func scriptCurrentColor24() async throws {
+        // Text fill-opacity should be preserved while fill follows currentColor updates.
+        try await compareToReference("script-currentcolor-24")
+    }
+
+    @Test func scriptCurrentColor25() async throws {
+        // Text stroke-opacity should remain controllable across none -> currentColor relink.
+        try await compareToReference("script-currentcolor-25")
+    }
+
 }
