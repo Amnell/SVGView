@@ -1,0 +1,96 @@
+SVGViewport {
+	id: "svg-root",
+	viewBox: { width: 480, height: 360 },
+	scaling: "none",
+	contents: [
+		SVGDefs {  },
+		SVGGroup {
+			id: "test-body-content",
+			contents: [
+				SVGPath {
+					path: "M35,25 L115,25 A10,20,0,0,1,125,45 L125,105 A10,20,0,0,1,115,125 L35,125 A10,20,0,0,1,25,105 L25,45 A10,20,0,0,1,35,25",
+					fill: "red"
+				},
+				SVGRect { x: 25, y: 25, width: 100, height: 100, rx: 10, ry: 20, fill: "black" },
+				SVGRect { x: 130, y: 25, width: 100, height: 100, rx: 10, ry: 20, fill: "red" },
+				SVGPath {
+					path: "M140,25 L220,25 A10,20,0,0,1,230,45 L230,105 A10,20,0,0,1,220,125 L140,125 A10,20,0,0,1,130,105 L130,45 A10,20,0,0,1,140,25",
+					fill: "black"
+				},
+				SVGPath { path: "M300,125 A50,50,0,1,0,299.9999,125", fill: "red" },
+				SVGCircle { cx: 300, cy: 75, r: 50, fill: "black" },
+				SVGCircle { cx: 401, cy: 75, r: 50, fill: "red" },
+				SVGPath { path: "M401,125 A50,50,0,1,0,400.9999,125", fill: "black" },
+				SVGPath { path: "M60,305 A50,80,0,1,0,59.9999,305 z", fill: "red" },
+				SVGEllipse { cx: 60, cy: 225, rx: 50, ry: 80, fill: "black" },
+				SVGEllipse { cx: 161, cy: 225, rx: 50, ry: 80, fill: "red" },
+				SVGPath { path: "M161,305 A50,80,0,1,0,160.9999,305 z", fill: "black" },
+				SVGPath { path: "M220,150 L270,200 L220,250 z", fill: "red" },
+				SVGPolygon { points: [220, 150, 270, 200, 220, 250], fill: "black" },
+				SVGPolygon { points: [270, 150, 320, 200, 270, 250], fill: "red" },
+				SVGPath { path: "M270,150 L320,200 L270,250 z", fill: "black" },
+				SVGPath {
+					path: "M350,250 L350,350 L400,350 L400,250 L450,250 L450,350",
+					stroke: { fill: "red", width: 10 }
+				},
+				SVGPolyline {
+					points: [350, 250, 350, 350, 400, 350, 400, 250, 450, 250, 450, 350],
+					stroke: { fill: "black", width: 10 }
+				},
+				SVGPolyline {
+					points: [350, 135, 350, 235, 400, 235, 400, 135, 450, 135, 450, 235],
+					stroke: { fill: "red", width: 10 }
+				},
+				SVGPath {
+					path: "M350,135 L350,235 L400,235 L400,135 L450,135 L450,235",
+					stroke: { fill: "black", width: 10 }
+				},
+				SVGPath {
+					path: "M225,275 L325,275",
+					fill: "black",
+					stroke: { fill: "red", width: 10 }
+				},
+				SVGLine {
+					x1: 225,
+					y1: 275,
+					x2: 325,
+					y2: 275,
+					fill: "black",
+					stroke: { fill: "black", width: 10 }
+				},
+				SVGLine {
+					x1: 225,
+					y1: 325,
+					x2: 325,
+					y2: 325,
+					fill: "black",
+					stroke: { fill: "red", width: 10 }
+				},
+				SVGPath {
+					path: "M225,325 L325,325",
+					fill: "black",
+					stroke: { fill: "black", width: 10 }
+				}
+			]
+		},
+		SVGGroup {
+			contents: [
+				SVGText {
+					id: "revision",
+					text: "$Revision: 1.4 $",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 32 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 10, 340]
+				}
+			]
+		},
+		SVGRect {
+			id: "test-frame",
+			x: 1,
+			y: 1,
+			width: 478,
+			height: 358,
+			stroke: { fill: "black" }
+		}
+	]
+}
