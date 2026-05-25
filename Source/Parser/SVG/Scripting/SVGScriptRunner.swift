@@ -111,7 +111,8 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
 
     private func setColor(_ value: String) {
         guard let color = SVGHelper.parseColor(value, [:]) else { return }
-        propagateCurrentColor(color, to: node)
+        node.hasExplicitCurrentColor = true
+        propagateCurrentColor(color, to: node, forceCurrentNode: true)
     }
 
     private func setFill(_ value: String) {
@@ -325,18 +326,26 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
         )
     }
 
-    private func propagateCurrentColor(_ color: SVGColor, to node: SVGNode) {
-        node.currentColor = color
+    private func propagateCurrentColor(_ color: SVGColor, to node: SVGNode, forceCurrentNode: Bool = false) {
+        let resolvedColor: SVGColor
+        if node.hasExplicitCurrentColor && !forceCurrentNode {
+            resolvedColor = node.currentColor ?? color
+            node.currentColor = resolvedColor
+        } else {
+            node.currentColor = color
+            resolvedColor = color
+        }
+
         applyCurrentColorBindings(on: node)
 
         if let group = node as? SVGGroup {
             for child in group.contents {
-                propagateCurrentColor(color, to: child)
+                propagateCurrentColor(resolvedColor, to: child)
             }
         }
 
         if let userSpaceNode = node as? SVGUserSpaceNode {
-            propagateCurrentColor(color, to: userSpaceNode.node)
+            propagateCurrentColor(resolvedColor, to: userSpaceNode.node)
         }
     }
 

@@ -61,6 +61,7 @@ class SVGNodeContext: SVGContext {
     let element: XMLElement
     let useIds: [String]
 
+    let elementStyles: [String:String]
     let styles: [String:String]
     let properties: [String:String]
 
@@ -71,6 +72,7 @@ class SVGNodeContext: SVGContext {
         self.properties = element.attributes.filter { !SVGConstants.availableStyleAttributes.contains($0.key) }
 
         let styleDict = SVGParser.getStyleAttributes(xml: element, index: root.index)
+        self.elementStyles = styleDict
         self.styles = Self.mergeStyles(element: styleDict, parent: parentStyles)
     }
 
@@ -107,6 +109,10 @@ class SVGNodeContext: SVGContext {
 
     func style(_ name: String) -> String? {
         return styles[name]
+    }
+
+    func hasElementStyle(_ name: String) -> Bool {
+        elementStyles[name] != nil
     }
 
     func property(_ name: String) -> String? {
