@@ -1,0 +1,20 @@
+SVGViewport {
+	width: "120",
+	height: "120",
+	scaling: "none",
+	contents: [
+		SVGGroup {
+			id: "parent",
+			contents: [
+				SVGRect { id: "shape", x: 10, y: 10, width: 40, height: 40, fill: "lime" },
+				SVGText {
+					id: "text",
+					text: "X",
+					font: {  },
+					fill: "green",
+					transform: [1, 0, 0, 1, 10, 90]
+				}
+			]
+		}
+	]
+}
