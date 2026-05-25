@@ -11,6 +11,7 @@ public class SVGNode: SerializableElement {
     public var transform: CGAffineTransform = CGAffineTransform.identity
     public var opaque: Bool
     public var opacity: Double
+    public var currentColor: SVGColor?
     public var clip: SVGNode?
     public var mask: SVGNode?
     public var id: String?
@@ -21,6 +22,7 @@ public class SVGNode: SerializableElement {
     @Published public var transform: CGAffineTransform = CGAffineTransform.identity
     @Published public var opaque: Bool
     @Published public var opacity: Double
+    @Published public var currentColor: SVGColor?
     @Published public var clip: SVGNode?
     @Published public var mask: SVGNode?
     @Published public var id: String?
@@ -30,10 +32,11 @@ public class SVGNode: SerializableElement {
 #endif
 
 
-    public init(transform: CGAffineTransform = .identity, opaque: Bool = true, opacity: Double = 1, clip: SVGNode? = nil, mask: SVGNode? = nil, id: String? = nil, markerStart: String? = nil, markerMid: String? = nil, markerEnd: String? = nil) {
+    public init(transform: CGAffineTransform = .identity, opaque: Bool = true, opacity: Double = 1, currentColor: SVGColor? = nil, clip: SVGNode? = nil, mask: SVGNode? = nil, id: String? = nil, markerStart: String? = nil, markerMid: String? = nil, markerEnd: String? = nil) {
         self.transform = transform
         self.opaque = opaque
         self.opacity = opacity
+        self.currentColor = currentColor
         self.clip = clip
         self.mask = mask
         self.id = id
