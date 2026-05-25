@@ -116,37 +116,69 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
     }
 
     private func setFill(_ value: String) {
-        guard let shape = node as? SVGShape else { return }
+        if let shape = node as? SVGShape {
+            if value.lowercased() == "currentcolor" {
+                shape.fillUsesCurrentColor = true
+                shape.fill = node.currentColor ?? SVGColor.black
+                return
+            }
 
-        if value.lowercased() == "currentcolor" {
-            shape.fillUsesCurrentColor = true
-            shape.fill = node.currentColor ?? SVGColor.black
+            shape.fillUsesCurrentColor = false
+            shape.fill = SVGHelper.parseColor(value, [:])
             return
         }
 
-        shape.fillUsesCurrentColor = false
-        shape.fill = SVGHelper.parseColor(value, [:])
+        if let text = node as? SVGText {
+            if value.lowercased() == "currentcolor" {
+                text.fillUsesCurrentColor = true
+                text.fill = node.currentColor ?? SVGColor.black
+                return
+            }
+
+            text.fillUsesCurrentColor = false
+            text.fill = SVGHelper.parseColor(value, [:])
+        }
     }
 
     private func setStroke(_ value: String) {
-        guard let shape = node as? SVGShape else { return }
+        if let shape = node as? SVGShape {
+            if value.lowercased() == "none" {
+                shape.strokeUsesCurrentColor = false
+                shape.stroke = nil
+                return
+            }
 
-        if value.lowercased() == "none" {
+            if value.lowercased() == "currentcolor" {
+                shape.strokeUsesCurrentColor = true
+                let currentOpacity = (shape.stroke?.fill as? SVGColor)?.opacity ?? 1
+                replaceStrokeFill(for: shape, with: (node.currentColor ?? SVGColor.black).opacity(currentOpacity))
+                return
+            }
+
+            guard let color = SVGHelper.parseColor(value, [:]) else { return }
             shape.strokeUsesCurrentColor = false
-            shape.stroke = nil
+            replaceStrokeFill(for: shape, with: color)
             return
         }
 
-        if value.lowercased() == "currentcolor" {
-            shape.strokeUsesCurrentColor = true
-            let currentOpacity = (shape.stroke?.fill as? SVGColor)?.opacity ?? 1
-            replaceStrokeFill(for: shape, with: (node.currentColor ?? SVGColor.black).opacity(currentOpacity))
-            return
-        }
+        if let text = node as? SVGText {
+            if value.lowercased() == "none" {
+                text.strokeUsesCurrentColor = false
+                text.stroke = nil
+                return
+            }
 
-        guard let color = SVGHelper.parseColor(value, [:]) else { return }
-        shape.strokeUsesCurrentColor = false
-        replaceStrokeFill(for: shape, with: color)
+            if value.lowercased() == "currentcolor" {
+                text.strokeUsesCurrentColor = true
+                let currentOpacity = (text.stroke?.fill as? SVGColor)?.opacity ?? 1
+                replaceStrokeFill(for: text, with: (node.currentColor ?? SVGColor.black).opacity(currentOpacity))
+                return
+            }
+
+            guard let color = SVGHelper.parseColor(value, [:]) else { return }
+            text.strokeUsesCurrentColor = false
+            replaceStrokeFill(for: text, with: color)
+        }
     }
 
     private func setStrokeWidth(_ value: String) {
@@ -326,6 +358,19 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
         )
     }
 
+    private func replaceStrokeFill(for text: SVGText, with fill: SVGPaint) {
+        let current = text.stroke
+        text.stroke = SVGStroke(
+            fill: fill,
+            width: current?.width ?? 1,
+            cap: current?.cap ?? .butt,
+            join: current?.join ?? .miter,
+            miterLimit: current?.miterLimit ?? 4,
+            dashes: current?.dashes ?? [],
+            offset: current?.offset ?? 0
+        )
+    }
+
     private func propagateCurrentColor(_ color: SVGColor, to node: SVGNode, forceCurrentNode: Bool = false) {
         let resolvedColor: SVGColor
         if node.hasExplicitCurrentColor && !forceCurrentNode {
@@ -350,16 +395,26 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
     }
 
     private func applyCurrentColorBindings(on node: SVGNode) {
-        guard let shape = node as? SVGShape,
-              let currentColor = node.currentColor
-        else { return }
+        guard let currentColor = node.currentColor else { return }
 
-        if shape.fillUsesCurrentColor {
-            shape.fill = currentColor
+        if let shape = node as? SVGShape {
+            if shape.fillUsesCurrentColor {
+                shape.fill = currentColor
+            }
+            if shape.strokeUsesCurrentColor {
+                let currentOpacity = (shape.stroke?.fill as? SVGColor)?.opacity ?? 1
+                replaceStrokeFill(for: shape, with: currentColor.opacity(currentOpacity))
+            }
         }
-        if shape.strokeUsesCurrentColor {
-            let currentOpacity = (shape.stroke?.fill as? SVGColor)?.opacity ?? 1
-            replaceStrokeFill(for: shape, with: currentColor.opacity(currentOpacity))
+
+        if let text = node as? SVGText {
+            if text.fillUsesCurrentColor {
+                text.fill = currentColor
+            }
+            if text.strokeUsesCurrentColor {
+                let currentOpacity = (text.stroke?.fill as? SVGColor)?.opacity ?? 1
+                replaceStrokeFill(for: text, with: currentColor.opacity(currentOpacity))
+            }
         }
     }
 }

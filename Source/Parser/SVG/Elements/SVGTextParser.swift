@@ -25,7 +25,10 @@ class SVGTextParser: SVGBaseElementParser {
 
         if let textNode = context.element.contents.first as? XMLText {
             let trimmed = textNode.text.trimmingCharacters(in: .whitespacesAndNewlines).processingWhitespaces()
-            return SVGText(text: trimmed, font: font, fill: SVGHelper.parseFill(context.styles, context.index), stroke: SVGHelper.parseStroke(context.styles, index: context.index), textAnchor: textAnchor, transform: transform)
+            let text = SVGText(text: trimmed, font: font, fill: SVGHelper.parseFill(context.styles, context.index), stroke: SVGHelper.parseStroke(context.styles, index: context.index), textAnchor: textAnchor, transform: transform)
+            text.fillUsesCurrentColor = context.style("fill")?.lowercased() == "currentcolor"
+            text.strokeUsesCurrentColor = context.style("stroke")?.lowercased() == "currentcolor"
+            return text
         }
         return .none
     }

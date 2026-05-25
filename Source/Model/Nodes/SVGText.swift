@@ -17,12 +17,16 @@ public class SVGText: SVGNode {
     public var font: SVGFont?
     public var fill: SVGPaint?
     public var stroke: SVGStroke?
+    public var fillUsesCurrentColor: Bool = false
+    public var strokeUsesCurrentColor: Bool = false
     public var textAnchor: Anchor = .leading
     #else
     @Published public var text: String
     @Published public var font: SVGFont?
     @Published public var fill: SVGPaint?
     @Published public var stroke: SVGStroke?
+    @Published public var fillUsesCurrentColor: Bool = false
+    @Published public var strokeUsesCurrentColor: Bool = false
     @Published public var textAnchor: Anchor = .leading
     #endif
     
