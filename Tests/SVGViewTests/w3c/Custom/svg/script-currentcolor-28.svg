@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="140" height="120">
+  <g id="group" color="blue">
+    <rect id="shape" x="10" y="10" width="40" height="100" fill="currentColor"/>
+    <text id="text" x="70" y="75" fill="currentColor">X</text>
+  </g>
+  <script type="text/ecmascript"><![CDATA[
+    var group = document.getElementById('group');
+    var shape = document.getElementById('shape');
+    var text = document.getElementById('text');
+
+    shape.setAttribute('fill-opacity', '0.3');
+    text.setAttribute('fill-opacity', '0.5');
+    text.setAttribute('fill', '#ff0000');
+    group.setAttribute('color', 'red');
+    text.setAttribute('fill', 'currentColor');
+    group.setAttribute('color', 'lime');
+  ]]></script>
+</svg>
