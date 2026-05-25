@@ -1,0 +1,160 @@
+SVGViewport {
+	id: "svg-root",
+	viewBox: { width: 480, height: 360 },
+	scaling: "none",
+	contents: [
+		SVGDefs {  },
+		SVGGroup {
+			id: "test-body-content",
+			contents: [
+				SVGGroup {
+					contents: [
+						SVGText {
+							text: "Bounding box relative coordinates (percentage and fraction)",
+							font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+							fill: "black",
+							transform: [1, 0, 0, 1, 30, 30]
+						},
+						SVGGroup {
+							transform: [1, 0, 0, 1, 30, 40],
+							contents: [
+								SVGRect { width: 50, height: 20 },
+								SVGRect { width: 50, height: 20, transform: [1, 0, 0, 1, 0, 20] },
+								SVGRect { width: 50, height: 20, transform: [1, 0, 0, 1, 0, 40] },
+								SVGLine {
+									y1: 20,
+									x2: 50,
+									y2: 20,
+									fill: "black",
+									stroke: { fill: "#CCCCCC" }
+								},
+								SVGLine {
+									y1: 40,
+									x2: 50,
+									y2: 40,
+									fill: "black",
+									stroke: { fill: "#CCCCCC" }
+								},
+								SVGText {
+									text: "Percentage",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 60, 15]
+								},
+								SVGText {
+									text: "Fraction",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 60, 35]
+								},
+								SVGText {
+									text: "User Space",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 60, 55]
+								}
+							]
+						},
+						SVGText {
+							text: "Bounding box relative length (percentage and fraction)",
+							font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+							fill: "black",
+							transform: [1, 0, 0, 1, 30, 130]
+						},
+						SVGGroup {
+							transform: [1, 0, 0, 1, 30, 140],
+							contents: [
+								SVGRect { width: 60, height: 60 },
+								SVGRect { width: 60, height: 60, transform: [1, 0, 0, 1, 61, 0] },
+								SVGRect { width: 60, height: 60, transform: [1, 0, 0, 1, 122, 0] },
+								SVGText {
+									text: "Percent.",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 0, 73]
+								},
+								SVGText {
+									text: "Fraction",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 61, 73]
+								},
+								SVGText {
+									text: "User Space",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 122, 73]
+								}
+							]
+						},
+						SVGText {
+							text: "Bounding box relative width/height (percentage and fraction)",
+							font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+							fill: "black",
+							transform: [1, 0, 0, 1, 30, 240]
+						},
+						SVGGroup {
+							transform: [1, 0, 0, 1, 30, 250],
+							contents: [
+								SVGRect {
+									width: 50,
+									height: 30,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									width: 50,
+									height: 30,
+									stroke: { fill: "black" },
+									transform: [1, 0, 0, 1, 150, 0]
+								},
+								SVGRect {
+									width: 50,
+									height: 30,
+									stroke: { fill: "black" },
+									transform: [1, 0, 0, 1, 300, 0]
+								},
+								SVGText {
+									text: "Percentage",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 60, 20]
+								},
+								SVGText {
+									text: "Fraction",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 210, 20]
+								},
+								SVGText {
+									text: "User Space",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 14 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 360, 20]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		SVGGroup {
+			contents: [
+				SVGText {
+					id: "revision",
+					text: "$Revision: 1.7 $",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 32 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 10, 340]
+				}
+			]
+		},
+		SVGRect {
+			id: "test-frame",
+			x: 1,
+			y: 1,
+			width: 478,
+			height: 358,
+			stroke: { fill: "black" }
+		}
+	]
+}
