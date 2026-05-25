@@ -95,7 +95,7 @@ extension SVGTestHelper {
                     .frame(width: size.width, height: size.height)
                     .background(Color.clear)
                 let renderer = ImageRenderer(content: content)
-                renderer.scale = 1.0
+                renderer.scale = 2.0
                 renderer.isOpaque = false
 #if os(macOS)
                 guard let cgImage = renderer.cgImage else { return nil }
