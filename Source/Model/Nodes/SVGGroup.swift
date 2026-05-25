@@ -71,7 +71,7 @@ struct SVGGroupView: View {
     @ObservedObject var model: SVGGroup
 
     public var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             ForEach(0..<model.contents.count, id: \.self) { i in
                 if i <= model.contents.count - 1 {
                     model.contents[i].toSwiftUI()
