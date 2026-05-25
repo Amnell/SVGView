@@ -96,6 +96,12 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
             setStrokeDashArray(normalizedValue)
         case "stroke-dashoffset":
             setStrokeDashOffset(normalizedValue)
+        case "stroke-linecap":
+            setStrokeLineCap(normalizedValue)
+        case "stroke-linejoin":
+            setStrokeLineJoin(normalizedValue)
+        case "stroke-miterlimit":
+            setStrokeMiterLimit(normalizedValue)
         default:
             break
         }
@@ -209,6 +215,75 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
             miterLimit: current.miterLimit,
             dashes: current.dashes,
             offset: CGFloat(offset)
+        )
+    }
+
+    private func setStrokeLineCap(_ value: String) {
+        guard let shape = node as? SVGShape,
+              let current = shape.stroke
+        else { return }
+
+        let cap: CGLineCap
+        switch value.lowercased() {
+        case "round":
+            cap = .round
+        case "square":
+            cap = .square
+        default:
+            cap = .butt
+        }
+
+        shape.stroke = SVGStroke(
+            fill: current.fill,
+            width: current.width,
+            cap: cap,
+            join: current.join,
+            miterLimit: current.miterLimit,
+            dashes: current.dashes,
+            offset: current.offset
+        )
+    }
+
+    private func setStrokeLineJoin(_ value: String) {
+        guard let shape = node as? SVGShape,
+              let current = shape.stroke
+        else { return }
+
+        let join: CGLineJoin
+        switch value.lowercased() {
+        case "round":
+            join = .round
+        case "bevel":
+            join = .bevel
+        default:
+            join = .miter
+        }
+
+        shape.stroke = SVGStroke(
+            fill: current.fill,
+            width: current.width,
+            cap: current.cap,
+            join: join,
+            miterLimit: current.miterLimit,
+            dashes: current.dashes,
+            offset: current.offset
+        )
+    }
+
+    private func setStrokeMiterLimit(_ value: String) {
+        guard let shape = node as? SVGShape,
+              let current = shape.stroke,
+              let miterLimit = SVGHelper.doubleFromString(value)
+        else { return }
+
+        shape.stroke = SVGStroke(
+            fill: current.fill,
+            width: current.width,
+            cap: current.cap,
+            join: current.join,
+            miterLimit: CGFloat(miterLimit),
+            dashes: current.dashes,
+            offset: current.offset
         )
     }
 }
