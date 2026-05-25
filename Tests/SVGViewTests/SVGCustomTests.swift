@@ -179,4 +179,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-19")
     }
 
+    @Test func scriptCurrentColor20() async throws {
+        // Runtime fill=currentColor should override earlier concrete style fill and follow later color changes.
+        try await compareToReference("script-currentcolor-20")
+    }
+
+    @Test func scriptCurrentColor21() async throws {
+        // Inline style color should be the source color when runtime fill binds to currentColor.
+        try await compareToReference("script-currentcolor-21")
+    }
+
+    @Test func scriptCurrentColor22() async throws {
+        // Text runtime fill=currentColor should bind after parse-time style/attribute precedence resolution.
+        try await compareToReference("script-currentcolor-22")
+    }
+
 }
