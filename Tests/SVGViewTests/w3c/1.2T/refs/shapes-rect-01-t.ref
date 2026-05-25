@@ -1,0 +1,112 @@
+SVGViewport {
+	id: "svg-root",
+	viewBox: { width: 480, height: 360 },
+	scaling: "none",
+	contents: [
+		SVGDefs {  },
+		SVGGroup {
+			id: "test-body-content",
+			contents: [
+				SVGText {
+					text: "Testing the <rect/> element with different fill, stroke and rx attributes",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 12 },
+					textAnchor: "middle",
+					fill: "black",
+					transform: [1, 0, 0, 1, 240, 14]
+				},
+				SVGRect {
+					id: "Simple-rect-no-fill",
+					x: 30,
+					y: 46,
+					width: 50,
+					height: 80,
+					stroke: { fill: "black" }
+				},
+				SVGRect {
+					id: "Simple-rect-filled",
+					x: 130,
+					y: 46,
+					width: 50,
+					height: 80,
+					fill: "red"
+				},
+				SVGRect {
+					id: "Simple-round-rect-no-fill",
+					x: 250,
+					y: 46,
+					width: 50,
+					height: 80,
+					rx: 30,
+					ry: 30,
+					stroke: { fill: "black" }
+				},
+				SVGRect {
+					id: "Simple-round-rect-filled",
+					x: 350,
+					y: 46,
+					width: 50,
+					height: 80,
+					rx: 30,
+					ry: 30,
+					fill: "red"
+				},
+				SVGRect {
+					id: "rect-03",
+					x: 30,
+					y: 196,
+					width: 50,
+					height: 80,
+					stroke: { fill: "blue", width: 8 }
+				},
+				SVGRect {
+					id: "rect-04",
+					x: 130,
+					y: 196,
+					width: 50,
+					height: 80,
+					fill: "lime",
+					stroke: { fill: "blue", width: 8 }
+				},
+				SVGRect {
+					id: "rect-05",
+					x: 250,
+					y: 196,
+					width: 50,
+					height: 80,
+					rx: 30,
+					ry: 50,
+					stroke: { fill: "blue", width: 8 }
+				},
+				SVGRect {
+					id: "rect-06",
+					x: 350,
+					y: 196,
+					width: 50,
+					height: 80,
+					rx: 30,
+					ry: 50,
+					fill: "lime"
+				}
+			]
+		},
+		SVGGroup {
+			contents: [
+				SVGText {
+					id: "revision",
+					text: "$Revision: 1.10 $",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 32 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 10, 340]
+				}
+			]
+		},
+		SVGRect {
+			id: "test-frame",
+			x: 1,
+			y: 1,
+			width: 478,
+			height: 358,
+			stroke: { fill: "black" }
+		}
+	]
+}
