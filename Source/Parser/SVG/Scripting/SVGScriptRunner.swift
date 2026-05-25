@@ -84,9 +84,83 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
             node.opaque = normalizedValue.lowercased() != "none"
         case "transform":
             node.transform = SVGHelper.parseTransform(normalizedValue)
+        case "stroke":
+            setStroke(normalizedValue)
+        case "stroke-width":
+            setStrokeWidth(normalizedValue)
+        case "fill-opacity":
+            setFillOpacity(normalizedValue)
+        case "stroke-opacity":
+            setStrokeOpacity(normalizedValue)
         default:
             break
         }
+    }
+
+    private func setStroke(_ value: String) {
+        guard let shape = node as? SVGShape else { return }
+
+        if value.lowercased() == "none" {
+            shape.stroke = nil
+            return
+        }
+
+        guard let color = SVGHelper.parseColor(value, [:]) else { return }
+        let current = shape.stroke
+        shape.stroke = SVGStroke(
+            fill: color,
+            width: current?.width ?? 1,
+            cap: current?.cap ?? .butt,
+            join: current?.join ?? .miter,
+            miterLimit: current?.miterLimit ?? 4,
+            dashes: current?.dashes ?? [],
+            offset: current?.offset ?? 0
+        )
+    }
+
+    private func setStrokeWidth(_ value: String) {
+        guard let shape = node as? SVGShape,
+              let width = SVGHelper.doubleFromString(value)
+        else { return }
+
+        let current = shape.stroke
+        shape.stroke = SVGStroke(
+            fill: current?.fill ?? SVGColor.black,
+            width: CGFloat(width),
+            cap: current?.cap ?? .butt,
+            join: current?.join ?? .miter,
+            miterLimit: current?.miterLimit ?? 4,
+            dashes: current?.dashes ?? [],
+            offset: current?.offset ?? 0
+        )
+    }
+
+    private func setFillOpacity(_ value: String) {
+        guard let shape = node as? SVGShape,
+              let opacity = SVGHelper.doubleFromString(value),
+              let fill = shape.fill
+        else { return }
+
+        let clamped = min(max(opacity, 0), 1)
+        shape.fill = fill.opacity(clamped)
+    }
+
+    private func setStrokeOpacity(_ value: String) {
+        guard let shape = node as? SVGShape,
+              let opacity = SVGHelper.doubleFromString(value),
+              let current = shape.stroke
+        else { return }
+
+        let clamped = min(max(opacity, 0), 1)
+        shape.stroke = SVGStroke(
+            fill: current.fill.opacity(clamped),
+            width: current.width,
+            cap: current.cap,
+            join: current.join,
+            miterLimit: current.miterLimit,
+            dashes: current.dashes,
+            offset: current.offset
+        )
     }
 }
 
