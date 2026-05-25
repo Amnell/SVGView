@@ -9,7 +9,7 @@ SVGViewport {
 			contents: [
 				SVGGroup {
 					contents: [
-						SVGRect { x: 120, y: 60, width: 150, height: 150, fill: "lime" }
+						SVGRect { x: 120, y: 60, width: 150, height: 150, fill: "red" }
 					]
 				}
 			]
