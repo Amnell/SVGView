@@ -199,31 +199,51 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
     }
 
     private func setFillOpacity(_ value: String) {
-        guard let shape = node as? SVGShape,
-              let opacity = SVGHelper.doubleFromString(value),
-              let fill = shape.fill
-        else { return }
-
+        guard let opacity = SVGHelper.doubleFromString(value) else { return }
         let clamped = min(max(opacity, 0), 1)
-        shape.fill = fill.opacity(clamped)
+
+        if let shape = node as? SVGShape,
+           let fill = shape.fill {
+            shape.fill = fill.opacity(clamped)
+            return
+        }
+
+        if let text = node as? SVGText,
+           let fill = text.fill {
+            text.fill = fill.opacity(clamped)
+        }
     }
 
     private func setStrokeOpacity(_ value: String) {
-        guard let shape = node as? SVGShape,
-              let opacity = SVGHelper.doubleFromString(value),
-              let current = shape.stroke
-        else { return }
-
+        guard let opacity = SVGHelper.doubleFromString(value) else { return }
         let clamped = min(max(opacity, 0), 1)
-        shape.stroke = SVGStroke(
-            fill: current.fill.opacity(clamped),
-            width: current.width,
-            cap: current.cap,
-            join: current.join,
-            miterLimit: current.miterLimit,
-            dashes: current.dashes,
-            offset: current.offset
-        )
+
+        if let shape = node as? SVGShape,
+           let current = shape.stroke {
+            shape.stroke = SVGStroke(
+                fill: current.fill.opacity(clamped),
+                width: current.width,
+                cap: current.cap,
+                join: current.join,
+                miterLimit: current.miterLimit,
+                dashes: current.dashes,
+                offset: current.offset
+            )
+            return
+        }
+
+        if let text = node as? SVGText,
+           let current = text.stroke {
+            text.stroke = SVGStroke(
+                fill: current.fill.opacity(clamped),
+                width: current.width,
+                cap: current.cap,
+                join: current.join,
+                miterLimit: current.miterLimit,
+                dashes: current.dashes,
+                offset: current.offset
+            )
+        }
     }
 
     private func setStrokeDashArray(_ value: String) {
