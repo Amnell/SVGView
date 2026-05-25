@@ -1,0 +1,13 @@
+SVGViewport {
+	width: "120",
+	height: "120",
+	scaling: "none",
+	contents: [
+		SVGPath {
+			id: "target",
+			path: "M10,10 H110 V110 H10 z M40,40 H80 V80 H40 z",
+			fillRule: "evenodd",
+			fill: "blue"
+		}
+	]
+}
