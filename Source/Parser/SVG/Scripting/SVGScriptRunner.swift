@@ -6,13 +6,17 @@ import JavaScriptCore
 @objc protocol SVGJSDocumentExports: JSExport {
     var documentElement: SVGJSElement? { get }
     func getElementById(_ id: String) -> SVGJSElement?
+    func createElementNS(_ namespaceURI: String?, _ qualifiedName: String) -> SVGJSElement?
 }
 
 @objc protocol SVGJSElementExports: JSExport {
     var transform: SVGJSTransformListContainer? { get }
+    var textContent: String { get set }
     func createSVGMatrix() -> SVGJSMatrix
     func createSVGTransformFromMatrix(_ matrix: SVGJSMatrix) -> SVGJSTransform
+    func appendChild(_ child: SVGJSElement) -> SVGJSElement?
     func setAttribute(_ name: String, _ value: String)
+    func setAttributeNS(_ namespaceURI: String?, _ qualifiedName: String, _ value: String)
 }
 
 @objc protocol SVGJSTransformListContainerExports: JSExport {
@@ -22,6 +26,7 @@ import JavaScriptCore
 @objc protocol SVGJSTransformListExports: JSExport {
     func getItem(_ index: Int) -> SVGJSTransform?
     func createSVGTransformFromMatrix(_ matrix: SVGJSMatrix) -> SVGJSTransform
+    func consolidate() -> SVGJSTransform?
 }
 
 @objc protocol SVGJSTransformExports: JSExport {
@@ -60,6 +65,25 @@ final class SVGJSDocument: NSObject, SVGJSDocumentExports {
         }
         return SVGJSElement(node: node)
     }
+
+    func createElementNS(_ namespaceURI: String?, _ qualifiedName: String) -> SVGJSElement? {
+        _ = namespaceURI
+        let localName = qualifiedName
+            .split(separator: ":")
+            .last?
+            .lowercased() ?? qualifiedName.lowercased()
+
+        switch localName {
+        case "text":
+            return SVGJSElement(node: SVGText(text: ""))
+        case "rect":
+            return SVGJSElement(node: SVGRect())
+        case "g":
+            return SVGJSElement(node: SVGGroup(contents: []))
+        default:
+            return nil
+        }
+    }
 }
 
 @objcMembers
@@ -74,6 +98,15 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
         SVGJSTransformListContainer(node: node)
     }
 
+    var textContent: String {
+        get { (node as? SVGText)?.text ?? "" }
+        set {
+            if let textNode = node as? SVGText {
+                textNode.text = newValue
+            }
+        }
+    }
+
     func createSVGMatrix() -> SVGJSMatrix {
         SVGJSMatrix()
     }
@@ -82,15 +115,33 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
         SVGJSTransform(components: matrix.componentsSnapshot())
     }
 
+    func appendChild(_ child: SVGJSElement) -> SVGJSElement? {
+        guard let group = node as? SVGGroup else {
+            return nil
+        }
+        group.contents.append(child.node)
+        return child
+    }
+
     func setAttribute(_ name: String, _ value: String) {
         let normalizedName = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         let normalizedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
 
         switch normalizedName {
+        case "id":
+            node.id = normalizedValue
         case "fill":
             setFill(normalizedValue)
         case "color":
             setColor(normalizedValue)
+        case "x":
+            setX(normalizedValue)
+        case "y":
+            setY(normalizedValue)
+        case "width":
+            setWidth(normalizedValue)
+        case "height":
+            setHeight(normalizedValue)
         case "opacity":
             if let parsedOpacity = Double(normalizedValue) {
                 node.opacity = min(max(parsedOpacity, 0), 1)
@@ -101,6 +152,7 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
             node.opaque = normalizedValue.lowercased() != "none"
         case "transform":
             node.transform = SVGHelper.parseTransform(normalizedValue)
+            node.scriptTransforms = SVGHelper.parseTransformOperations(normalizedValue)
         case "stroke":
             setStroke(normalizedValue)
         case "stroke-width":
@@ -124,6 +176,47 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
         default:
             break
         }
+    }
+
+    func setAttributeNS(_ namespaceURI: String?, _ qualifiedName: String, _ value: String) {
+        _ = namespaceURI
+        setAttribute(qualifiedName, value)
+    }
+
+    private func setX(_ value: String) {
+        guard let x = SVGHelper.doubleFromString(value) else { return }
+        if let rect = node as? SVGRect {
+            rect.x = CGFloat(x)
+            return
+        }
+        if let text = node as? SVGText {
+            text.transform.tx = CGFloat(x)
+        }
+    }
+
+    private func setY(_ value: String) {
+        guard let y = SVGHelper.doubleFromString(value) else { return }
+        if let rect = node as? SVGRect {
+            rect.y = CGFloat(y)
+            return
+        }
+        if let text = node as? SVGText {
+            text.transform.ty = CGFloat(y)
+        }
+    }
+
+    private func setWidth(_ value: String) {
+        guard let width = SVGHelper.doubleFromString(value),
+              let rect = node as? SVGRect
+        else { return }
+        rect.width = CGFloat(width)
+    }
+
+    private func setHeight(_ value: String) {
+        guard let height = SVGHelper.doubleFromString(value),
+              let rect = node as? SVGRect
+        else { return }
+        rect.height = CGFloat(height)
     }
 
     private func setColor(_ value: String) {
@@ -467,18 +560,35 @@ final class SVGJSTransformListContainer: NSObject, SVGJSTransformListContainerEx
 
 @objcMembers
 final class SVGJSTransformList: NSObject, SVGJSTransformListExports {
-    private let transform: SVGJSTransform
+    private var transforms: [SVGJSTransform]
 
     init(node: SVGNode) {
-        self.transform = SVGJSTransform(node: node)
+        if node.scriptTransforms.count > 1 {
+            self.transforms = node.scriptTransforms.map { SVGJSTransform(components: $0.svgComponents) }
+        } else {
+            self.transforms = [SVGJSTransform(node: node)]
+        }
     }
 
     func getItem(_ index: Int) -> SVGJSTransform? {
-        index == 0 ? transform : nil
+        guard transforms.indices.contains(index) else { return nil }
+        return transforms[index]
     }
 
     func createSVGTransformFromMatrix(_ matrix: SVGJSMatrix) -> SVGJSTransform {
         SVGJSTransform(components: matrix.componentsSnapshot())
+    }
+
+    func consolidate() -> SVGJSTransform? {
+        guard !transforms.isEmpty else {
+            return nil
+        }
+        let consolidated = transforms.reduce(CGAffineTransform.identity) { result, transform in
+            transform.affineTransform.concatenating(result)
+        }
+        let transform = SVGJSTransform(components: consolidated.svgComponents)
+        transforms = [transform]
+        return transform
     }
 }
 
@@ -499,6 +609,17 @@ final class SVGJSTransform: NSObject, SVGJSTransformExports {
 
     var matrix: SVGJSMatrix {
         matrixModel
+    }
+
+    var affineTransform: CGAffineTransform {
+        CGAffineTransform(
+            a: CGFloat(components.a),
+            b: CGFloat(components.b),
+            c: CGFloat(components.c),
+            d: CGFloat(components.d),
+            tx: CGFloat(components.e),
+            ty: CGFloat(components.f)
+        )
     }
 
     init(node: SVGNode?) {
@@ -654,6 +775,12 @@ final class SVGJSMatrix: NSObject, SVGJSMatrixExports {
         set { setComponent(\.f, newValue) }
     }
 }
+
+private extension CGAffineTransform {
+    var svgComponents: (a: Double, b: Double, c: Double, d: Double, e: Double, f: Double) {
+        (a: Double(a), b: Double(b), c: Double(c), d: Double(d), e: Double(tx), f: Double(ty))
+    }
+}
 #endif
 
 enum SVGScriptRunner {
@@ -673,7 +800,8 @@ enum SVGScriptRunner {
     static func executeIfNeeded(xmlRoot: XMLElement, nodeRoot: SVGNode, logger: SVGLogger) {
 #if canImport(JavaScriptCore)
         let scripts = collectScripts(from: xmlRoot)
-        guard !scripts.isEmpty else { return }
+        let onLoadScript = normalizedOnLoadScript(from: xmlRoot)
+        guard !scripts.isEmpty || onLoadScript != nil else { return }
 
         guard let context = JSContext() else {
             logger.log(message: "Failed to create JavaScript context")
@@ -702,6 +830,10 @@ enum SVGScriptRunner {
 
         for script in scripts {
             _ = context.evaluateScript(script)
+        }
+
+        if let onLoadScript {
+            _ = context.evaluateScript(onLoadScript)
         }
 #else
         _ = xmlRoot
@@ -763,5 +895,11 @@ enum SVGScriptRunner {
 
         guard let typeOnly else { return nil }
         return supportedScriptMIMETypes.contains(typeOnly) ? typeOnly : nil
+    }
+
+    private static func normalizedOnLoadScript(from root: XMLElement) -> String? {
+        let script = root.attributes["onload"]?.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let script, !script.isEmpty else { return nil }
+        return script
     }
 }

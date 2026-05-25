@@ -20,6 +20,7 @@ struct cli: ParsableCommand {
         "coords-dom-01-f",
         "coords-dom-02-f",
         "coords-dom-03-f",
+        "coords-dom-04-f",
         "coords-trans-01-b",
         "coords-trans-02-t",
         "coords-trans-03-t",

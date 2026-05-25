@@ -163,6 +163,81 @@ public class SVGHelper: NSObject {
         return parseTransform(newAttributeString, transform: finalTransform)
     }
 
+    static func parseTransformOperations(_ attributes: String, collectedOperations: [CGAffineTransform] = []) -> [CGAffineTransform] {
+        guard let matcher = SVGParserRegexHelper.getTransformAttributeMatcher() else {
+            return collectedOperations
+        }
+
+        let attributes = attributes.replacingOccurrences(of: "\n", with: "")
+        var updatedOperations = collectedOperations
+        let fullRange = NSRange(location: 0, length: attributes.count)
+
+        guard let matchedAttribute = matcher.firstMatch(in: attributes, options: .reportCompletion, range: fullRange) else {
+            return updatedOperations
+        }
+
+        let attributeName = (attributes as NSString).substring(with: matchedAttribute.range(at: 1))
+        let values = parseTransformValues((attributes as NSString).substring(with: matchedAttribute.range(at: 2)))
+        if values.isEmpty {
+            return updatedOperations
+        }
+
+        var operation = CGAffineTransform.identity
+        switch attributeName {
+        case "translate":
+            if let x = values[0].cgFloatValue {
+                var y: CGFloat = 0
+                if values.indices.contains(1) {
+                    y = values[1].cgFloatValue ?? 0
+                }
+                operation = operation.translatedBy(x: x, y: y)
+            }
+        case "scale":
+            if let x = values[0].cgFloatValue {
+                var y = x
+                if values.indices.contains(1) {
+                    y = values[1].cgFloatValue ?? x
+                }
+                operation = operation.scaledBy(x: x, y: y)
+            }
+        case "rotate":
+            if let angle = values[0].cgFloatValue {
+                if values.count == 1 {
+                    operation = operation.rotated(by: angle.degreesToRadians)
+                } else if values.count == 3, let x = values[1].cgFloatValue, let y = values[2].cgFloatValue {
+                    operation = operation.translatedBy(x: x, y: y).rotated(by: angle.degreesToRadians).translatedBy(x: -x, y: -y)
+                }
+            }
+        case "skewX":
+            if let x = values[0].cgFloatValue {
+                let v = tan((x * .pi) / 180.0)
+                operation = operation.shear(shx: v, shy: 0)
+            }
+        case "skewY":
+            if let y = values[0].cgFloatValue {
+                let v = tan((y * .pi) / 180.0)
+                operation = operation.shear(shx: 0, shy: v)
+            }
+        case "matrix":
+            if values.count != 6 {
+                return updatedOperations
+            }
+            if let a = values[0].cgFloatValue, let b = values[1].cgFloatValue,
+               let c = values[2].cgFloatValue, let d = values[3].cgFloatValue,
+               let tx = values[4].cgFloatValue, let ty = values[5].cgFloatValue {
+                operation = CGAffineTransform(a: a, b: b, c: c, d: d, tx: tx, ty: ty)
+            }
+        default:
+            break
+        }
+
+        updatedOperations.append(operation)
+        let rangeToRemove = NSRange(location: 0,
+                                    length: matchedAttribute.range.location + matchedAttribute.range.length)
+        let newAttributeString = (attributes as NSString).replacingCharacters(in: rangeToRemove, with: "")
+        return parseTransformOperations(newAttributeString, collectedOperations: updatedOperations)
+    }
+
     static func parseTransformValues(_ values: String, collectedValues: [String] = []) -> [String] {
         guard let matcher = SVGParserRegexHelper.getTransformMatcher() else {
             return collectedValues
