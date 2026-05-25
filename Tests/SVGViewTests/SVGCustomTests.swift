@@ -10,15 +10,38 @@ struct SVGCustomTests: SVGTestHelper {
     }
 
     @Test func graph01() async throws {
+        // Baseline parsing snapshot for a large graph-like SVG fixture.
         try await compareToReference("graph-01")
     }
 
     @Test func viewport01() async throws {
+        // Verifies viewport handling for the first custom viewport fixture.
         try await compareToReference("viewport-01")
     }
 
     @Test func viewport02() async throws {
+        // Verifies viewport handling for the second custom viewport fixture.
         try await compareToReference("viewport-02")
+    }
+
+    @Test func scriptGating01() async throws {
+        // Unsupported script MIME type must be ignored, so the square stays blue.
+        try await compareToReference("script-gating-01")
+    }
+
+    @Test func scriptGating02() async throws {
+        // Unsupported root contentScriptType should prevent untyped script execution.
+        try await compareToReference("script-gating-02")
+    }
+
+    @Test func scriptGating03() async throws {
+        // Supported script MIME type should execute and turn the square red.
+        try await compareToReference("script-gating-03")
+    }
+
+    @Test func scriptGating04() async throws {
+        // Untyped script should execute with default script MIME handling.
+        try await compareToReference("script-gating-04")
     }
 
 }

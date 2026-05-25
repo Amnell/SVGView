@@ -155,6 +155,10 @@ struct cli: ParsableCommand {
         "viewport-01",
         "viewport-02",
         "graph-01",
+        "script-gating-01",
+        "script-gating-02",
+        "script-gating-03",
+        "script-gating-04",
     ]
 
     mutating func run() throws {

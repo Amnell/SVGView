@@ -66,8 +66,26 @@ final class SVGJSElement: NSObject, SVGJSElementExports {
     }
 
     func setAttribute(_ name: String, _ value: String) {
-        if name == "fill", let shape = node as? SVGShape {
-            shape.fill = SVGHelper.parseColor(value, [:])
+        let normalizedName = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let normalizedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        switch normalizedName {
+        case "fill":
+            if let shape = node as? SVGShape {
+                shape.fill = SVGHelper.parseColor(normalizedValue, [:])
+            }
+        case "opacity":
+            if let parsedOpacity = Double(normalizedValue) {
+                node.opacity = min(max(parsedOpacity, 0), 1)
+            }
+        case "visibility":
+            node.opaque = normalizedValue.lowercased() != "hidden"
+        case "display":
+            node.opaque = normalizedValue.lowercased() != "none"
+        case "transform":
+            node.transform = SVGHelper.parseTransform(normalizedValue)
+        default:
+            break
         }
     }
 }
@@ -221,6 +239,18 @@ final class SVGJSMatrix: NSObject, SVGJSMatrixExports {
 
 enum SVGScriptRunner {
 
+    private static let supportedScriptMIMETypes: Set<String> = [
+        "application/ecmascript",
+        "application/javascript",
+        "application/x-ecmascript",
+        "application/x-javascript",
+        "text/ecmascript",
+        "text/javascript",
+        "text/jscript",
+    ]
+
+    private static let defaultScriptMIMEType = "application/ecmascript"
+
     static func executeIfNeeded(xmlRoot: XMLElement, nodeRoot: SVGNode, logger: SVGLogger) {
 #if canImport(JavaScriptCore)
         let scripts = collectScripts(from: xmlRoot)
@@ -264,8 +294,26 @@ enum SVGScriptRunner {
     private static func collectScripts(from root: XMLElement) -> [String] {
         var result: [String] = []
 
+        let explicitDefaultType = root.attributes["contentScriptType"]
+        let defaultScriptType: String? = {
+            if let explicitDefaultType {
+                return normalizedSupportedScriptType(explicitDefaultType)
+            }
+            return defaultScriptMIMEType
+        }()
+
         func walk(_ element: XMLElement) {
             if element.name == "script" {
+                let hasExplicitType = element.attributes["type"] != nil
+                let effectiveType: String? = {
+                    if let scriptType = element.attributes["type"] {
+                        return normalizedSupportedScriptType(scriptType)
+                    }
+                    return hasExplicitType ? nil : defaultScriptType
+                }()
+
+                guard effectiveType != nil else { return }
+
                 let script = element.contents
                     .compactMap { ($0 as? XMLText)?.text }
                     .joined()
@@ -282,5 +330,19 @@ enum SVGScriptRunner {
 
         walk(root)
         return result
+    }
+
+    private static func normalizedSupportedScriptType(_ rawValue: String) -> String? {
+        let trimmed = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        let typeOnly = trimmed
+            .split(separator: ";", maxSplits: 1, omittingEmptySubsequences: true)
+            .first?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        guard let typeOnly else { return nil }
+        return supportedScriptMIMETypes.contains(typeOnly) ? typeOnly : nil
     }
 }
