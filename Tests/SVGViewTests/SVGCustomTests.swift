@@ -239,4 +239,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-31")
     }
 
+    @Test func scriptCurrentColor32() async throws {
+        // Invalid shape fill-opacity token should be ignored while currentColor updates still apply.
+        try await compareToReference("script-currentcolor-32")
+    }
+
+    @Test func scriptCurrentColor33() async throws {
+        // Invalid text fill-opacity token should be ignored after a valid opacity update.
+        try await compareToReference("script-currentcolor-33")
+    }
+
+    @Test func scriptCurrentColor34() async throws {
+        // Invalid text stroke-opacity token should be ignored across none -> currentColor relink.
+        try await compareToReference("script-currentcolor-34")
+    }
+
 }

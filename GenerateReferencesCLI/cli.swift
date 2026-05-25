@@ -198,6 +198,9 @@ struct cli: ParsableCommand {
         "script-currentcolor-29",
         "script-currentcolor-30",
         "script-currentcolor-31",
+        "script-currentcolor-32",
+        "script-currentcolor-33",
+        "script-currentcolor-34",
     ]
 
     mutating func run() throws {
