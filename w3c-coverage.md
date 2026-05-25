@@ -564,7 +564,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |✅|[shapes-polygon-03-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-polygon-03-t.svg)|
 |✅|[shapes-polyline-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-polyline-01-t.svg)|
 |✅|[shapes-polyline-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-polyline-02-t.svg)|
-|❌|[shapes-rect-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-01-t.svg)|
+|✅|[shapes-rect-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-01-t.svg)|
 |✅|[shapes-rect-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-02-t.svg)|
 |❌|[shapes-rect-03-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-03-t.svg)|
 |✅|[shapes-rect-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-04-f.svg)|
@@ -1282,7 +1282,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[shapes-polygon-02-t](Tests/SVGViewTests/w3c/1.2T/svg/shapes-polygon-02-t.svg)|
 |✅|[shapes-polyline-01-t](Tests/SVGViewTests/w3c/1.2T/svg/shapes-polyline-01-t.svg)|
 |❌|[shapes-polyline-02-t](Tests/SVGViewTests/w3c/1.2T/svg/shapes-polyline-02-t.svg)|
-|❌|[shapes-rect-01-t](Tests/SVGViewTests/w3c/1.2T/svg/shapes-rect-01-t.svg)|
+|✅|[shapes-rect-01-t](Tests/SVGViewTests/w3c/1.2T/svg/shapes-rect-01-t.svg)|
 |✅|[shapes-rect-02-t](Tests/SVGViewTests/w3c/1.2T/svg/shapes-rect-02-t.svg)|
 |❌|[shapes-rect-03-t](Tests/SVGViewTests/w3c/1.2T/svg/shapes-rect-03-t.svg)|
 </details>
