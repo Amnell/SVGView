@@ -98,6 +98,7 @@ struct cli: ParsableCommand {
         "shapes-ellipse-03-f",
         "shapes-grammar-01-f",
         "shapes-intro-01-t",
+        "shapes-intro-02-f",
         "shapes-line-01-t",
         "shapes-line-02-f",
         "shapes-polygon-01-t",
