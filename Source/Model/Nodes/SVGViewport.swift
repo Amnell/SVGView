@@ -79,7 +79,9 @@ struct SVGViewportView: View {
             SVGGroupView(model: model)
                 .transformEffect(getTransform(viewBox: viewBox, size: size))
         }
-        .frame(idealWidth: model.width.ideal, idealHeight: model.height.ideal)
+        // Use fixed frame for absolute viewport lengths so nested <svg> elements
+        // don't expand to the full proposed size from parent stacks.
+        .frame(width: model.width.ideal, height: model.height.ideal, alignment: .topLeading)
         .clipped()
     }
 
