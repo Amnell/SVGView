@@ -54,4 +54,14 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-stroke-02")
     }
 
+    @Test func scriptStroke03() async throws {
+        // Unsupported script MIME type must not mutate stroke dash properties.
+        try await compareToReference("script-stroke-03")
+    }
+
+    @Test func scriptStroke04() async throws {
+        // Supported script MIME type should mutate stroke dasharray/dashoffset.
+        try await compareToReference("script-stroke-04")
+    }
+
 }
