@@ -124,4 +124,9 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-08")
     }
 
+    @Test func scriptCurrentColor09() async throws {
+        // Child explicit color should override inherited parent color changes.
+        try await compareToReference("script-currentcolor-09")
+    }
+
 }

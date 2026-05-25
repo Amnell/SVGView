@@ -12,6 +12,7 @@ public class SVGNode: SerializableElement {
     public var opaque: Bool
     public var opacity: Double
     public var currentColor: SVGColor?
+    public var hasExplicitCurrentColor: Bool = false
     public var clip: SVGNode?
     public var mask: SVGNode?
     public var id: String?
@@ -23,6 +24,7 @@ public class SVGNode: SerializableElement {
     @Published public var opaque: Bool
     @Published public var opacity: Double
     @Published public var currentColor: SVGColor?
+    @Published public var hasExplicitCurrentColor: Bool = false
     @Published public var clip: SVGNode?
     @Published public var mask: SVGNode?
     @Published public var id: String?

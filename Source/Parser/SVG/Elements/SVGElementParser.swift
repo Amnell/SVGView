@@ -23,6 +23,7 @@ class SVGBaseElementParser: SVGElementParser {
         if let colorValue = context.style("color") {
             node.currentColor = SVGHelper.parseColor(colorValue, context.styles)
         }
+        node.hasExplicitCurrentColor = context.hasElementStyle("color")
 
         if let clipId = SVGHelper.parseUse(context.properties["clip-path"]),
            let clipNode = context.index.element(by: clipId),
