@@ -224,4 +224,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-28")
     }
 
+    @Test func scriptCurrentColor29() async throws {
+        // fill-opacity values above 1 should clamp while fill remains linked to currentColor updates.
+        try await compareToReference("script-currentcolor-29")
+    }
+
+    @Test func scriptCurrentColor30() async throws {
+        // Text fill-opacity below 0 should clamp and later in-range opacity should apply.
+        try await compareToReference("script-currentcolor-30")
+    }
+
+    @Test func scriptCurrentColor31() async throws {
+        // Text stroke-opacity should clamp around none -> currentColor relink and accept later valid updates.
+        try await compareToReference("script-currentcolor-31")
+    }
+
 }
