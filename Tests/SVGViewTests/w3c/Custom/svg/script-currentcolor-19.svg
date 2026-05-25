@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="120" height="120">
+  <g id="parent" color="blue">
+    <rect id="shape" x="10" y="10" width="40" height="40" fill="currentColor"/>
+    <text id="text" x="10" y="90" fill="currentColor" color="green">X</text>
+  </g>
+  <script type="text/ecmascript"><![CDATA[
+    var parent = document.getElementById('parent');
+    parent.setAttribute('color', 'red');
+    parent.setAttribute('color', 'lime');
+  ]]></script>
+</svg>

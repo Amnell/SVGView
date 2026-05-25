@@ -164,4 +164,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-16")
     }
 
+    @Test func scriptCurrentColor17() async throws {
+        // Parent color updates should propagate to both shape and text children using currentColor.
+        try await compareToReference("script-currentcolor-17")
+    }
+
+    @Test func scriptCurrentColor18() async throws {
+        // Child text relinking to currentColor should bind to inherited parent color updates.
+        try await compareToReference("script-currentcolor-18")
+    }
+
+    @Test func scriptCurrentColor19() async throws {
+        // Explicit child text color override should remain stable while sibling shape tracks parent color.
+        try await compareToReference("script-currentcolor-19")
+    }
+
 }
