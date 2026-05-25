@@ -284,4 +284,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-40")
     }
 
+    @Test func scriptCurrentColor41() async throws {
+        // Out-of-range rgb token should be ignored while a later valid color update applies.
+        try await compareToReference("script-currentcolor-41")
+    }
+
+    @Test func scriptCurrentColor42() async throws {
+        // Negative rgb token should not block later fill-opacity and valid color updates.
+        try await compareToReference("script-currentcolor-42")
+    }
+
+    @Test func scriptCurrentColor43() async throws {
+        // Malformed hex token should be ignored across stroke none -> currentColor relink.
+        try await compareToReference("script-currentcolor-43")
+    }
+
 }

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="120" height="120">
+  <text id="target" x="10" y="70" fill="none" stroke="currentColor" stroke-width="6" color="blue">X</text>
+  <script type="text/ecmascript"><![CDATA[
+    var node = document.getElementById('target');
+    node.setAttribute('stroke-opacity', '0.3');
+    node.setAttribute('stroke', 'none');
+    node.setAttribute('stroke', 'currentColor');
+    node.setAttribute('color', '#12');
+    node.setAttribute('color', 'red');
+  ]]></script>
+</svg>
