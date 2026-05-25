@@ -209,4 +209,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-25")
     }
 
+    @Test func scriptCurrentColor26() async throws {
+        // Shape relink to currentColor should resume color tracking while preserving runtime fill-opacity.
+        try await compareToReference("script-currentcolor-26")
+    }
+
+    @Test func scriptCurrentColor27() async throws {
+        // Text stroke relink should restore currentColor tracking with latest runtime stroke-opacity.
+        try await compareToReference("script-currentcolor-27")
+    }
+
+    @Test func scriptCurrentColor28() async throws {
+        // Mixed descendants should preserve opacity while relinked nodes follow parent color updates.
+        try await compareToReference("script-currentcolor-28")
+    }
+
 }
