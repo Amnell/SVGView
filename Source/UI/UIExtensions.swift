@@ -57,6 +57,9 @@ extension View {
 
     func applyNodeAttributes(model: SVGNode) -> some View {
         self.opacity(model.opacity)
+            .applyIf(!model.opaque) {
+                $0.hidden()
+            }
             .applyMask(mask: model.clip, absoluteNode: model)
             .transformEffect(model.transform)
             .applyIf(!model.gestures.isEmpty) {

@@ -50,13 +50,14 @@ public class SVGRect: SVGShape {
 
     #if !os(WASI) && !os(Linux)
     override func draw(in context: CGContext) {
+        guard opaque else { return }
         guard let color = fill as? SVGColor else { return }
         context.saveGState()
         context.setFillColor(CGColor(
             red: CGFloat(color.r) / 255,
             green: CGFloat(color.g) / 255,
             blue: CGFloat(color.b) / 255,
-            alpha: CGFloat(color.opacity)
+            alpha: CGFloat(color.opacity * opacity)
         ))
         context.fill(CGRect(x: x, y: y, width: width, height: height))
         context.restoreGState()

@@ -46,9 +46,11 @@ public class SVGGroup: SVGNode {
 
     #if !os(WASI) && !os(Linux)
     override func draw(in context: CGContext) {
+        guard opaque else { return }
         context.saveGState()
         context.concatenate(transform)
         for node in contents {
+            guard node.opaque else { continue }
             node.draw(in: context)
         }
         context.restoreGState()

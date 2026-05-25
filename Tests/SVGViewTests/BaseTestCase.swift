@@ -91,12 +91,15 @@ extension SVGTestHelper {
         if #available(macOS 13, iOS 16, watchOS 9, *) {
             let size = renderSize(for: node)
             let png = await MainActor.run { () -> Data? in
-                let renderer = ImageRenderer(content: SVGView(svg: node).frame(width: size.width, height: size.height))
+                let content = SVGView(svg: node)
+                    .frame(width: size.width, height: size.height)
+                    .background(Color.clear)
+                let renderer = ImageRenderer(content: content)
                 renderer.scale = 1.0
+                renderer.isOpaque = false
 #if os(macOS)
-                guard let nsImage = renderer.nsImage,
-                      let tiff = nsImage.tiffRepresentation,
-                      let rep = NSBitmapImageRep(data: tiff) else { return nil }
+                guard let cgImage = renderer.cgImage else { return nil }
+                let rep = NSBitmapImageRep(cgImage: cgImage)
                 return rep.representation(using: .png, properties: [:])
 #elseif os(iOS)
                 return renderer.uiImage?.pngData()
