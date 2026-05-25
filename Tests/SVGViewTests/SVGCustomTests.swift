@@ -299,4 +299,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-43")
     }
 
+    @Test func scriptCurrentColor44() async throws {
+        // Malformed rgb argument count should be ignored while later valid color applies.
+        try await compareToReference("script-currentcolor-44")
+    }
+
+    @Test func scriptCurrentColor45() async throws {
+        // Out-of-range rgba alpha should not block later fill-opacity and valid color updates.
+        try await compareToReference("script-currentcolor-45")
+    }
+
+    @Test func scriptCurrentColor46() async throws {
+        // Malformed hsl argument count should be ignored across stroke none -> currentColor relink.
+        try await compareToReference("script-currentcolor-46")
+    }
+
 }
