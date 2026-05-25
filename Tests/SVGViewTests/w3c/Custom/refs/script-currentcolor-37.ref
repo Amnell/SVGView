@@ -1,0 +1,14 @@
+SVGViewport {
+	width: "120",
+	height: "120",
+	scaling: "none",
+	contents: [
+		SVGText {
+			id: "target",
+			text: "X",
+			font: {  },
+			stroke: { fill: "red" },
+			transform: [1, 0, 0, 1, 10, 70]
+		}
+	]
+}
