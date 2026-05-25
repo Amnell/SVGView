@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="120" height="120">
+  <text id="target" x="10" y="70" fill="currentColor" color="blue">X</text>
+  <script type="text/ecmascript"><![CDATA[
+    var node = document.getElementById('target');
+    node.setAttribute('color', '   ');
+    node.setAttribute('fill-opacity', '0.5');
+    node.setAttribute('color', 'lime');
+  ]]></script>
+</svg>
