@@ -269,4 +269,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-37")
     }
 
+    @Test func scriptCurrentColor38() async throws {
+        // Empty color token should be ignored while a later valid color update applies.
+        try await compareToReference("script-currentcolor-38")
+    }
+
+    @Test func scriptCurrentColor39() async throws {
+        // Whitespace color token should not block later fill-opacity and valid color updates.
+        try await compareToReference("script-currentcolor-39")
+    }
+
+    @Test func scriptCurrentColor40() async throws {
+        // Quoted color token should be ignored across stroke none -> currentColor relink.
+        try await compareToReference("script-currentcolor-40")
+    }
+
 }
