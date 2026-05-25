@@ -114,4 +114,14 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-06")
     }
 
+    @Test func scriptCurrentColor07() async throws {
+        // Unsupported script MIME type must not mutate inherited currentColor fill.
+        try await compareToReference("script-currentcolor-07")
+    }
+
+    @Test func scriptCurrentColor08() async throws {
+        // Updating parent color should update descendant fill=currentColor.
+        try await compareToReference("script-currentcolor-08")
+    }
+
 }
