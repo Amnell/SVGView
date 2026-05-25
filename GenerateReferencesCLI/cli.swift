@@ -159,6 +159,8 @@ struct cli: ParsableCommand {
         "script-gating-02",
         "script-gating-03",
         "script-gating-04",
+        "script-stroke-01",
+        "script-stroke-02",
     ]
 
     mutating func run() throws {

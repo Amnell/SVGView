@@ -44,4 +44,14 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-gating-04")
     }
 
+    @Test func scriptStroke01() async throws {
+        // Unsupported script MIME type must not mutate stroke properties.
+        try await compareToReference("script-stroke-01")
+    }
+
+    @Test func scriptStroke02() async throws {
+        // Supported script MIME type should mutate stroke color/width/opacity.
+        try await compareToReference("script-stroke-02")
+    }
+
 }
