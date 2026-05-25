@@ -163,6 +163,8 @@ struct cli: ParsableCommand {
         "script-stroke-02",
         "script-stroke-03",
         "script-stroke-04",
+        "script-stroke-05",
+        "script-stroke-06",
     ]
 
     mutating func run() throws {

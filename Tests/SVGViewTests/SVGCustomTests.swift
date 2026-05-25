@@ -64,4 +64,14 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-stroke-04")
     }
 
+    @Test func scriptStroke05() async throws {
+        // Unsupported script MIME type must not mutate cap/join/miterlimit.
+        try await compareToReference("script-stroke-05")
+    }
+
+    @Test func scriptStroke06() async throws {
+        // Supported script MIME type should mutate cap/join/miterlimit.
+        try await compareToReference("script-stroke-06")
+    }
+
 }
