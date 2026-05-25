@@ -149,4 +149,19 @@ struct SVGCustomTests: SVGTestHelper {
         try await compareToReference("script-currentcolor-13")
     }
 
+    @Test func scriptCurrentColor14() async throws {
+        // Concrete stroke should unlink text stroke from currentColor updates.
+        try await compareToReference("script-currentcolor-14")
+    }
+
+    @Test func scriptCurrentColor15() async throws {
+        // Setting text stroke back to currentColor should relink to later color updates.
+        try await compareToReference("script-currentcolor-15")
+    }
+
+    @Test func scriptCurrentColor16() async throws {
+        // Stroke none should clear binding; setting currentColor later should relink using current color.
+        try await compareToReference("script-currentcolor-16")
+    }
+
 }
