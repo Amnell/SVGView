@@ -109,6 +109,8 @@ extension SVGNode {
         switch self {
         case let model as SVGViewport:
             SVGViewportView(model: model)
+        case is SVGDefs:
+            EmptyView()
         case let model as SVGGroup:
             model.contentView()
         case let model as SVGRect:
