@@ -161,6 +161,7 @@ struct SVG11Tests {
         var dir: String { "1.1F2" }
 
         @Test func structCond01T() async throws { try await compareToReference("struct-cond-01-t") }
+        @Test func structCond02T() async throws { try await compareToReference("struct-cond-02-t") }
         @Test func structCond03T() async throws { try await compareToReference("struct-cond-03-t") }
         @Test func structDefs01T() async throws { try await compareToReference("struct-defs-01-t") }
         @Test func structFrag01T() async throws { try await compareToReference("struct-frag-01-t") }
