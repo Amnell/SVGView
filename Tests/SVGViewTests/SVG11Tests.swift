@@ -149,6 +149,7 @@ struct SVG11Tests {
         @Test func shapesPolyline02T() async throws { try await compareToReference("shapes-polyline-02-t") }
         @Test func shapesRect01T() async throws { try await compareToReference("shapes-rect-01-t") }
         @Test func shapesRect02T() async throws { try await compareToReference("shapes-rect-02-t") }
+        @Test func shapesRect03T() async throws { try await compareToReference("shapes-rect-03-t") }
         @Test func shapesRect04F() async throws { try await compareToReference("shapes-rect-04-f") }
         @Test func shapesRect05F() async throws { try await compareToReference("shapes-rect-05-f") }
         @Test func shapesRect06F() async throws { try await compareToReference("shapes-rect-06-f") }

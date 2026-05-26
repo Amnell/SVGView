@@ -1,0 +1,334 @@
+SVGViewport {
+	id: "svg-root",
+	viewBox: { width: 480, height: 360 },
+	scaling: "none",
+	contents: [
+		SVGDefs {  },
+		SVGGroup {
+			id: "test-body-content",
+			contents: [
+				SVGGroup {
+					transform: [1, 0, 0, 1, 0, 30],
+					contents: [
+						SVGGroup {
+							contents: [
+								SVGGroup {
+									id: "references",
+									contents: [
+										SVGRect { x: 100, width: 20, height: 100, rx: 50, ry: 20, fill: "red" },
+										SVGRect { x: 130, width: 20, height: 100, rx: 10, ry: 20, fill: "red" },
+										SVGRect { x: 160, width: 20, height: 100, rx: 10, ry: 20, fill: "red" },
+										SVGRect { x: 190, width: 20, height: 100, rx: 10, ry: 50, fill: "red" },
+										SVGRect { x: 220, width: 20, height: 100, rx: 10, ry: 20, fill: "red" },
+										SVGRect { x: 250, width: 20, height: 100, rx: 10, ry: 10, fill: "red" },
+										SVGRect { x: 280, width: 20, height: 100, rx: 5, ry: 5, fill: "red" },
+										SVGRect { x: 310, width: 20, height: 100, fill: "red" },
+										SVGRect { x: 340, width: 20, height: 100, fill: "red" },
+										SVGGroup {
+											transform: [1, 0, 0, 1, 45, 0],
+											contents: [
+												SVGRect { x: 10, y: 120, width: 100, height: 20, rx: 50, ry: 10, fill: "red" },
+												SVGRect { x: 10, y: 150, width: 100, height: 20, rx: 15, ry: 10, fill: "red" },
+												SVGRect { x: 10, y: 180, width: 100, height: 20, rx: 10, ry: 10, fill: "red" },
+												SVGRect { x: 130, y: 120, width: 100, height: 20, rx: 50, ry: 10, fill: "red" },
+												SVGRect { x: 130, y: 150, width: 100, height: 20, rx: 20, ry: 10, fill: "red" },
+												SVGRect { x: 130, y: 180, width: 100, height: 20, rx: 10, ry: 10, fill: "red" },
+												SVGRect { x: 250, y: 120, width: 100, height: 20, rx: 5, ry: 5, fill: "red" },
+												SVGRect { x: 250, y: 150, width: 100, height: 20, fill: "red" },
+												SVGRect { x: 250, y: 180, width: 100, height: 20, fill: "red" }
+											]
+										},
+										SVGGroup {
+											transform: [1, 0, 0, 1, 100, 100],
+											contents: [
+												SVGRect { x: 10, y: 120, width: 50, height: 20, rx: 25, ry: 10, fill: "red" },
+												SVGRect { x: 80, y: 120, width: 20, height: 50, rx: 10, ry: 25, fill: "red" },
+												SVGRect { x: 120, y: 120, width: 50, height: 20, rx: 25, ry: 10, fill: "red" },
+												SVGRect {
+													width: 20,
+													height: 30,
+													rx: 10,
+													ry: 15,
+													fill: "red",
+													transform: [2, 0, 0, 2, 180, 120]
+												},
+												SVGRect { x: 230, y: 120, width: 20, height: 30, rx: 10, ry: 25, fill: "red" }
+											]
+										}
+									]
+								}
+							]
+						},
+						SVGGroup {
+							id: "tests",
+							contents: [
+								SVGRect { x: 100, width: 20, height: 100, rx: 50, ry: 20, fill: "lime" },
+								SVGRect { x: 130, width: 20, height: 100, rx: 15, ry: 20, fill: "lime" },
+								SVGRect { x: 160, width: 20, height: 100, rx: 10, ry: 20, fill: "lime" },
+								SVGRect { x: 190, width: 20, height: 100, rx: 80, ry: 80, fill: "lime" },
+								SVGRect { x: 220, width: 20, height: 100, rx: 20, ry: 20, fill: "lime" },
+								SVGRect { x: 250, width: 20, height: 100, rx: 10, ry: 10, fill: "lime" },
+								SVGRect { x: 280, width: 20, height: 100, rx: 5, ry: 5, fill: "lime" },
+								SVGRect { x: 310, width: 20, height: 100, fill: "lime" },
+								SVGRect { x: 340, width: 20, height: 100, fill: "lime" },
+								SVGGroup {
+									transform: [1, 0, 0, 1, 45, 0],
+									contents: [
+										SVGRect { x: 10, y: 120, width: 100, height: 20, rx: 50, ry: 20, fill: "lime" },
+										SVGRect { x: 10, y: 150, width: 100, height: 20, rx: 15, ry: 20, fill: "lime" },
+										SVGRect { x: 10, y: 180, width: 100, height: 20, rx: 10, ry: 20, fill: "lime" },
+										SVGRect { x: 130, y: 120, width: 100, height: 20, rx: 50, ry: 50, fill: "lime" },
+										SVGRect { x: 130, y: 150, width: 100, height: 20, rx: 20, ry: 20, fill: "lime" },
+										SVGRect { x: 130, y: 180, width: 100, height: 20, rx: 10, ry: 10, fill: "lime" },
+										SVGRect { x: 250, y: 120, width: 100, height: 20, rx: 5, ry: 5, fill: "lime" },
+										SVGRect { x: 250, y: 150, width: 100, height: 20, fill: "lime" },
+										SVGRect { x: 250, y: 180, width: 100, height: 20, fill: "lime" }
+									]
+								},
+								SVGGroup {
+									transform: [1, 0, 0, 1, 100, 100],
+									contents: [
+										SVGRect { x: 10, y: 120, width: 50, height: 20, rx: 50, ry: 50, fill: "lime" },
+										SVGRect { x: 80, y: 120, width: 20, height: 50, rx: 50, ry: 50, fill: "lime" },
+										SVGRect { x: 120, y: 120, width: 50, height: 20, rx: 200, ry: 200, fill: "lime" },
+										SVGRect {
+											width: 20,
+											height: 30,
+											rx: 50,
+											ry: 50,
+											fill: "lime",
+											transform: [2, 0, 0, 2, 180, 120]
+										},
+										SVGRect { x: 230, y: 120, width: 20, height: 30, rx: 50, ry: 50, fill: "lime" }
+									]
+								}
+							]
+						},
+						SVGGroup {
+							contents: [
+								SVGRect {
+									x: 100,
+									width: 20,
+									height: 100,
+									rx: 50,
+									ry: 20,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									x: 130,
+									width: 20,
+									height: 100,
+									rx: 10,
+									ry: 20,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									x: 160,
+									width: 20,
+									height: 100,
+									rx: 10,
+									ry: 20,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									x: 190,
+									width: 20,
+									height: 100,
+									rx: 10,
+									ry: 50,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									x: 220,
+									width: 20,
+									height: 100,
+									rx: 10,
+									ry: 20,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									x: 250,
+									width: 20,
+									height: 100,
+									rx: 10,
+									ry: 10,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									x: 280,
+									width: 20,
+									height: 100,
+									rx: 5,
+									ry: 5,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									x: 310,
+									width: 20,
+									height: 100,
+									stroke: { fill: "black" }
+								},
+								SVGRect {
+									x: 340,
+									width: 20,
+									height: 100,
+									stroke: { fill: "black" }
+								},
+								SVGGroup {
+									transform: [1, 0, 0, 1, 45, 0],
+									contents: [
+										SVGRect {
+											x: 10,
+											y: 120,
+											width: 100,
+											height: 20,
+											rx: 50,
+											ry: 10,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 10,
+											y: 150,
+											width: 100,
+											height: 20,
+											rx: 15,
+											ry: 10,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 10,
+											y: 180,
+											width: 100,
+											height: 20,
+											rx: 10,
+											ry: 10,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 130,
+											y: 120,
+											width: 100,
+											height: 20,
+											rx: 50,
+											ry: 10,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 130,
+											y: 150,
+											width: 100,
+											height: 20,
+											rx: 20,
+											ry: 10,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 130,
+											y: 180,
+											width: 100,
+											height: 20,
+											rx: 10,
+											ry: 10,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 250,
+											y: 120,
+											width: 100,
+											height: 20,
+											rx: 5,
+											ry: 5,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 250,
+											y: 150,
+											width: 100,
+											height: 20,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 250,
+											y: 180,
+											width: 100,
+											height: 20,
+											stroke: { fill: "black" }
+										}
+									]
+								},
+								SVGGroup {
+									transform: [1, 0, 0, 1, 100, 100],
+									contents: [
+										SVGRect {
+											x: 10,
+											y: 120,
+											width: 50,
+											height: 20,
+											rx: 25,
+											ry: 10,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 80,
+											y: 120,
+											width: 20,
+											height: 50,
+											rx: 10,
+											ry: 25,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											x: 120,
+											y: 120,
+											width: 50,
+											height: 20,
+											rx: 25,
+											ry: 10,
+											stroke: { fill: "black" }
+										},
+										SVGRect {
+											width: 20,
+											height: 30,
+											rx: 10,
+											ry: 15,
+											stroke: { fill: "black", width: 0.5 },
+											transform: [2, 0, 0, 2, 180, 120]
+										},
+										SVGRect {
+											x: 230,
+											y: 120,
+											width: 20,
+											height: 30,
+											rx: 10,
+											ry: 25,
+											stroke: { fill: "black" }
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		SVGGroup {
+			contents: [
+				SVGText {
+					id: "revision",
+					text: "$Revision: 1.9 $",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 32 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 10, 340]
+				}
+			]
+		},
+		SVGRect {
+			id: "test-frame",
+			x: 1,
+			y: 1,
+			width: 478,
+			height: 358,
+			stroke: { fill: "black" }
+		}
+	]
+}
