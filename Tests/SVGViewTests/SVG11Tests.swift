@@ -188,4 +188,11 @@ struct SVG11Tests {
 
         @Test func typesBasic01F() async throws { try await compareToReference("types-basic-01-f") }
     }
+
+    @Suite("Text")
+    struct Text: SVGTestHelper {
+        var dir: String { "1.1F2" }
+
+        @Test func textAlign01B() async throws { try await compareToReference("text-align-01-b") }
+    }
 }

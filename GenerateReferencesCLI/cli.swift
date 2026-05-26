@@ -129,6 +129,7 @@ struct cli: ParsableCommand {
         "styling-css-01-b",
         "styling-pres-01-t",
         "types-basic-01-f",
+        "text-align-01-b",
     ]
     
     static let v12Refs: [String] = [
