@@ -109,6 +109,7 @@ struct cli: ParsableCommand {
         "shapes-polyline-02-t",
         "shapes-rect-01-t",
         "shapes-rect-02-t",
+        "shapes-rect-03-t",
         "shapes-rect-04-f",
         "shapes-rect-05-f",
         "shapes-rect-06-f",
