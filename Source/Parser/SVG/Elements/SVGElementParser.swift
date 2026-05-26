@@ -15,7 +15,29 @@ protocol SVGElementParser {
 
 class SVGBaseElementParser: SVGElementParser {
 
+    /// SVG 1.1 feature strings that SVGView supports for conditional processing.
+    static let supportedConditionalFeatures: Set<String> = [
+        "http://www.w3.org/TR/SVG11/feature#SVG-static",
+        "http://www.w3.org/TR/SVG11/feature#CoreAttribute",
+        "http://www.w3.org/TR/SVG11/feature#Structure",
+        "http://www.w3.org/TR/SVG11/feature#BasicStructure",
+        "http://www.w3.org/TR/SVG11/feature#ConditionalProcessing",
+        "http://www.w3.org/TR/SVG11/feature#Shape",
+        "http://www.w3.org/TR/SVG11/feature#BasicText",
+        "http://www.w3.org/TR/SVG11/feature#PaintAttribute",
+        "http://www.w3.org/TR/SVG11/feature#BasicPaintAttribute",
+        "http://www.w3.org/TR/SVG11/feature#OpacityAttribute",
+        "http://www.w3.org/TR/SVG11/feature#GraphicsAttribute",
+        "http://www.w3.org/TR/SVG11/feature#BasicGraphicsAttribute",
+        "http://www.w3.org/TR/SVG11/feature#Gradient",
+        "http://www.w3.org/TR/SVG11/feature#Marker",
+        "http://www.w3.org/TR/SVG11/feature#Image",
+    ]
+
     func parse(context: SVGNodeContext, delegate: (XMLElement) -> SVGNode?) -> SVGNode? {
+        guard Self.conditionalAttributesMet(attributes: context.properties) else {
+            return nil
+        }
         guard let node = doParse(context: context, delegate: delegate) else { return nil }
         let transform = SVGHelper.parseTransform(context.properties["transform"] ?? "")
         node.transform = node.transform.concatenating(transform)
@@ -56,6 +78,42 @@ class SVGBaseElementParser: SVGElementParser {
             return result
         }
         return SVGUserSpaceNode.UserSpace.objectBoundingBox
+    }
+
+    static func conditionalAttributesMet(attributes: [String: String]) -> Bool {
+        // requiredExtensions: SVGView supports no extensions — any non-empty value fails.
+        if let extensions = attributes["requiredExtensions"], !extensions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return false
+        }
+
+        // requiredFeatures: every whitespace-separated URI must be supported.
+        if let features = attributes["requiredFeatures"] {
+            let required = features.split(whereSeparator: { $0.isWhitespace }).map(String.init)
+            if !required.allSatisfy({ supportedConditionalFeatures.contains($0) }) {
+                return false
+            }
+        }
+
+        // systemLanguage: at least one listed language must match the current locale.
+        if let languages = attributes["systemLanguage"] {
+            let currentLanguage: String
+            if #available(macOS 13, iOS 16, watchOS 9, *) {
+                currentLanguage = Locale.current.language.languageCode?.identifier ?? ""
+            } else {
+                currentLanguage = (Locale.current as NSLocale).languageCode
+            }
+
+            let codes = languages
+                .split(separator: ",")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
+                .filter { !$0.isEmpty }
+            let normalizedCurrent = currentLanguage.lowercased()
+            if !codes.contains(where: { $0.hasPrefix(normalizedCurrent) || normalizedCurrent.hasPrefix($0) }) {
+                return false
+            }
+        }
+
+        return true
     }
 
 }

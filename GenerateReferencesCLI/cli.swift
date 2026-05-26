@@ -117,6 +117,7 @@ struct cli: ParsableCommand {
         "struct-cond-01-t",
         "struct-cond-02-t",
         "struct-cond-03-t",
+        "struct-cond-overview-02-f",
         "struct-defs-01-t",
         "struct-frag-01-t",
         "struct-frag-06-t",
