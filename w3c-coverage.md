@@ -2,7 +2,7 @@
 
 This page is automatically generated and shows actual coverage of the [W3C SVG Test Suite](https://github.com/web-platform-tests/wpt/tree/master/svg) by this `SVGView` implementation. Currently there are two standards supported: [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/) and [SVG Tiny 1.2](https://www.w3.org/TR/SVGTiny12/).
 
-  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `21.6%`
+  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `21.8%`
     * [Animate](#animate-1): `0.0%`
     * [Color](#color-1): `83.3%`
     * [Conform](#conform-1): `0.0%`
@@ -20,7 +20,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
     * [Pservers](#pservers-1): `24.2%`
     * [Render](#render-1): `37.5%`
     * [Script](#script-1): `0.0%`
-    * [Shapes](#shapes-1): `86.3%`
+    * [Shapes](#shapes-1): `90.9%`
     * [Struct](#struct-1): `12.5%`
     * [Styling](#styling-1): `16.6%`
     * [Svgdom](#svgdom-1): `0.0%`
@@ -51,7 +51,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 
 ## [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/)
 
-`21.6%` of tests covered (113/522). They can be splitted into following categories:
+`21.8%` of tests covered (114/522). They can be splitted into following categories:
 
 ### <a name='animate-1'></a> [Animate](https://www.w3.org/TR/SVG11/animate.html): `0.0%`
 
@@ -542,10 +542,10 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[script-specify-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/script-specify-02-f.svg)|
 </details>
 
-### <a name='shapes-1'></a> [Shapes](https://www.w3.org/TR/SVG11/shapes.html): `86.3%`
+### <a name='shapes-1'></a> [Shapes](https://www.w3.org/TR/SVG11/shapes.html): `90.9%`
 
 <details>
-  <summary>(19/22) tests covered...</summary>
+  <summary>(20/22) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
@@ -570,7 +570,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |✅|[shapes-rect-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-04-f.svg)|
 |✅|[shapes-rect-05-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-05-f.svg)|
 |✅|[shapes-rect-06-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-06-f.svg)|
-|❌|[shapes-rect-07-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-07-f.svg)|
+|✅|[shapes-rect-07-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-07-f.svg)|
 </details>
 
 ### <a name='struct-1'></a> [Struct](https://www.w3.org/TR/SVG11/struct.html): `12.5%`
