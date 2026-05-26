@@ -96,6 +96,14 @@ def svg_src(test_name, version_dir):
     """Relative path from test-output/ to the original source SVG."""
     return f"../Tests/SVGViewTests/w3c/{version_dir}/svg/{test_name}.svg"
 
+def w3c_png_src(test_name, version_dir):
+  """Relative path from test-output/ to the local W3C reference PNG."""
+  return f"../Tests/SVGViewTests/w3c/{version_dir}/png/{test_name}.png"
+
+def asset_exists(rel_path):
+  """Check whether a report-relative asset exists on disk."""
+  return os.path.exists(os.path.normpath(os.path.join(output_dir, rel_path)))
+
 def w3c_ref_url(test_name, version_dir):
   if version_dir == '1.2T':
     return f"https://www.w3.org/Graphics/SVG/Test/20080912/htmlEmbedHarness/{test_name}.html"
@@ -119,27 +127,36 @@ STATUS_LABEL = {'pass': 'pass', 'fail': 'fail', 'unimplemented': 'unimplemented'
 def img(src, cls='', alt=''):
     return f'<img src="{src}" class="thumb {cls}" alt="{alt}" loading="lazy">'
 
+def media_or_missing(src, alt, missing_label):
+    if src:
+        return img(src, alt=alt)
+    return f'<div class="thumb missing">{missing_label}</div>'
+
 def card_html(test_name, status, version_dir):
     a       = attachment_set(test_name, version_dir)
     src_svg = svg_src(test_name, version_dir)
+    src_png = w3c_png_src(test_name, version_dir)
     ref_url = w3c_ref_url(test_name, version_dir)
     card_id = f"{version_dir}-{test_name}".replace('.', '-')
 
-    rendered_col = ''
-    if 'png' in a:
-        rendered_col = f'''<div class="col">
-          <div class="col-label">Rendered</div>
-          {img(a["png"], alt="rendered")}
-        </div>'''
+    rendered_src = a.get('png')
+    w3c_svg_src = src_svg if asset_exists(src_svg) else None
+    w3c_png_local_src = src_png if asset_exists(src_png) else None
+
+    rendered_col = f'''<div class="col">
+      <div class="col-label">Generated</div>
+      {media_or_missing(rendered_src, "generated", "Not generated")}
+    </div>'''
 
     source_col = f'''<div class="col">
-      <div class="col-label">Source SVG</div>
-      {img(src_svg, alt="source svg")}
+      <div class="col-label">W3C SVG</div>
+      {media_or_missing(w3c_svg_src, "w3c svg", "W3C SVG missing")}
     </div>'''
 
     ref_col = f'''<div class="col">
-      <div class="col-label">W3C Reference</div>
-      <a href="{ref_url}" target="_blank" rel="noopener">{img(ref_url, alt="W3C reference")}</a>
+      <div class="col-label">W3C PNG</div>
+      {media_or_missing(w3c_png_local_src, "w3c png", "W3C PNG missing")}
+      <a class="w3c-link" href="{ref_url}" target="_blank" rel="noopener">Open W3C harness</a>
     </div>'''
 
     diff_col = ''
@@ -375,6 +392,21 @@ html = f"""<!DOCTYPE html>
       background: repeating-conic-gradient(#e0e0e0 0% 25%, #fff 0% 50%) 0 0 / 10px 10px;
       border-radius: 5px;
     }}
+    .thumb.missing {{
+      display: flex; align-items: center; justify-content: center;
+      min-height: 120px;
+      font-size: 0.72rem; font-weight: 600; color: #6e6e73;
+      border: 1px dashed #d1d1d6;
+      background: #f6f6f8;
+    }}
+    .w3c-link {{
+      align-self: flex-start;
+      font-size: 0.72rem;
+      color: #0059b8;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }}
+    .w3c-link:hover {{ border-bottom-color: currentColor; }}
     .diff-col {{ flex: 2; }}
     pre.diff {{
       font-size: 0.7rem; font-family: "SF Mono", ui-monospace, monospace;
