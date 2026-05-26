@@ -163,6 +163,7 @@ struct SVG11Tests {
         @Test func structCond01T() async throws { try await compareToReference("struct-cond-01-t") }
         @Test func structCond02T() async throws { try await compareToReference("struct-cond-02-t") }
         @Test func structCond03T() async throws { try await compareToReference("struct-cond-03-t") }
+        @Test func structCondOverview02F() async throws { try await compareToReference("struct-cond-overview-02-f") }
         @Test func structDefs01T() async throws { try await compareToReference("struct-defs-01-t") }
         @Test func structFrag01T() async throws { try await compareToReference("struct-frag-01-t") }
         @Test func structFrag06T() async throws { try await compareToReference("struct-frag-06-t") }

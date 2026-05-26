@@ -583,7 +583,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |✅|[struct-cond-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-01-t.svg)|
 |❌|[struct-cond-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-02-t.svg)|
 |✅|[struct-cond-03-t](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-03-t.svg)|
-|❌|[struct-cond-overview-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-overview-02-f.svg)|
+|✅|[struct-cond-overview-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-overview-02-f.svg)|
 |❌|[struct-cond-overview-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-overview-03-f.svg)|
 |❌|[struct-cond-overview-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-overview-04-f.svg)|
 |❌|[struct-cond-overview-05-f](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-overview-05-f.svg)|
