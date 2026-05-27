@@ -39,70 +39,29 @@ open class SVGConstants {
 
 public class SVGParserRegexHelper {
 
-    fileprivate static let transformAttributePattern = "([a-z]+)\\(((\\-?\\d+\\.?\\d*e?\\-?\\d*\\s*,?\\s*)+)\\)"
-    fileprivate static let transformPattern = "\\-?\\d+\\.?\\d*e?\\-?\\d*"
-    fileprivate static let textElementPattern = "<text.*?>((?s:.*))<\\/text>"
-    fileprivate static let maskIdenitifierPattern = "url\\(#((?s:.*))\\)"
-    fileprivate static let unitsIdenitifierPattern = "([a-zA-Z]+)$"
-
-    fileprivate static var transformMatcher: NSRegularExpression?
-    fileprivate static var transformAttributeMatcher: NSRegularExpression?
-    fileprivate static var textElementMatcher: NSRegularExpression?
-    fileprivate static var maskIdenitifierMatcher: NSRegularExpression?
-    fileprivate static var unitsMatcher: NSRegularExpression?
+    static let transformAttributeMatcher = try? NSRegularExpression(pattern: "([a-z]+)\\(((\\-?\\d+\\.?\\d*e?\\-?\\d*\\s*,?\\s*)+)\\)", options: .caseInsensitive)
+    static let transformMatcher = try? NSRegularExpression(pattern: "\\-?\\d+\\.?\\d*e?\\-?\\d*", options: .caseInsensitive)
+    static let textElementMatcher = try? NSRegularExpression(pattern: "<text.*?>((?s:.*))<\\/text>", options: .caseInsensitive)
+    static let maskIdenitifierMatcher = try? NSRegularExpression(pattern: "url\\(#((?s:.*))\\)", options: .caseInsensitive)
+    static let unitsMatcher = try? NSRegularExpression(pattern: "([a-zA-Z]+)$", options: .caseInsensitive)
 
     class func getTransformAttributeMatcher() -> NSRegularExpression? {
-        if self.transformAttributeMatcher == nil {
-            do {
-                self.transformAttributeMatcher = try NSRegularExpression(pattern: transformAttributePattern, options: .caseInsensitive)
-            } catch {
-
-            }
-        }
-        return self.transformAttributeMatcher
+        return transformAttributeMatcher
     }
 
     class func getTransformMatcher() -> NSRegularExpression? {
-        if self.transformMatcher == nil {
-            do {
-                self.transformMatcher = try NSRegularExpression(pattern: transformPattern, options: .caseInsensitive)
-            } catch {
-
-            }
-        }
-        return self.transformMatcher
+        return transformMatcher
     }
 
     class func getTextElementMatcher() -> NSRegularExpression? {
-        if self.textElementMatcher == nil {
-            do {
-                self.textElementMatcher = try NSRegularExpression(pattern: textElementPattern, options: .caseInsensitive)
-            } catch {
-
-            }
-        }
-        return self.textElementMatcher
+        return textElementMatcher
     }
 
     class func getMaskIdenitifierMatcher() -> NSRegularExpression? {
-        if self.maskIdenitifierMatcher == nil {
-            do {
-                self.maskIdenitifierMatcher = try NSRegularExpression(pattern: maskIdenitifierPattern, options: .caseInsensitive)
-            } catch {
-
-            }
-        }
-        return self.maskIdenitifierMatcher
+        return maskIdenitifierMatcher
     }
 
     class func getUnitsIdenitifierMatcher() -> NSRegularExpression? {
-        if unitsMatcher == nil {
-            do {
-                unitsMatcher = try NSRegularExpression(pattern: unitsIdenitifierPattern, options: .caseInsensitive)
-            } catch {
-
-            }
-        }
         return unitsMatcher
     }
 
