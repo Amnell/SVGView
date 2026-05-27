@@ -9,16 +9,16 @@ struct SVGCustomTests: SVGTestHelper {
         "Custom"
     }
 
-    @Test func graph01() throws {
-        try compareToReference("graph-01")
+    @Test func graph01() async throws {
+        try await compareToReference("graph-01")
     }
 
-    @Test func viewport01() throws {
-        try compareToReference("viewport-01")
+    @Test func viewport01() async throws {
+        try await compareToReference("viewport-01")
     }
 
-    @Test func viewport02() throws {
-        try compareToReference("viewport-02")
+    @Test func viewport02() async throws {
+        try await compareToReference("viewport-02")
     }
 
 }
