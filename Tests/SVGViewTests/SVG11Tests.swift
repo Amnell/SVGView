@@ -149,9 +149,11 @@ struct SVG11Tests {
         @Test func shapesPolyline02T() async throws { try await compareToReference("shapes-polyline-02-t") }
         @Test func shapesRect01T() async throws { try await compareToReference("shapes-rect-01-t") }
         @Test func shapesRect02T() async throws { try await compareToReference("shapes-rect-02-t") }
+        @Test func shapesRect03T() async throws { try await compareToReference("shapes-rect-03-t") }
         @Test func shapesRect04F() async throws { try await compareToReference("shapes-rect-04-f") }
         @Test func shapesRect05F() async throws { try await compareToReference("shapes-rect-05-f") }
         @Test func shapesRect06F() async throws { try await compareToReference("shapes-rect-06-f") }
+        @Test func shapesRect07F() async throws { try await compareToReference("shapes-rect-07-f") }
     }
 
     @Suite("Struct")
@@ -159,7 +161,9 @@ struct SVG11Tests {
         var dir: String { "1.1F2" }
 
         @Test func structCond01T() async throws { try await compareToReference("struct-cond-01-t") }
+        @Test func structCond02T() async throws { try await compareToReference("struct-cond-02-t") }
         @Test func structCond03T() async throws { try await compareToReference("struct-cond-03-t") }
+        @Test func structCondOverview02F() async throws { try await compareToReference("struct-cond-overview-02-f") }
         @Test func structDefs01T() async throws { try await compareToReference("struct-defs-01-t") }
         @Test func structFrag01T() async throws { try await compareToReference("struct-frag-01-t") }
         @Test func structFrag06T() async throws { try await compareToReference("struct-frag-06-t") }
@@ -183,5 +187,12 @@ struct SVG11Tests {
         var dir: String { "1.1F2" }
 
         @Test func typesBasic01F() async throws { try await compareToReference("types-basic-01-f") }
+    }
+
+    @Suite("Text")
+    struct Text: SVGTestHelper {
+        var dir: String { "1.1F2" }
+
+        @Test func textAlign01B() async throws { try await compareToReference("text-align-01-b") }
     }
 }

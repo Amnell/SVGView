@@ -109,11 +109,15 @@ struct cli: ParsableCommand {
         "shapes-polyline-02-t",
         "shapes-rect-01-t",
         "shapes-rect-02-t",
+        "shapes-rect-03-t",
         "shapes-rect-04-f",
         "shapes-rect-05-f",
         "shapes-rect-06-f",
+        "shapes-rect-07-f",
         "struct-cond-01-t",
+        "struct-cond-02-t",
         "struct-cond-03-t",
+        "struct-cond-overview-02-f",
         "struct-defs-01-t",
         "struct-frag-01-t",
         "struct-frag-06-t",
@@ -125,6 +129,7 @@ struct cli: ParsableCommand {
         "styling-css-01-b",
         "styling-pres-01-t",
         "types-basic-01-f",
+        "text-align-01-b",
     ]
     
     static let v12Refs: [String] = [
