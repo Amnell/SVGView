@@ -96,8 +96,18 @@ def svg_src(test_name, version_dir):
     """Relative path from test-output/ to the original source SVG."""
     return f"../Tests/SVGViewTests/w3c/{version_dir}/svg/{test_name}.svg"
 
-def w3c_ref_url(test_name):
-    return f"https://www.w3.org/Graphics/SVG/Test/20110816/harness/htmlEmbed/{test_name}.html"
+def w3c_png_src(test_name, version_dir):
+  """Relative path from test-output/ to the local W3C reference PNG."""
+  return f"../Tests/SVGViewTests/w3c/{version_dir}/png/{test_name}.png"
+
+def asset_exists(rel_path):
+  """Check whether a report-relative asset exists on disk."""
+  return os.path.exists(os.path.normpath(os.path.join(output_dir, rel_path)))
+
+def w3c_ref_url(test_name, version_dir):
+  if version_dir == '1.2T':
+    return f"https://www.w3.org/Graphics/SVG/Test/20080912/htmlEmbedHarness/{test_name}.html"
+  return f"https://www.w3.org/Graphics/SVG/Test/20110816/harness/htmlEmbed/{test_name}.html"
 
 # ── Aggregate stats ────────────────────────────────────────────────────────────
 total_pass = total_fail = total_unimpl = 0
@@ -117,27 +127,36 @@ STATUS_LABEL = {'pass': 'pass', 'fail': 'fail', 'unimplemented': 'unimplemented'
 def img(src, cls='', alt=''):
     return f'<img src="{src}" class="thumb {cls}" alt="{alt}" loading="lazy">'
 
+def media_or_missing(src, alt, missing_label):
+    if src:
+        return img(src, alt=alt)
+    return f'<div class="thumb missing">{missing_label}</div>'
+
 def card_html(test_name, status, version_dir):
     a       = attachment_set(test_name, version_dir)
     src_svg = svg_src(test_name, version_dir)
-    ref_url = w3c_ref_url(test_name)
+    src_png = w3c_png_src(test_name, version_dir)
+    ref_url = w3c_ref_url(test_name, version_dir)
     card_id = f"{version_dir}-{test_name}".replace('.', '-')
 
-    rendered_col = ''
-    if 'png' in a:
-        rendered_col = f'''<div class="col">
-          <div class="col-label">Rendered</div>
-          {img(a["png"], alt="rendered")}
-        </div>'''
+    rendered_src = a.get('png')
+    w3c_svg_src = src_svg if asset_exists(src_svg) else None
+    w3c_png_local_src = src_png if asset_exists(src_png) else None
+
+    rendered_col = f'''<div class="col">
+      <div class="col-label">Generated</div>
+      {media_or_missing(rendered_src, "generated", "Not generated")}
+    </div>'''
 
     source_col = f'''<div class="col">
-      <div class="col-label">Source SVG</div>
-      {img(src_svg, alt="source svg")}
+      <div class="col-label">W3C SVG</div>
+      {media_or_missing(w3c_svg_src, "w3c svg", "W3C SVG missing")}
     </div>'''
 
     ref_col = f'''<div class="col">
-      <div class="col-label">W3C Reference</div>
-      <a href="{ref_url}" target="_blank" rel="noopener">{img(ref_url, alt="W3C reference")}</a>
+      <div class="col-label">W3C PNG</div>
+      {media_or_missing(w3c_png_local_src, "w3c png", "W3C PNG missing")}
+      <a class="w3c-link" href="{ref_url}" target="_blank" rel="noopener">Open W3C harness</a>
     </div>'''
 
     diff_col = ''
@@ -154,9 +173,10 @@ def card_html(test_name, status, version_dir):
             pass
 
     return f'''<div class="card {status} open" id="{card_id}" data-test-name="{test_name}">
-  <div class="card-header" data-w3c-url="{w3c_ref_url(test_name)}">
+  <div class="card-header" data-w3c-url="{w3c_ref_url(test_name, version_dir)}">
     <span class="icon">{STATUS_ICON[status]}</span>
     <span class="card-name">{test_name}</span>
+    <button class="copy-name" data-test-name="{test_name}" title="Copy test name" aria-label="Copy test name">Copy</button>
     <span class="card-badge {status}">{STATUS_LABEL[status]}</span>
     <span class="expand-icon">▾</span>
   </div>
@@ -277,6 +297,11 @@ html = f"""<!DOCTYPE html>
       text-decoration: none; color: #1d1d1f;
     }}
     nav a:hover {{ background: #f5f5f7; }}
+    nav a.active {{
+      background: #e8f1ff;
+      color: #0059b8;
+      font-weight: 600;
+    }}
     nav a.suite-all-pass .toc-nums {{ color: #34c759; }}
     nav a.suite-has-pass .toc-nums {{ color: #ff9f0a; }}
     nav a.suite-none     .toc-nums {{ color: #8e8e93; }}
@@ -324,6 +349,19 @@ html = f"""<!DOCTYPE html>
       font-family: "SF Mono", ui-monospace, monospace;
       color: #1d1d1f; flex: 1;
     }}
+    .copy-name {{
+      font-size: 0.68rem; font-weight: 600;
+      border: 1px solid #d1d1d6; border-radius: 999px;
+      background: #fff; color: #3a3a3c;
+      padding: 0.1rem 0.45rem; cursor: pointer;
+      margin-right: 0.25rem;
+    }}
+    .copy-name:hover {{ background: #f2f2f7; }}
+    .copy-name.copied {{
+      border-color: #34c759;
+      color: #1a7a2e;
+      background: #d1f5d3;
+    }}
     .card-badge {{
       font-size: 0.7rem; font-weight: 600;
       padding: 0.1rem 0.45rem; border-radius: 999px;
@@ -354,6 +392,21 @@ html = f"""<!DOCTYPE html>
       background: repeating-conic-gradient(#e0e0e0 0% 25%, #fff 0% 50%) 0 0 / 10px 10px;
       border-radius: 5px;
     }}
+    .thumb.missing {{
+      display: flex; align-items: center; justify-content: center;
+      min-height: 120px;
+      font-size: 0.72rem; font-weight: 600; color: #6e6e73;
+      border: 1px dashed #d1d1d6;
+      background: #f6f6f8;
+    }}
+    .w3c-link {{
+      align-self: flex-start;
+      font-size: 0.72rem;
+      color: #0059b8;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }}
+    .w3c-link:hover {{ border-bottom-color: currentColor; }}
     .diff-col {{ flex: 2; }}
     pre.diff {{
       font-size: 0.7rem; font-family: "SF Mono", ui-monospace, monospace;
@@ -389,11 +442,47 @@ html = f"""<!DOCTYPE html>
   </div>
 </main>
 <script>
+  async function copyText(text) {{
+    if (navigator.clipboard && navigator.clipboard.writeText) {{
+      await navigator.clipboard.writeText(text);
+      return;
+    }}
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }}
+
   // ── Card header: navigate to W3C; expand icon toggles ───────────────────────
   document.querySelectorAll('.card-header').forEach(header => {{
     header.addEventListener('click', () => {{
       const url = header.dataset.w3cUrl;
       if (url) window.open(url, '_blank', 'noopener');
+    }});
+    header.querySelector('.copy-name').addEventListener('click', async e => {{
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      const name = btn.dataset.testName || '';
+      if (!name) return;
+      try {{
+        await copyText(name);
+        const prev = btn.textContent;
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+        setTimeout(() => {{
+          btn.textContent = prev;
+          btn.classList.remove('copied');
+        }}, 900);
+      }} catch (_) {{
+        const prev = btn.textContent;
+        btn.textContent = 'Failed';
+        setTimeout(() => {{ btn.textContent = prev; }}, 900);
+      }}
     }});
     header.querySelector('.expand-icon').addEventListener('click', e => {{
       e.stopPropagation();
@@ -405,21 +494,79 @@ html = f"""<!DOCTYPE html>
   const cards  = Array.from(document.querySelectorAll('.card'));
   const suites = Array.from(document.querySelectorAll('.suite'));
   const stds   = Array.from(document.querySelectorAll('.standard'));
+  const navLinks = Array.from(document.querySelectorAll('nav a[href^="#"]'));
+  const STORAGE_KEY = 'svgview-report-menu-focus';
   let activeFilter = 'all';
   let searchTerm   = '';
+  let selectedSuiteId = null;
+  let selectedStdId = null;
+
+  function updateNavActive() {{
+    navLinks.forEach(link => {{
+      const href = link.getAttribute('href') || '';
+      const id = href.startsWith('#') ? href.slice(1) : '';
+      const isActive =
+        (selectedSuiteId && id === selectedSuiteId) ||
+        (!selectedSuiteId && selectedStdId && id === selectedStdId);
+      link.classList.toggle('active', Boolean(isActive));
+    }});
+  }}
+
+  function suiteAllowed(suiteEl) {{
+    if (selectedSuiteId) return suiteEl.id === selectedSuiteId;
+    if (selectedStdId) return suiteEl.closest('.standard')?.id === selectedStdId;
+    return false;
+  }}
+
+  function saveSelection() {{
+    try {{
+      const data = {{ suite: selectedSuiteId, standard: selectedStdId }};
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }} catch (_) {{}}
+  }}
+
+  function setSelection({{ suiteId = null, stdId = null, syncHash = true }} = {{}}) {{
+    selectedSuiteId = suiteId;
+    selectedStdId = stdId;
+    if (syncHash) {{
+      const id = selectedSuiteId || selectedStdId;
+      if (id) history.replaceState(null, '', `#${{id}}`);
+    }}
+    saveSelection();
+    updateNavActive();
+    applyFilters();
+  }}
 
   function applyFilters() {{
     cards.forEach(card => {{
       const matchFilter = activeFilter === 'all' || card.classList.contains(activeFilter);
       const testName = (card.dataset.testName || card.id).toLowerCase();
       const matchSearch = !searchTerm || testName.includes(searchTerm);
-      card.classList.toggle('hidden', !(matchFilter && matchSearch));
+      const suiteEl = card.closest('.suite');
+      const matchSelection = suiteEl ? suiteAllowed(suiteEl) : false;
+      card.classList.toggle('hidden', !(matchFilter && matchSearch && matchSelection));
     }});
     suites.forEach(s => s.classList.toggle('hidden',
-      s.querySelectorAll('.card:not(.hidden)').length === 0));
+      !suiteAllowed(s) || s.querySelectorAll('.card:not(.hidden)').length === 0));
     stds.forEach(s => s.classList.toggle('hidden',
       s.querySelectorAll('.suite:not(.hidden)').length === 0));
   }}
+
+  navLinks.forEach(link => {{
+    link.addEventListener('click', e => {{
+      const href = link.getAttribute('href') || '';
+      if (!href.startsWith('#')) return;
+      const id = href.slice(1);
+      if (!id) return;
+      if (document.getElementById(id)?.classList.contains('suite')) {{
+        e.preventDefault();
+        setSelection({{ suiteId: id, stdId: null }});
+      }} else if (document.getElementById(id)?.classList.contains('standard')) {{
+        e.preventDefault();
+        setSelection({{ suiteId: null, stdId: id }});
+      }}
+    }});
+  }});
 
   document.querySelectorAll('[data-filter]').forEach(btn => {{
     btn.addEventListener('click', () => {{
@@ -433,6 +580,34 @@ html = f"""<!DOCTYPE html>
     searchTerm = e.target.value.trim().toLowerCase();
     applyFilters();
   }});
+
+  // Restore selection from hash/localStorage; fallback to first suite.
+  const hashId = window.location.hash ? window.location.hash.slice(1) : '';
+  if (hashId && document.getElementById(hashId)?.classList.contains('suite')) {{
+    setSelection({{ suiteId: hashId, stdId: null, syncHash: false }});
+  }} else if (hashId && document.getElementById(hashId)?.classList.contains('standard')) {{
+    setSelection({{ suiteId: null, stdId: hashId, syncHash: false }});
+  }} else {{
+    let restored = false;
+    try {{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {{
+        const data = JSON.parse(raw);
+        if (data?.suite && document.getElementById(data.suite)?.classList.contains('suite')) {{
+          setSelection({{ suiteId: data.suite, stdId: null }});
+          restored = true;
+        }} else if (data?.standard && document.getElementById(data.standard)?.classList.contains('standard')) {{
+          setSelection({{ suiteId: null, stdId: data.standard }});
+          restored = true;
+        }}
+      }}
+    }} catch (_) {{}}
+
+    if (!restored) {{
+      const firstSuite = suites[0];
+      if (firstSuite) setSelection({{ suiteId: firstSuite.id, stdId: null }});
+    }}
+  }}
 </script>
 </body>
 </html>"""
