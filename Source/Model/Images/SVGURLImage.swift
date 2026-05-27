@@ -22,12 +22,24 @@ public class SVGURLImage: SVGImage {
         width: CGFloat = 0,
         height: CGFloat = 0,
         preserveAspectRatio: SVGPreserveAspectRatio = SVGPreserveAspectRatio(),
+        colorProfileId: String? = nil,
+        appliesColorProfile: Bool = false,
+        colorProfileData: Data? = nil,
         src: String,
         data: Data?
     ) {
         self.src = src
         self.data = data
-        super.init(x: x, y: y, width: width, height: height, preserveAspectRatio: preserveAspectRatio)
+        super.init(
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            preserveAspectRatio: preserveAspectRatio,
+            colorProfileId: colorProfileId,
+            appliesColorProfile: appliesColorProfile,
+            colorProfileData: colorProfileData
+        )
     }
 
     override func serialize(_ serializer: Serializer) {
@@ -52,21 +64,15 @@ struct SVGUrlImageView: View {
         CGSize(width: model.width, height: model.height)
     }
 
-#if os(OSX)
     private var decoded: (image: Image, size: CGSize)? {
-        guard let data = model.data, let nsImage = NSImage(data: data) else {
+        guard let data = model.data else {
             return nil
         }
-        return (Image(nsImage: nsImage), nsImage.size)
+        return SVGImageICCTransformer.decodeImage(
+            data: data,
+            profileData: model.appliesColorProfile ? model.colorProfileData : nil
+        )
     }
-#else
-    private var decoded: (image: Image, size: CGSize)? {
-        guard let data = model.data, let uiImage = UIImage(data: data) else {
-            return nil
-        }
-        return (Image(uiImage: uiImage), uiImage.size)
-    }
-#endif
 
     public var body: some View {
         ZStack(alignment: .topLeading) {
