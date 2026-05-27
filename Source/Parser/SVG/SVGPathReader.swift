@@ -557,25 +557,29 @@ extension SVGPath {
         }
 
         func E(_ x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat, startAngle: CGFloat, arcAngle: CGFloat, rotation: CGFloat = 0) {
-            let extent = CGFloat(startAngle)
-            let end = extent + CGFloat(arcAngle)
+            let start = CGFloat(startAngle)
+            let end = start + CGFloat(arcAngle)
             let cx = CGFloat(x + w / 2)
             let cy = CGFloat(y + h / 2)
-            if w == h && rotation == 0 {
-                bezierPath.addArc(withCenter: CGPoint(x: cx, y: cy), radius: CGFloat(w / 2), startAngle: extent, endAngle: end, clockwise: arcAngle >= 0)
-            } else {
-                let maxSize = CGFloat(max(w, h))
-                #if os(WASI) || os(Linux)
-                var path = MBezierPath(arcCenter: CGPoint.zero, radius: maxSize / 2, startAngle: extent, endAngle: end, clockwise: arcAngle >= 0)
-                #else
-                let path = MBezierPath(arcCenter: CGPoint.zero, radius: maxSize / 2, startAngle: extent, endAngle: end, clockwise: arcAngle >= 0)
-                #endif
+            let rx = CGFloat(w / 2)
+            let ry = CGFloat(h / 2)
 
-                var transform = CGAffineTransform(translationX: cx, y: cy)
-                transform = transform.rotated(by: CGFloat(rotation))
-                path.apply(transform.scaledBy(x: CGFloat(w) / maxSize, y: CGFloat(h) / maxSize))
+            // Approximate elliptical arcs explicitly to avoid platform-dependent
+            // `addArc` direction differences for SVG endpoint arc commands.
+            let minStep = CGFloat.pi / 18 // ~10 degrees
+            let steps = max(1, Int(ceil(abs(arcAngle) / minStep)))
 
-                bezierPath.append(path)
+            for i in 1...steps {
+                let t = start + (end - start) * CGFloat(i) / CGFloat(steps)
+                let ct = cos(t)
+                let st = sin(t)
+
+                let xr = rx * ct
+                let yr = ry * st
+
+                let px = cx + xr * cos(rotation) - yr * sin(rotation)
+                let py = cy + xr * sin(rotation) + yr * cos(rotation)
+                lineTo(CGPoint(x: px, y: py))
             }
         }
 

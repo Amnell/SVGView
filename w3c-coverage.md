@@ -2,11 +2,11 @@
 
 This page is automatically generated and shows actual coverage of the [W3C SVG Test Suite](https://github.com/web-platform-tests/wpt/tree/master/svg) by this `SVGView` implementation. Currently there are two standards supported: [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/) and [SVG Tiny 1.2](https://www.w3.org/TR/SVGTiny12/).
 
-  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `20.6%`
+  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `21.6%`
     * [Animate](#animate-1): `0.0%`
     * [Color](#color-1): `83.3%`
     * [Conform](#conform-1): `0.0%`
-    * [Coords](#coords-1): `87.5%`
+    * [Coords](#coords-1): `90.6%`
     * [Extend](#extend-1): `0.0%`
     * [Filters](#filters-1): `0.0%`
     * [Fonts](#fonts-1): `0.0%`
@@ -20,7 +20,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
     * [Pservers](#pservers-1): `24.2%`
     * [Render](#render-1): `37.5%`
     * [Script](#script-1): `0.0%`
-    * [Shapes](#shapes-1): `81.8%`
+    * [Shapes](#shapes-1): `86.3%`
     * [Struct](#struct-1): `12.5%`
     * [Styling](#styling-1): `16.6%`
     * [Svgdom](#svgdom-1): `0.0%`
@@ -51,7 +51,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 
 ## [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/)
 
-`20.6%` of tests covered (108/522). They can be splitted into following categories:
+`21.6%` of tests covered (113/522). They can be splitted into following categories:
 
 ### <a name='animate-1'></a> [Animate](https://www.w3.org/TR/SVG11/animate.html): `0.0%`
 
@@ -167,10 +167,10 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[conform-viewers-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/conform-viewers-03-f.svg)|
 </details>
 
-### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `87.5%`
+### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `90.6%`
 
 <details>
-  <summary>(28/32) tests covered...</summary>
+  <summary>(29/32) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
@@ -199,7 +199,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |✅|[coords-transformattr-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-transformattr-03-f.svg)|
 |✅|[coords-transformattr-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-transformattr-04-f.svg)|
 |✅|[coords-transformattr-05-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-transformattr-05-f.svg)|
-|❌|[coords-units-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-01-b.svg)|
+|✅|[coords-units-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-01-b.svg)|
 |✅|[coords-units-02-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-02-b.svg)|
 |✅|[coords-units-03-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-03-b.svg)|
 |✅|[coords-viewattr-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-01-b.svg)|
@@ -542,10 +542,10 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[script-specify-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/script-specify-02-f.svg)|
 </details>
 
-### <a name='shapes-1'></a> [Shapes](https://www.w3.org/TR/SVG11/shapes.html): `81.8%`
+### <a name='shapes-1'></a> [Shapes](https://www.w3.org/TR/SVG11/shapes.html): `86.3%`
 
 <details>
-  <summary>(18/22) tests covered...</summary>
+  <summary>(19/22) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
@@ -556,7 +556,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |✅|[shapes-ellipse-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-ellipse-03-f.svg)|
 |✅|[shapes-grammar-01-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-grammar-01-f.svg)|
 |✅|[shapes-intro-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-intro-01-t.svg)|
-|❌|[shapes-intro-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-intro-02-f.svg)|
+|✅|[shapes-intro-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-intro-02-f.svg)|
 |✅|[shapes-line-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-line-01-t.svg)|
 |✅|[shapes-line-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-line-02-f.svg)|
 |✅|[shapes-polygon-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-polygon-01-t.svg)|
