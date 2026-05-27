@@ -6,7 +6,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
     * [Animate](#animate-1): `0.0%`
     * [Color](#color-1): `83.3%`
     * [Conform](#conform-1): `0.0%`
-    * [Coords](#coords-1): `78.1%`
+    * [Coords](#coords-1): `87.5%`
     * [Extend](#extend-1): `0.0%`
     * [Filters](#filters-1): `0.0%`
     * [Fonts](#fonts-1): `0.0%`
@@ -167,10 +167,10 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[conform-viewers-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/conform-viewers-03-f.svg)|
 </details>
 
-### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `84.4%`
+### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `87.5%`
 
 <details>
-  <summary>(27/32) tests covered...</summary>
+  <summary>(28/32) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
@@ -202,7 +202,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[coords-units-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-01-b.svg)|
 |✅|[coords-units-02-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-02-b.svg)|
 |✅|[coords-units-03-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-units-03-b.svg)|
-|❌|[coords-viewattr-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-01-b.svg)|
+|✅|[coords-viewattr-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-01-b.svg)|
 |❌|[coords-viewattr-02-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-02-b.svg)|
 |❌|[coords-viewattr-03-b](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-03-b.svg)|
 |❌|[coords-viewattr-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/coords-viewattr-04-f.svg)|
