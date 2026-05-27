@@ -85,22 +85,30 @@ class SVGIndex {
             contents = SVGParser.parseElements(childElements, index: self)
         }
         guard !contents.isEmpty else { return nil }
-        let x = SVGHelper.parseCGFloat(element.attributes, "x", defaultValue: parent?.x ?? 0)
-        let y = SVGHelper.parseCGFloat(element.attributes, "y", defaultValue: parent?.y ?? 0)
-        let width = SVGHelper.parseCGFloat(element.attributes, "width", defaultValue: parent?.width ?? 0)
-        let height = SVGHelper.parseCGFloat(element.attributes, "height", defaultValue: parent?.height ?? 0)
-        guard width > 0, height > 0 else { return nil }
+
         var userSpace = parent?.userSpace ?? false
         if let patternUnits = element.attributes["patternUnits"] {
             userSpace = patternUnits == "userSpaceOnUse"
         }
+
+        var contentUserSpace = parent?.contentUserSpace ?? true
+        if let patternContentUnits = element.attributes["patternContentUnits"] {
+            contentUserSpace = patternContentUnits == "userSpaceOnUse"
+        }
+
+        let x = parsePatternUnitValue(element, attribute: "x", defaultValue: parent?.x ?? 0, userSpace: userSpace)
+        let y = parsePatternUnitValue(element, attribute: "y", defaultValue: parent?.y ?? 0, userSpace: userSpace)
+        let width = parsePatternUnitValue(element, attribute: "width", defaultValue: parent?.width ?? 0, userSpace: userSpace)
+        let height = parsePatternUnitValue(element, attribute: "height", defaultValue: parent?.height ?? 0, userSpace: userSpace)
+        guard width > 0, height > 0 else { return nil }
+
         var patternTransform = parent?.patternTransform ?? .identity
         if let transformStr = element.attributes["patternTransform"] {
             patternTransform = SVGHelper.parseTransform(transformStr)
         }
         return SVGPattern(x: x, y: y, width: width, height: height,
                           userSpace: userSpace, patternTransform: patternTransform,
-                          contents: contents)
+                          contents: contents, contentUserSpace: contentUserSpace)
     }
 
     private func getParentGradient(_ element: XMLElement) -> SVGGradient? {
@@ -228,6 +236,13 @@ class SVGIndex {
             }
         }
         return defaultValue
+    }
+
+    private func parsePatternUnitValue(_ element: XMLElement, attribute: String, defaultValue: CGFloat = 0, userSpace: Bool) -> CGFloat {
+        if userSpace {
+            return SVGHelper.parseCGFloat(element.attributes, attribute, defaultValue: defaultValue)
+        }
+        return getDoubleValueFromPercentage(element, attribute: attribute, defaultValue: defaultValue)
     }
 
 }

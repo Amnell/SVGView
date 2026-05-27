@@ -45,6 +45,7 @@ struct SVG11Tests {
         @Test func coordsTransformattr03F() async throws { try await compareToReference("coords-transformattr-03-f") }
         @Test func coordsTransformattr04F() async throws { try await compareToReference("coords-transformattr-04-f") }
         @Test func coordsTransformattr05F() async throws { try await compareToReference("coords-transformattr-05-f") }
+        @Test func coordsUnits01B() async throws { try await compareToReference("coords-units-01-b") }
         @Test func coordsUnits02B() async throws { try await compareToReference("coords-units-02-b") }
         @Test func coordsUnits03B() async throws { try await compareToReference("coords-units-03-b") }
     }
