@@ -2,11 +2,11 @@
 
 This page is automatically generated and shows actual coverage of the [W3C SVG Test Suite](https://github.com/web-platform-tests/wpt/tree/master/svg) by this `SVGView` implementation. Currently there are two standards supported: [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/) and [SVG Tiny 1.2](https://www.w3.org/TR/SVGTiny12/).
 
-  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `21.8%`
+  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `22.9%`
     * [Animate](#animate-1): `0.0%`
     * [Color](#color-1): `83.3%`
     * [Conform](#conform-1): `0.0%`
-    * [Coords](#coords-1): `90.6%`
+    * [Coords](#coords-1): `93.7%`
     * [Extend](#extend-1): `0.0%`
     * [Filters](#filters-1): `0.0%`
     * [Fonts](#fonts-1): `0.0%`
@@ -20,13 +20,13 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
     * [Pservers](#pservers-1): `24.2%`
     * [Render](#render-1): `37.5%`
     * [Script](#script-1): `0.0%`
-    * [Shapes](#shapes-1): `90.9%`
-    * [Struct](#struct-1): `12.5%`
+    * [Shapes](#shapes-1): `100.0%`
+    * [Struct](#struct-1): `15.2%`
     * [Styling](#styling-1): `16.6%`
     * [Svgdom](#svgdom-1): `0.0%`
-    * [Text](#text-1): `0.0%`
+    * [Text](#text-1): `1.6%`
     * [Types](#types-1): `6.6%`
-  * [SVG Tiny 1.2](#svg-tiny-12): `4.7%`
+  * [SVG Tiny 1.2](#svg-tiny-12): `4.9%`
     * [Animate](#animate-2): `0.0%`
     * [Conf](#conf-2): `0.0%`
     * [Coords](#coords-2): `50.0%`
@@ -42,7 +42,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
     * [Paths](#paths-2): `15.3%`
     * [Render](#render-2): `37.5%`
     * [Script](#script-2): `0.0%`
-    * [Shapes](#shapes-2): `37.5%`
+    * [Shapes](#shapes-2): `43.7%`
     * [Struct](#struct-2): `4.5%`
     * [Styling](#styling-2): `0.0%`
     * [Text](#text-2): `0.0%`
@@ -51,7 +51,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 
 ## [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/)
 
-`21.8%` of tests covered (114/522). They can be splitted into following categories:
+`22.9%` of tests covered (120/522). They can be splitted into following categories:
 
 ### <a name='animate-1'></a> [Animate](https://www.w3.org/TR/SVG11/animate.html): `0.0%`
 
@@ -167,10 +167,10 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[conform-viewers-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/conform-viewers-03-f.svg)|
 </details>
 
-### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `90.6%`
+### <a name='coords-1'></a> [Coords](https://www.w3.org/TR/SVG11/coords.html): `93.7%`
 
 <details>
-  <summary>(29/32) tests covered...</summary>
+  <summary>(30/32) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
@@ -542,10 +542,10 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[script-specify-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/script-specify-02-f.svg)|
 </details>
 
-### <a name='shapes-1'></a> [Shapes](https://www.w3.org/TR/SVG11/shapes.html): `90.9%`
+### <a name='shapes-1'></a> [Shapes](https://www.w3.org/TR/SVG11/shapes.html): `100.0%`
 
 <details>
-  <summary>(20/22) tests covered...</summary>
+  <summary>(22/22) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
@@ -566,22 +566,22 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |✅|[shapes-polyline-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-polyline-02-t.svg)|
 |✅|[shapes-rect-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-01-t.svg)|
 |✅|[shapes-rect-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-02-t.svg)|
-|❌|[shapes-rect-03-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-03-t.svg)|
+|✅|[shapes-rect-03-t](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-03-t.svg)|
 |✅|[shapes-rect-04-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-04-f.svg)|
 |✅|[shapes-rect-05-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-05-f.svg)|
 |✅|[shapes-rect-06-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-06-f.svg)|
 |✅|[shapes-rect-07-f](Tests/SVGViewTests/w3c/1.1F2/svg/shapes-rect-07-f.svg)|
 </details>
 
-### <a name='struct-1'></a> [Struct](https://www.w3.org/TR/SVG11/struct.html): `12.5%`
+### <a name='struct-1'></a> [Struct](https://www.w3.org/TR/SVG11/struct.html): `15.2%`
 
 <details>
-  <summary>(9/72) tests covered...</summary>
+  <summary>(11/72) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
 |✅|[struct-cond-01-t](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-01-t.svg)|
-|❌|[struct-cond-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-02-t.svg)|
+|✅|[struct-cond-02-t](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-02-t.svg)|
 |✅|[struct-cond-03-t](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-03-t.svg)|
 |✅|[struct-cond-overview-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-overview-02-f.svg)|
 |❌|[struct-cond-overview-03-f](Tests/SVGViewTests/w3c/1.1F2/svg/struct-cond-overview-03-f.svg)|
@@ -691,14 +691,14 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[svgdom-over-01-f](Tests/SVGViewTests/w3c/1.1F2/svg/svgdom-over-01-f.svg)|
 </details>
 
-### <a name='text-1'></a> [Text](https://www.w3.org/TR/SVG11/text.html): `0.0%`
+### <a name='text-1'></a> [Text](https://www.w3.org/TR/SVG11/text.html): `1.6%`
 
 <details>
-  <summary>(0/59) tests covered...</summary>
+  <summary>(1/59) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
-|❌|[text-align-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/text-align-01-b.svg)|
+|✅|[text-align-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/text-align-01-b.svg)|
 |❌|[text-align-02-b](Tests/SVGViewTests/w3c/1.1F2/svg/text-align-02-b.svg)|
 |❌|[text-align-03-b](Tests/SVGViewTests/w3c/1.1F2/svg/text-align-03-b.svg)|
 |❌|[text-align-04-b](Tests/SVGViewTests/w3c/1.1F2/svg/text-align-04-b.svg)|
@@ -785,7 +785,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 
 ## [SVG Tiny 1.2](https://www.w3.org/TR/SVGTiny12/)
 
-`4.7%` of tests covered (28/591). They can be splitted into following categories:
+`4.9%` of tests covered (29/591). They can be splitted into following categories:
 
 ### <a name='animate-2'></a> [Animate](https://www.w3.org/TR/SVGTiny12/animate.html): `0.0%`
 
@@ -1262,10 +1262,10 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[script-listener-204-t](Tests/SVGViewTests/w3c/1.2T/svg/script-listener-204-t.svg)|
 </details>
 
-### <a name='shapes-2'></a> [Shapes](https://www.w3.org/TR/SVGTiny12/shapes.html): `37.5%`
+### <a name='shapes-2'></a> [Shapes](https://www.w3.org/TR/SVGTiny12/shapes.html): `43.7%`
 
 <details>
-  <summary>(6/16) tests covered...</summary>
+  <summary>(7/16) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
