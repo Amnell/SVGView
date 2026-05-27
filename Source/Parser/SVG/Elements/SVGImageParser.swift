@@ -19,6 +19,9 @@ class SVGImageParser: SVGBaseElementParser {
         let width = SVGHelper.parseCGFloat(context.properties, "width")
         let height = SVGHelper.parseCGFloat(context.properties, "height")
         let preserveAspectRatio = parsePreserveAspectRatio(context: context)
+        let colorProfileId = context.property("color-profile")?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let colorProfileData = loadColorProfileData(id: colorProfileId, context: context)
+        let appliesColorProfile = colorProfileData != nil
 
         // Base64 image
         let decodableFormat = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"]
@@ -33,6 +36,9 @@ class SVGImageParser: SVGBaseElementParser {
                         width: width,
                         height: height,
                         preserveAspectRatio: preserveAspectRatio,
+                        colorProfileId: colorProfileId,
+                        appliesColorProfile: appliesColorProfile,
+                        colorProfileData: colorProfileData,
                         data: decodedData
                     )
                 }
@@ -47,6 +53,9 @@ class SVGImageParser: SVGBaseElementParser {
                     width: width,
                     height: height,
                     preserveAspectRatio: preserveAspectRatio,
+                    colorProfileId: colorProfileId,
+                    appliesColorProfile: appliesColorProfile,
+                    colorProfileData: colorProfileData,
                     src: src,
                     data: data
                 )
@@ -61,6 +70,9 @@ class SVGImageParser: SVGBaseElementParser {
             width: width,
             height: height,
             preserveAspectRatio: preserveAspectRatio,
+            colorProfileId: colorProfileId,
+            appliesColorProfile: appliesColorProfile,
+            colorProfileData: colorProfileData,
             src: src,
             data: nil
         )
@@ -77,6 +89,21 @@ class SVGImageParser: SVGBaseElementParser {
             context: context,
             defaultValue: defaultPAR
         )
+    }
+
+    private func loadColorProfileData(id: String?, context: SVGNodeContext) -> Data? {
+        guard let id, !id.isEmpty,
+              let colorProfile = context.index.element(by: id),
+              colorProfile.name == "color-profile",
+              let href = colorProfile.attributes["xlink:href"] else {
+            return nil
+        }
+        do {
+            return try context.linker.load(src: href)
+        } catch {
+            context.log(error: error)
+            return nil
+        }
     }
 
 }

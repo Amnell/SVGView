@@ -2,9 +2,9 @@
 
 This page is automatically generated and shows actual coverage of the [W3C SVG Test Suite](https://github.com/web-platform-tests/wpt/tree/master/svg) by this `SVGView` implementation. Currently there are two standards supported: [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/) and [SVG Tiny 1.2](https://www.w3.org/TR/SVGTiny12/).
 
-  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `22.9%`
+  * [SVG 1.1 (Second Edition)](#svg-11-second-edition): `23.1%`
     * [Animate](#animate-1): `0.0%`
-    * [Color](#color-1): `83.3%`
+    * [Color](#color-1): `100.0%`
     * [Conform](#conform-1): `0.0%`
     * [Coords](#coords-1): `93.7%`
     * [Extend](#extend-1): `0.0%`
@@ -51,7 +51,7 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 
 ## [SVG 1.1 (Second Edition)](https://www.w3.org/TR/SVG11/)
 
-`22.9%` of tests covered (120/522). They can be splitted into following categories:
+`23.1%` of tests covered (121/522). They can be splitted into following categories:
 
 ### <a name='animate-1'></a> [Animate](https://www.w3.org/TR/SVG11/animate.html): `0.0%`
 
@@ -140,14 +140,14 @@ This page is automatically generated and shows actual coverage of the [W3C SVG T
 |❌|[animate-struct-dom-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/animate-struct-dom-01-b.svg)|
 </details>
 
-### <a name='color-1'></a> [Color](https://www.w3.org/TR/SVG11/color.html): `83.3%`
+### <a name='color-1'></a> [Color](https://www.w3.org/TR/SVG11/color.html): `100.0%`
 
 <details>
-  <summary>(5/6) tests covered...</summary>
+  <summary>(6/6) tests covered...</summary>
 
 |Status  | Name|
 |------|-------|
-|❌|[color-prof-01-f](Tests/SVGViewTests/w3c/1.1F2/svg/color-prof-01-f.svg)|
+|✅|[color-prof-01-f](Tests/SVGViewTests/w3c/1.1F2/svg/color-prof-01-f.svg)|
 |✅|[color-prop-01-b](Tests/SVGViewTests/w3c/1.1F2/svg/color-prop-01-b.svg)|
 |✅|[color-prop-02-f](Tests/SVGViewTests/w3c/1.1F2/svg/color-prop-02-f.svg)|
 |✅|[color-prop-03-t](Tests/SVGViewTests/w3c/1.1F2/svg/color-prop-03-t.svg)|
