@@ -9,6 +9,7 @@ public class SVGNode: SerializableElement {
 
 #if os(WASI) || os(Linux)
     public var transform: CGAffineTransform = CGAffineTransform.identity
+    public var scriptTransforms: [CGAffineTransform] = []
     public var opaque: Bool
     public var opacity: Double
     public var currentColor: SVGColor?
@@ -21,6 +22,7 @@ public class SVGNode: SerializableElement {
     public var markerEnd: String?
 #else
     @Published public var transform: CGAffineTransform = CGAffineTransform.identity
+    @Published public var scriptTransforms: [CGAffineTransform] = []
     @Published public var opaque: Bool
     @Published public var opacity: Double
     @Published public var currentColor: SVGColor?
@@ -34,8 +36,9 @@ public class SVGNode: SerializableElement {
 #endif
 
 
-    public init(transform: CGAffineTransform = .identity, opaque: Bool = true, opacity: Double = 1, currentColor: SVGColor? = nil, clip: SVGNode? = nil, mask: SVGNode? = nil, id: String? = nil, markerStart: String? = nil, markerMid: String? = nil, markerEnd: String? = nil) {
+    public init(transform: CGAffineTransform = .identity, scriptTransforms: [CGAffineTransform] = [], opaque: Bool = true, opacity: Double = 1, currentColor: SVGColor? = nil, clip: SVGNode? = nil, mask: SVGNode? = nil, id: String? = nil, markerStart: String? = nil, markerMid: String? = nil, markerEnd: String? = nil) {
         self.transform = transform
+        self.scriptTransforms = scriptTransforms
         self.opaque = opaque
         self.opacity = opacity
         self.currentColor = currentColor

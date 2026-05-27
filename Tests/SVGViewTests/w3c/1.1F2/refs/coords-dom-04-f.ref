@@ -1,0 +1,131 @@
+SVGViewport {
+	id: "svg-root",
+	viewBox: { width: 480, height: 360 },
+	scaling: "none",
+	contents: [
+		SVGDefs {  },
+		SVGGroup {
+			id: "test-body-content",
+			contents: [
+				SVGDefs {  },
+				SVGGroup {
+					transform: [1, 0, 0, 1, 20, -10],
+					contents: [
+						SVGGroup {
+							id: "subteststatus",
+							transform: [1, 0, 0, 1, 0, 40],
+							contents: [
+								SVGRect { id: "status", y: 5, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									id: "scriptstatus",
+									text: "Scripting enabled",
+									font: { name: "SVGFreeSansASCII,sans-serif", size: 18 },
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 20]
+								},
+								SVGRect { y: 25, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #1",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 40]
+								},
+								SVGRect { y: 45, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #2",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 60]
+								},
+								SVGRect { y: 65, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #3",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 80]
+								},
+								SVGRect { y: 85, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #4",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 100]
+								},
+								SVGRect { y: 105, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #5",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 120]
+								},
+								SVGRect { y: 125, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #6",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 140]
+								},
+								SVGRect { y: 145, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #7",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 160]
+								},
+								SVGRect { y: 165, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #8",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 180]
+								},
+								SVGRect { y: 185, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #9",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 200]
+								},
+								SVGRect { y: 205, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #10",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 220]
+								},
+								SVGRect { y: 225, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #11",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 240]
+								},
+								SVGRect { y: 245, width: 15, height: 15, fill: "lime" },
+								SVGText {
+									text: "Passed subtest #12",
+									fill: "black",
+									transform: [1, 0, 0, 1, 20, 260]
+								}
+							]
+						},
+						SVGPolyline {
+							id: "r",
+							points: [0, 0, 30, 40, 80, -20],
+							stroke: { fill: "green", width: 10 },
+							transform: [0, 1, -1, 0, 10, 10],
+							opaque: false
+						}
+					]
+				}
+			]
+		},
+		SVGGroup {
+			contents: [
+				SVGText {
+					id: "revision",
+					text: "$Revision: 1.5 $",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 32 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 10, 340]
+				}
+			]
+		},
+		SVGRect {
+			id: "test-frame",
+			x: 1,
+			y: 1,
+			width: 478,
+			height: 358,
+			stroke: { fill: "black" }
+		}
+	]
+}

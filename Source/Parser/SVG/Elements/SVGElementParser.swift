@@ -19,7 +19,14 @@ class SVGBaseElementParser: SVGElementParser {
         guard let node = doParse(context: context, delegate: delegate) else { return nil }
         let transform = SVGHelper.parseTransform(context.properties["transform"] ?? "")
         node.transform = node.transform.concatenating(transform)
+        node.scriptTransforms = SVGHelper.parseTransformOperations(context.properties["transform"] ?? "")
         node.opacity = SVGHelper.parseOpacity(context.properties, "opacity")
+        if let visibility = context.style("visibility")?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(), visibility == "hidden" {
+            node.opaque = false
+        }
+        if let display = context.style("display")?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(), display == "none" {
+            node.opaque = false
+        }
         if let colorValue = context.style("color") {
             node.currentColor = SVGHelper.parseColor(colorValue, context.styles)
         }
