@@ -47,18 +47,41 @@ for line in cov_lines:
         standards[current_std][current_suite].append((m.group(1) == '✅', m.group(2)))
 
 # ── Build attachment lookup ────────────────────────────────────────────────────
-att = defaultdict(dict)   # test_name -> {png, actual, expected, diff, svg_copy}
+# New files are version-scoped (<version>-<test>-suffix), but keep legacy
+# fallback support for historical output directories.
+att_by_version = defaultdict(dict)   # (version_dir, test_name) -> {png, actual, expected, diff, svg_copy}
+att_legacy = defaultdict(dict)       # test_name -> {png, actual, expected, diff, svg_copy}
+
+def split_attachment_base(base):
+    m = re.match(r'^(1\.1F2|1\.2T)-(.+)$', base)
+    if m:
+        return m.group(1), m.group(2)
+    return None, base
+
 for fname in sorted(os.listdir(output_dir)):
     for suffix, key in [('-rendered.png', 'png'), ('-actual.txt', 'actual'),
                         ('-expected.txt', 'expected'), ('-diff.txt', 'diff')]:
         if fname.endswith(suffix):
-            att[fname[:-len(suffix)]][key] = fname
+            base = fname[:-len(suffix)]
+            version_dir, test_name = split_attachment_base(base)
+            if version_dir:
+                att_by_version[(version_dir, test_name)][key] = fname
+            else:
+                att_legacy[test_name][key] = fname
     if fname.endswith('.svg'):
-        att[fname[:-4]]['svg_copy'] = fname
+        base = fname[:-4]
+        version_dir, test_name = split_attachment_base(base)
+        if version_dir:
+            att_by_version[(version_dir, test_name)]['svg_copy'] = fname
+        else:
+            att_legacy[test_name]['svg_copy'] = fname
 
-def run_status(test_name):
+def attachment_set(test_name, version_dir):
+    return att_by_version.get((version_dir, test_name), att_legacy.get(test_name, {}))
+
+def run_status(test_name, version_dir):
     """Return 'pass', 'fail', or 'unimplemented' based on attachments."""
-    a = att.get(test_name, {})
+    a = attachment_set(test_name, version_dir)
     if 'png' not in a:
         return 'unimplemented'
     ap = os.path.join(output_dir, a.get('actual', ''))
@@ -81,7 +104,7 @@ total_pass = total_fail = total_unimpl = 0
 for (_, vdir), suites in standards.items():
     for suite, tests in suites.items():
         for _, name in tests:
-            s = run_status(name)
+            s = run_status(name, vdir)
             if   s == 'pass':   total_pass  += 1
             elif s == 'fail':   total_fail  += 1
             else:               total_unimpl += 1
@@ -95,9 +118,10 @@ def img(src, cls='', alt=''):
     return f'<img src="{src}" class="thumb {cls}" alt="{alt}" loading="lazy">'
 
 def card_html(test_name, status, version_dir):
-    a       = att.get(test_name, {})
+    a       = attachment_set(test_name, version_dir)
     src_svg = svg_src(test_name, version_dir)
     ref_url = w3c_ref_url(test_name)
+    card_id = f"{version_dir}-{test_name}".replace('.', '-')
 
     rendered_col = ''
     if 'png' in a:
@@ -129,7 +153,7 @@ def card_html(test_name, status, version_dir):
         except Exception:
             pass
 
-    return f'''<div class="card {status} open" id="{test_name}">
+    return f'''<div class="card {status} open" id="{card_id}" data-test-name="{test_name}">
   <div class="card-header" data-w3c-url="{w3c_ref_url(test_name)}">
     <span class="icon">{STATUS_ICON[status]}</span>
     <span class="card-name">{test_name}</span>
@@ -153,7 +177,7 @@ for (std_label, vdir), suites in standards.items():
         s_pass = s_fail = s_unimpl = 0
         cards = []
         for _, name in tests:
-            s = run_status(name)
+            s = run_status(name, vdir)
             if   s == 'pass':   s_pass  += 1
             elif s == 'fail':   s_fail  += 1
             else:               s_unimpl += 1
@@ -387,7 +411,8 @@ html = f"""<!DOCTYPE html>
   function applyFilters() {{
     cards.forEach(card => {{
       const matchFilter = activeFilter === 'all' || card.classList.contains(activeFilter);
-      const matchSearch = !searchTerm || card.id.includes(searchTerm);
+      const testName = (card.dataset.testName || card.id).toLowerCase();
+      const matchSearch = !searchTerm || testName.includes(searchTerm);
       card.classList.toggle('hidden', !(matchFilter && matchSearch));
     }});
     suites.forEach(s => s.classList.toggle('hidden',

@@ -30,12 +30,13 @@ extension SVGTestHelper {
         let node = try #require(SVGParser.parse(contentsOf: svgURL))
         let content = Serializer.serialize(node)
         let reference = try String(contentsOf: refURL)
+        let attachmentPrefix = "\(dir)-\(fileName)"
 
-        Attachment.record(Attachment(svgSource, named: "\(fileName).svg"))
-        Attachment.record(Attachment(content, named: "\(fileName)-actual.txt"))
-        Attachment.record(Attachment(reference, named: "\(fileName)-expected.txt"))
-        Attachment.record(Attachment(unifiedDiff(actual: content, expected: reference), named: "\(fileName)-diff.txt"))
-        await renderedPNGAttachment(node: node, named: "\(fileName)-rendered.png")
+        Attachment.record(Attachment(svgSource, named: "\(attachmentPrefix).svg"))
+        Attachment.record(Attachment(content, named: "\(attachmentPrefix)-actual.txt"))
+        Attachment.record(Attachment(reference, named: "\(attachmentPrefix)-expected.txt"))
+        Attachment.record(Attachment(unifiedDiff(actual: content, expected: reference), named: "\(attachmentPrefix)-diff.txt"))
+        await renderedPNGAttachment(node: node, named: "\(attachmentPrefix)-rendered.png")
 
         #expect(content == reference, "nodeContent is not equal to referenceContent. \(prettyFirstDifferenceBetweenStrings(s1: content, s2: reference))")
     }
@@ -95,7 +96,7 @@ extension SVGTestHelper {
                     .frame(width: size.width, height: size.height)
                     .background(Color.clear)
                 let renderer = ImageRenderer(content: content)
-                renderer.scale = 1.0
+                renderer.scale = 2.0
                 renderer.isOpaque = false
 #if os(macOS)
                 guard let cgImage = renderer.cgImage else { return nil }
