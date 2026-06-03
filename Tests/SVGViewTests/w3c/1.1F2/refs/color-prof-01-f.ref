@@ -1,0 +1,64 @@
+SVGViewport {
+	id: "svg-root",
+	viewBox: { width: 480, height: 360 },
+	scaling: "none",
+	contents: [
+		SVGDefs {  },
+		SVGGroup {
+			id: "test-body-content",
+			contents: [
+				SVGDefs {  },
+				SVGGroup {
+					contents: [
+						SVGURLImage {
+							id: "image1PNG",
+							src: "../images/colorprof.png",
+							x: 30,
+							width: 190,
+							height: 190
+						}
+					]
+				},
+				SVGGroup {
+					contents: [
+						SVGURLImage {
+							id: "image2",
+							src: "../images/colorprof.png",
+							x: 260,
+							y: 90,
+							width: 190,
+							height: 190,
+							colorProfile: "changeColor",
+							appliesColorProfile: true
+						}
+					]
+				},
+				SVGText {
+					text: "Basic test of ICC profile with an image.",
+					font: { name: "Arial", size: 12 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 250, 20]
+				}
+			]
+		},
+		SVGGroup {
+			contents: [
+				SVGText {
+					id: "revision",
+					text: "$Revision: 1.5 $",
+					font: { name: "SVGFreeSansASCII,sans-serif", size: 32 },
+					fill: "black",
+					transform: [1, 0, 0, 1, 10, 340]
+				}
+			]
+		},
+		SVGRect {
+			id: "test-frame",
+			x: 1,
+			y: 1,
+			width: 478,
+			height: 358,
+			stroke: { fill: "black" }
+		}
+	]
+}

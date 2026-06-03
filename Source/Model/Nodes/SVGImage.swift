@@ -20,12 +20,18 @@ public class SVGImage: SVGNode {
     public var width: CGFloat
     public var height: CGFloat
     public var preserveAspectRatio: SVGPreserveAspectRatio
+    public var colorProfileId: String?
+    public var appliesColorProfile: Bool
+    public var colorProfileData: Data?
 #else
     @Published public var x: CGFloat
     @Published public var y: CGFloat
     @Published public var width: CGFloat
     @Published public var height: CGFloat
     @Published public var preserveAspectRatio: SVGPreserveAspectRatio
+    @Published public var colorProfileId: String?
+    @Published public var appliesColorProfile: Bool
+    @Published public var colorProfileData: Data?
 #endif
 
     public init(
@@ -33,13 +39,19 @@ public class SVGImage: SVGNode {
         y: CGFloat = 0,
         width: CGFloat = 0,
         height: CGFloat = 0,
-        preserveAspectRatio: SVGPreserveAspectRatio = SVGPreserveAspectRatio()
+        preserveAspectRatio: SVGPreserveAspectRatio = SVGPreserveAspectRatio(),
+        colorProfileId: String? = nil,
+        appliesColorProfile: Bool = false,
+        colorProfileData: Data? = nil
     ) {
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.preserveAspectRatio = preserveAspectRatio
+        self.colorProfileId = colorProfileId
+        self.appliesColorProfile = appliesColorProfile
+        self.colorProfileData = colorProfileData
     }
 
     override func serialize(_ serializer: Serializer) {
@@ -51,6 +63,8 @@ public class SVGImage: SVGNode {
             .add("scaling", preserveAspectRatio.scaling)
             .add("xAlign", preserveAspectRatio.xAlign)
             .add("yAlign", preserveAspectRatio.yAlign)
+            .add("colorProfile", colorProfileId)
+            .add("appliesColorProfile", appliesColorProfile, false)
         super.serialize(serializer)
     }
 }

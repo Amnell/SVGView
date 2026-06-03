@@ -25,10 +25,22 @@ public class SVGDataImage: SVGImage {
         width: CGFloat = 0,
         height: CGFloat = 0,
         preserveAspectRatio: SVGPreserveAspectRatio = SVGPreserveAspectRatio(),
+        colorProfileId: String? = nil,
+        appliesColorProfile: Bool = false,
+        colorProfileData: Data? = nil,
         data: Data
     ) {
         self.data = data
-        super.init(x: x, y: y, width: width, height: height, preserveAspectRatio: preserveAspectRatio)
+        super.init(
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            preserveAspectRatio: preserveAspectRatio,
+            colorProfileId: colorProfileId,
+            appliesColorProfile: appliesColorProfile,
+            colorProfileData: colorProfileData
+        )
     }
 
     override func serialize(_ serializer: Serializer) {
@@ -48,21 +60,12 @@ extension SVGDataImage: ObservableObject {}
 struct SVGDataImageView: View {
     @ObservedObject var model: SVGDataImage
 
-#if os(OSX)
     private var decoded: (image: Image, size: CGSize)? {
-        guard let nsImage = NSImage(data: model.data) else {
-            return nil
-        }
-        return (Image(nsImage: nsImage), nsImage.size)
+        return SVGImageICCTransformer.decodeImage(
+            data: model.data,
+            profileData: model.appliesColorProfile ? model.colorProfileData : nil
+        )
     }
-#else
-    private var decoded: (image: Image, size: CGSize)? {
-        guard let uiImage = UIImage(data: model.data) else {
-            return nil
-        }
-        return (Image(uiImage: uiImage), uiImage.size)
-    }
-#endif
 
     private var viewportSize: CGSize {
         CGSize(width: model.width, height: model.height)

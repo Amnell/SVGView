@@ -10,6 +10,7 @@ struct cli: ParsableCommand {
     var input: String
 
     static let v11Refs: [String] = [
+        "color-prof-01-f",
         "color-prop-01-b",
         "color-prop-02-f",
         "color-prop-03-t",

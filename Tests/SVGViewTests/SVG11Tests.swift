@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import SVGView
 
@@ -8,6 +9,27 @@ struct SVG11Tests {
     struct Color: SVGTestHelper {
         var dir: String { "1.1F2" }
 
+        @Test func colorProf01F() async throws { try await compareToReference("color-prof-01-f") }
+        @Test func colorProf01FParsesICCProfile() throws {
+            let bundle = Bundle.module
+            let svgURL = try #require(bundle.url(forResource: "color-prof-01-f", withExtension: "svg", subdirectory: "w3c/1.1F2/svg/"))
+            let icmURL = try #require(bundle.url(forResource: "changeColor", withExtension: "ICM", subdirectory: "w3c/1.1F2/images/"))
+
+            let root = try #require(SVGParser.parse(contentsOf: svgURL))
+            let imageWithProfile = try #require(root.getNode(byId: "image2") as? SVGImage)
+            let imageWithoutProfile = try #require(root.getNode(byId: "image1PNG") as? SVGImage)
+            let loadedProfile = try #require(imageWithProfile.colorProfileData)
+            let expectedProfile = try Data(contentsOf: icmURL)
+
+            #expect(imageWithProfile.colorProfileId == "changeColor")
+            #expect(imageWithProfile.appliesColorProfile)
+            #expect(!loadedProfile.isEmpty)
+            #expect(loadedProfile == expectedProfile)
+
+            #expect(imageWithoutProfile.colorProfileId == nil)
+            #expect(imageWithoutProfile.appliesColorProfile == false)
+            #expect(imageWithoutProfile.colorProfileData == nil)
+        }
         @Test func colorProp01B() async throws { try await compareToReference("color-prop-01-b") }
         @Test func colorProp02F() async throws { try await compareToReference("color-prop-02-f") }
         @Test func colorProp03T() async throws { try await compareToReference("color-prop-03-t") }
