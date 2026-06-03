@@ -76,13 +76,21 @@ struct SVGViewportView: View {
         GeometryReader { geometry in
             let size = geometry.size
             let viewBox = getViewBox(size: size)
-            SVGGroupView(model: model)
+            ZStack(alignment: .topLeading) {
+                ForEach(0..<model.contents.count, id: \.self) { i in
+                    if i <= model.contents.count - 1 {
+                        model.contents[i].toSwiftUI()
+                    }
+                }
+            }
+                .frame(width: size.width, height: size.height, alignment: .topLeading)
                 .transformEffect(getTransform(viewBox: viewBox, size: size))
         }
         // Use fixed frame for absolute viewport lengths so nested <svg> elements
         // don't expand to the full proposed size from parent stacks.
         .frame(width: model.width.ideal, height: model.height.ideal, alignment: .topLeading)
         .clipped()
+        .applyNodeAttributes(model: model)
     }
 
     private func getViewBox(size: CGSize) -> CGRect {

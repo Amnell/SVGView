@@ -277,7 +277,10 @@ public class SVGHelper: NSObject {
     static func parseViewBox(_ attributes: [String: String], context: SVGContext) -> CGRect? {
         // TODO: temporary solution, all attributes should be case insensitive
         if let string = attributes[ignoreCase: "viewBox"] {
-            let nums = string.components(separatedBy: .whitespaces)
+            let separators = CharacterSet(charactersIn: ",").union(.whitespacesAndNewlines)
+            let nums = string
+                .components(separatedBy: separators)
+                .filter { !$0.isEmpty }
             if nums.count == 4,
                let x = SVGLengthParser.xAxis.double(string: nums[0], context: context),
                let y = SVGLengthParser.yAxis.double(string: nums[1], context: context),

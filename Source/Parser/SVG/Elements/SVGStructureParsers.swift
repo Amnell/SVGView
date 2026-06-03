@@ -16,7 +16,12 @@ class SVGViewportParser: SVGGroupParser {
         let h = SVGHelper.parseDimension(attributes, "height") ?? SVGLength(percent: 100)
         let viewBox = SVGHelper.parseViewBox(attributes, context: context)
         let par = SVGHelper.parsePreserveAspectRatio(string: attributes["preserveAspectRatio"], context: context, defaultValue: SVGPreserveAspectRatio(scaling: SVGHelper.parseScaling("meet"), xAlign: .mid, yAlign: .mid))
-        return SVGViewport(width: w, height: h, viewBox: viewBox, preserveAspectRatio: par, contents: parseContents(context: context, delegate: delegate))
+        let viewport = SVGViewport(width: w, height: h, viewBox: viewBox, preserveAspectRatio: par, contents: parseContents(context: context, delegate: delegate))
+        viewport.transform = CGAffineTransform(
+            translationX: SVGHelper.parseCGFloat(attributes, "x"),
+            y: SVGHelper.parseCGFloat(attributes, "y")
+        )
+        return viewport
     }
 
     static func parseAlign(_ string: String) -> SVGPreserveAspectRatio.Align {
