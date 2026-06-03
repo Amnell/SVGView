@@ -6,7 +6,7 @@ let package = Package(
 	name: "SVGView",
     platforms: [
         .macOS(.v14),
-        .iOS(.v14),
+        .iOS(.v16),
         .watchOS(.v7)
     ],
     products: [
@@ -14,6 +14,10 @@ let package = Package(
     		name: "SVGView", 
     		targets: ["SVGView"]
     	),
+        .library(
+            name: "SVGViewTestAssets",
+            targets: ["SVGViewTestAssets"]
+        ),
         .executable(
             name: "GenerateReferencesCLI",
             targets: ["GenerateReferencesCLI"]
@@ -38,15 +42,32 @@ let package = Package(
     		name: "SVGView",
             path: "Source",
         ),
+        .target(
+            name: "SVGViewTestAssets",
+            path: "Tests/SVGViewTests",
+            exclude: [
+                "BaseTestCase.swift",
+                "CGTests.swift",
+                "SVG11Tests.swift",
+                "SVG12Tests.swift",
+                "SVGCustomTests.swift"
+            ],
+            sources: [
+                "AssetSupport"
+            ],
+            resources: [
+                .copy("w3c")
+            ]
+        ),
         .testTarget(
             name: "CoreGraphicsPolyfillTests",
             dependencies: ["SVGView"]
         ),
         .testTarget(
             name: "SVGViewTests",
-            dependencies: ["SVGView"],
-            resources: [
-                .copy("w3c")
+            dependencies: ["SVGView", "SVGViewTestAssets"],
+            exclude: [
+                "AssetSupport"
             ]
         ),
     ],

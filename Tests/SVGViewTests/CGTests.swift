@@ -2,6 +2,7 @@ import Foundation
 import ImageIO
 import Testing
 @testable import SVGView
+import SVGViewTestAssets
 
 struct CGTests {
 
@@ -17,9 +18,8 @@ struct CGTests {
     }
 
     @Test func iccProfileTransformChangesCGImagePixels() throws {
-        let bundle = Bundle.module
-        let imageURL = try #require(bundle.url(forResource: "colorprof", withExtension: "png", subdirectory: "w3c/1.1F2/images/"))
-        let profileURL = try #require(bundle.url(forResource: "changeColor", withExtension: "ICM", subdirectory: "w3c/1.1F2/images/"))
+        let imageURL = try #require(SVGTestAssets.imageURL(fileName: "colorprof", fileExtension: "png", suite: "1.1F2"))
+        let profileURL = try #require(SVGTestAssets.imageURL(fileName: "changeColor", fileExtension: "ICM", suite: "1.1F2"))
 
         let imageData = try Data(contentsOf: imageURL)
         let profileData = try Data(contentsOf: profileURL)

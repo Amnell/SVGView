@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 @testable import SVGView
+import SVGViewTestAssets
 
 @Suite("SVG 1.1")
 struct SVG11Tests {
@@ -11,9 +12,8 @@ struct SVG11Tests {
 
         @Test func colorProf01F() async throws { try await compareToReference("color-prof-01-f") }
         @Test func colorProf01FParsesICCProfile() throws {
-            let bundle = Bundle.module
-            let svgURL = try #require(bundle.url(forResource: "color-prof-01-f", withExtension: "svg", subdirectory: "w3c/1.1F2/svg/"))
-            let icmURL = try #require(bundle.url(forResource: "changeColor", withExtension: "ICM", subdirectory: "w3c/1.1F2/images/"))
+            let svgURL = try #require(SVGTestAssets.svgURL(fileName: "color-prof-01-f", suite: "1.1F2"))
+            let icmURL = try #require(SVGTestAssets.imageURL(fileName: "changeColor", fileExtension: "ICM", suite: "1.1F2"))
 
             let root = try #require(SVGParser.parse(contentsOf: svgURL))
             let imageWithProfile = try #require(root.getNode(byId: "image2") as? SVGImage)

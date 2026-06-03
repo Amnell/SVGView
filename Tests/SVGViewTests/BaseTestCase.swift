@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 @testable import SVGView
+import SVGViewTestAssets
 
 #if canImport(SwiftUI)
 import SwiftUI
@@ -22,9 +23,8 @@ extension SVGTestHelper {
     var dir: String { "1.2T" }
 
     func compareToReference(_ fileName: String) async throws {
-        let bundle = Bundle.module
-        let svgURL = try #require(bundle.url(forResource: fileName, withExtension: "svg", subdirectory: "w3c/\(dir)/svg/"))
-        let refURL = try #require(bundle.url(forResource: fileName, withExtension: "ref", subdirectory: "w3c/\(dir)/refs/"))
+        let svgURL = try #require(SVGTestAssets.svgURL(fileName: fileName, suite: dir))
+        let refURL = try #require(SVGTestAssets.refURL(fileName: fileName, suite: dir))
 
         let svgSource = try String(contentsOf: svgURL)
         let node = try #require(SVGParser.parse(contentsOf: svgURL))
